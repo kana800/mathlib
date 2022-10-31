@@ -1,3 +1,12 @@
+### Coordinate
+
+contains the coordinate; 
+
+```
+coord_t { x, y };
+```
+
+
 ### Coordinate Container
 
 Coordinate Container is custome datastructure that holds all the 
