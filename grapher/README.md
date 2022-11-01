@@ -1,3 +1,5 @@
+### Linear Grapher
+
 ### Coordinate
 
 contains the coordinate; 
@@ -5,7 +7,6 @@ contains the coordinate;
 ```
 coord_t { x, y };
 ```
-
 
 ### Coordinate Container
 
