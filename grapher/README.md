@@ -53,7 +53,7 @@ When user adds a coordinate through the `addcoordinate` (`lineargrapher.h`);
 The `CreateCoordinateContainer` in `coordcontainer.h` will create a `coord_t`
 typed coordinate and allocate memory for it.
 
-![addcoordinateflow](".images/addcoordinateflow.png")
+![addcoordinateflow](.images/addcoordinateflow.png)
 
 The size of the `coordcontainer_t` will be **tracked** by the 
 linear grapher `GlobalContainer`. 
