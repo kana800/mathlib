@@ -1,7 +1,6 @@
 #include "grapher.h"
 
-
-
+/*---CONSOLE OPERATIONS---*/
 void cls(HANDLE hConsole) {
     COORD coordScreen = { 0, 0 };    // home for the cursor
     DWORD cCharsWritten;
@@ -46,68 +45,39 @@ void cls(HANDLE hConsole) {
     SetConsoleCursorPosition(hConsole, coordScreen);
 }
 
+/*---HELPER FUNCTIONS---*/
 
-void setBlueColor(HANDLE hConsole) {
+static void setBlueColor(HANDLE hConsole) {
     /*sets the red color to the console*/
     SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE |
         FOREGROUND_INTENSITY);
 }
 
-void setRedColor(HANDLE hConsole) {
-    /*sets the white color to the console*/
+static void setRedColor(HANDLE hConsole) {
+    /*sets the red color to the console*/
     SetConsoleTextAttribute(hConsole, FOREGROUND_RED |
         FOREGROUND_INTENSITY);
 }
 
+static void setGreenColor(HANDLE hConsole) {
+    /*sets the green color to the console*/
+    SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN |
+        FOREGROUND_INTENSITY);
+}
 
-void drawGraph(HANDLE hConsole, COORD winSize) {
+static void printEndLine(HANDLE hConsole) {
+    /*prints 'x' at the end of the console*/
+    setBlueColor(hConsole);
+    SetConsoleCursorPosition(hConsole, brgt);
+    printf("x");
+}
+
+static bool drawGraph(HANDLE hConsole, COORD winSize) {
     /*summary: draw the skeleton of the graph
     args:
         HANDLE hConsole -> console output
         COORD winSize -> size of the window
-    More:
-              y = x 
-                | / 
-				|/
-		  ------0------
-			   /|
-			  / |
-
-		console: 
-		   tlft   tmid    trgt   
-		   x----------------x
-		   |       mm       |
-		   x----------------x 
-		   blft   bmid    brgt
-
-		setting the predefined cursor position
-		---
-		tlft -> top left point
-		tmid -> top mid point
-		trgt -> top right point
-        ---
-        mmid -> mid point
-		---
-		blft -> bot left point
-		bmid -> bot mid point
-		brgt -> bot right point
     */
-
-    short tempY = 0;
-    short botY = winSize.Y;
-
-    COORD tlft = {0 , 0};
-    COORD tmid = { winSize.X / 2, 0 };
-    COORD trgt = { winSize.X - 1, 0};
-
-    COORD mmid = { winSize.X / 2, winSize.Y / 2 };
-
-    COORD blft = { 0 , winSize.Y };
-    COORD bmid = { winSize.X / 2 , winSize.Y };
-    COORD brgt = { winSize.X - 1, winSize.Y };
-
-    COORD btl = { 0, winSize.Y + 1 };
-
     /*setting console attributes*/
     setBlueColor(hConsole);
 
@@ -150,6 +120,16 @@ void drawGraph(HANDLE hConsole, COORD winSize) {
         t_xNeg.X--;
     }
 
+    /*marking the x positive quadrant*/
+    while (xPos.X >= t_xPos.X) {
+        SetConsoleCursorPosition(
+            hConsole, t_xPos);
+        printf("-");
+        t_xPos.X++;
+    }
+
+    setGreenColor(hConsole);
+    
     /*marking the x number line*/
     while (xNeg.X <= t_xNegNum.X) {
         SetConsoleCursorPosition(
@@ -159,15 +139,6 @@ void drawGraph(HANDLE hConsole, COORD winSize) {
             printf("%d", val / 2);
         }
         t_xNegNum.X--;
-    }
-    
-
-    /*marking the x positive quadrant*/
-    while (xPos.X >= t_xPos.X) {
-        SetConsoleCursorPosition(
-            hConsole, t_xPos);
-        printf("-");
-        t_xPos.X++;
     }
 
     /*marking the x number line*/
@@ -180,6 +151,8 @@ void drawGraph(HANDLE hConsole, COORD winSize) {
         }
         t_xPosNum.X++;
     }
+
+    setBlueColor(hConsole);
 
     /*drawing y range*/
     COORD yNeg = { mmid.X,
@@ -209,52 +182,110 @@ void drawGraph(HANDLE hConsole, COORD winSize) {
         t_yPos.Y++;
     }
 
-    SetConsoleCursorPosition(hConsole, brgt);
-    printf("x");
+    printEndLine(hConsole);
 
-    return;
+    return 1;
 }
 
-void InitConsole(void) {
-	/*setting up the input and output handles*/
-	hstdout = GetStdHandle(STD_OUTPUT_HANDLE);
-	hstdin = GetStdHandle(STD_INPUT_HANDLE);
 
-    XRANGE = 20;
-    YRANGE = 10;
+static bool drawTable(HANDLE hConsole, COORD winSize) {
+    /*summary: draws the table for the coordinates
+    args:
+        HANDLE hConsole -> console output
+        COORD winSize -> size of window
+    
+    x------x------x
+    |cc    |      |
+    |cc  --x--    |
+    |cc    |      |
+    x------x------x
+    
+    The table is placed at the left corner; The coordinates
+    will be added to the table;
+    */
 
+    /*printing the headers of the table*/
+    COORD tcoord = { tlft.X , tlft.Y + 1 };
+    SetConsoleCursorPosition(hConsole, tcoord);
+    setGreenColor(hConsole);
+    printf(" coordinates ");
+
+    /*iterating through coordinates*/
+    int tSize = 0;
+    while (GlobalContainer.size > tSize) {
+        SetConsoleCursorPosition(
+            hConsole, tcoord);
+        /*obtaining the x and y val*/
+        printf("%d->(%d, %d)", tSize + 1 , 1, 2);
+        tcoord.Y++;
+    }
+
+
+    printEndLine(hConsole);
+    return true;
+}
+
+
+/*---MAIN FUNCTIONS---*/
+bool InitConsole(void) {
+    /*setting up the input and output handles*/
+    hstdout = GetStdHandle(STD_OUTPUT_HANDLE);
+    hstdin = GetStdHandle(STD_INPUT_HANDLE);
+
+    /*clears the screen*/
     cls(hstdout);
 
-	if (!GetConsoleScreenBufferInfo(hstdout, &csbiInfo)) {
-		return;
-	}
+    if (!GetConsoleScreenBufferInfo(hstdout, &csbiInfo)) {
+        return false;
+    }
 
-	/*
-	removing the scroll buffer
-	*/
-	// current window size
-	short winWidth = csbiInfo.srWindow.Right - csbiInfo.srWindow.Left + 1;
-	short winHeight = csbiInfo.srWindow.Bottom - csbiInfo.srWindow.Top + 1;
-	// current screen buffer size
-	short scrBufferWidth = csbiInfo.dwSize.X;
-	short scrBufferHeight = csbiInfo.dwSize.Y;
+    /*
+    removing the scroll buffer
+    */
+    // current window size
+    short winWidth = csbiInfo.srWindow.Right - csbiInfo.srWindow.Left + 1;
+    short winHeight = csbiInfo.srWindow.Bottom - csbiInfo.srWindow.Top + 1;
+    // current screen buffer size
+    short scrBufferWidth = csbiInfo.dwSize.X;
 
-	COORD newSize;
-	newSize.X = scrBufferWidth;
-	newSize.Y = winHeight;
+    COORD newSize = { scrBufferWidth, winHeight };
 
-	if (!SetConsoleScreenBufferSize(
-		hstdout, newSize)) {
-		return;
-	}
+    if ((MINSIZEX >= scrBufferWidth)
+        || (MINSIZEY >= winHeight)) {
+        fprintf(stderr, "Console Size Is Too Small;"
+            "The Minimum Size Should Be 120x30");
+        return false;
+    }
+
+    if (!SetConsoleScreenBufferSize(
+        hstdout, newSize)) {
+        return false;
+    }
 
     /*adjusting new size with the reduced buffer size*/
     COORD consoleSize = {
-        scrBufferWidth - 1, winHeight - 3};
+        scrBufferWidth - 1, winHeight - 3 };
+
+    /*setting up the coordinates*/
+    tlft.X = 0;
+    tlft.Y = 0;
+    tmid.X = consoleSize.X / 2;
+    tmid.Y = 0;
+    trgt.X = consoleSize.X - 1;
+    trgt.Y = 0;
+    mmid.X = consoleSize.X / 2;
+    mmid.Y = consoleSize.Y / 2;
+    blft.X = 0;
+    blft.Y = consoleSize.Y;
+    bmid.X = consoleSize.X / 2;
+    bmid.Y = consoleSize.Y;
+    brgt.X = consoleSize.X - 1;
+    brgt.Y = consoleSize.Y;
+    btl.X = 0;
+    btl.Y = consoleSize.Y + 1;
 
     drawGraph(hstdout, consoleSize);
-
-	return;
+    drawTable(hstdout, consoleSize);
+	return true;
 }
-
 
