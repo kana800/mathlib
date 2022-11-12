@@ -1,10 +1,3 @@
 ### Math Library
 
-- [Linear Grapher](grapher)
-- [Matrix Calculator]() 
-
----
-
-### Why?
-
-I want to improve my `C` programming skills; 
+- [Linear Grapher](lineargrapher) | [Wiki](https://github.com/kana800/mathlib/wiki/Linear-Grapher)
