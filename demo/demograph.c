@@ -1,5 +1,5 @@
 /*Demo the Usage of the linear grapher library*/
-#include "grapher.h"
+#include "lineargrapher.h"
 
 int main(void){
 

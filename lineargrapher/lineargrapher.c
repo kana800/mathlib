@@ -1,4 +1,4 @@
-#include "grapher.h"
+#include "lineargrapher.h"
 
 /*---CONSOLE OPERATIONS---*/
 void cls(HANDLE hConsole) {
