@@ -56,7 +56,7 @@ typed coordinate and allocate memory for it.
 <p style="text-align: center" align="center">
   <img src=".images/addcoordinateflow.png" alt="addingcoordinate"> 
   <p align="center">
-	visual representation of the coordinate *adding* process.
+	visual representation of the coordinate <i>adding</i> process.
   </p>
 </p>
 

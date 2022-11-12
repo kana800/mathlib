@@ -1,9 +1,9 @@
 ### Math Library
 
 - [Linear Grapher](grapher)
-- [Matrix Calculation]() 
+- [Matrix Calculator]() 
 
-
+---
 
 ### Why?
 
