@@ -45,6 +45,83 @@ void cls(HANDLE hConsole) {
     SetConsoleCursorPosition(hConsole, coordScreen);
 }
 
+
+void clsLine(COORD line, bool ret) {
+    /*summary: clears the content
+    of a given line and if 'ret' is
+    true returns the original position
+    args:
+        COORD line -> coordinates of the line
+        bool ret -> if true return original pos
+    */
+
+    DWORD cCharsWritten;
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    DWORD dwConSize;
+
+    /*Get the number of character cells in the current buffer.*/
+    if (!GetConsoleScreenBufferInfo(
+        hstdout, &csbi)){
+        return;
+    }
+
+    dwConSize = csbi.dwSize.X * csbi.dwSize.Y;
+
+    if (!FillConsoleOutputCharacter(
+        hstdout,         /*Handle to console screen buffer*/
+        (TCHAR)' ',      /*Character to write to the buffer*/
+        dwConSize,       /*Number of cells to write*/
+        line,     /*Coordinates of first cell*/
+        &cCharsWritten)) /*Receive number of characters written*/
+    {
+        SetConsoleCursorPosition(hstdout, btl);
+        return;
+    }
+    SetConsoleCursorPosition(hstdout, btl);
+    return;
+}
+
+
+void clsChar(COORD line, bool ret) {
+    /*summary: clears one character
+    of a given line and if 'ret' is
+    true returns the original position
+    Ex:
+        abcx 
+        when clsChar is called x will be removed
+        and if ret is true the cursor will move
+        to pos of x;
+    args:
+        COORD line -> coordinates of the line
+        bool ret -> if true return original pos
+    */
+    DWORD cCharsWritten;
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    DWORD dwConSize;
+
+    /*Get the number of character cells in the current buffer.*/
+    if (!GetConsoleScreenBufferInfo(
+        hstdout, &csbi)){
+        return;
+    }
+
+    dwConSize = csbi.dwSize.X * csbi.dwSize.Y;
+
+    if (!FillConsoleOutputCharacter(
+        hstdout,         /*Handle to console screen buffer*/
+        (TCHAR)' ',      /*Character to write to the buffer*/
+        dwConSize,       /*Number of cells to write*/
+        line,     /*Coordinates of first cell*/
+        &cCharsWritten)) /*Receive number of characters written*/
+    {
+        SetConsoleCursorPosition(hstdout, btl);
+        return;
+    }
+    btl.X--;
+    SetConsoleCursorPosition(hstdout, btl);
+    return;
+}
+
 /*---HELPER FUNCTIONS---*/
 
 static void setBlueColor(HANDLE hConsole) {
@@ -187,7 +264,6 @@ static bool drawGraph(HANDLE hConsole, COORD winSize) {
     return 1;
 }
 
-
 static bool drawTable(HANDLE hConsole, COORD winSize) {
     /*summary: draws the table for the coordinates
     args:
@@ -236,6 +312,7 @@ bool InitConsole(void) {
     cls(hstdout);
 
     if (!GetConsoleScreenBufferInfo(hstdout, &csbiInfo)) {
+        fprintf(stderr, "Unable To Retrieve Buffer Information");
         return false;
     }
 
@@ -286,6 +363,78 @@ bool InitConsole(void) {
 
     drawGraph(hstdout, consoleSize);
     drawTable(hstdout, consoleSize);
+   
 	return true;
 }
 
+
+static void processKeyEvent(
+    KEY_EVENT_RECORD key) {
+    /*processes keyboard events and 
+    add the characters to the static string*/
+    CHAR asciichar = key.uChar.AsciiChar;
+
+    if (key.bKeyDown) {
+        printf("%c", asciichar);
+        addChar(INPUTSTRING, asciichar);
+        if (key.wVirtualKeyCode == VK_BACK) {
+            removePrevChar(INPUTSTRING);
+            clsChar(INPUTSTRING->currcursorpos, true);
+            //moveCursor(INPUTSTRING, hstdout);
+        }
+        else if (key.wVirtualKeyCode == VK_RETURN) {
+            clearInputString(INPUTSTRING);
+            moveCursor(INPUTSTRING, hstdout);
+            clsLine(btl, true);
+        }
+    }
+
+}
+
+int MainConsole(void) {
+
+    DWORD cNumRead, i;
+    DWORD fdwMode = ENABLE_WINDOW_INPUT;
+    int currentchar = 0;
+
+    /*Initialize theV
+    String Structure*/
+    INPUTSTRING = malloc(sizeof(inputstring_t));
+    initInputString(INPUTSTRING, 0, btl);
+    
+    /*setting the console mode*/
+    if (!SetConsoleMode(hstdin, fdwMode)) {
+        fprintf(stderr, "Unable To Set Mode");
+        return false;
+    }
+
+    /*move the cursor to the bottom*/
+    btl.Y -= 1;
+    SetConsoleCursorPosition(hstdout, btl);
+
+    while (1) {
+        if (!ReadConsoleInput(
+            hstdin,
+            irInBuf,
+            MAXCHARCOUNT - 1,
+            &cNumRead
+        )) {
+            fprintf(stderr, "Cannot Process Line");
+            break;
+        }
+
+        for (i = 0; i < cNumRead; i++) {
+            switch (irInBuf[i].EventType) {
+            case KEY_EVENT:
+                processKeyEvent(irInBuf[i].Event.KeyEvent);
+                currentchar++;
+            default:
+                break;
+            }
+        }
+
+    }
+    printEndLine(hstdout);
+    free(INPUTSTRING);
+    return 1;
+}
