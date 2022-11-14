@@ -1,7 +1,7 @@
 #include "inputstring.h"
 
-void initInputString(
-	inputstring_t* is, short ccount, COORD cp) {
+void InitInputString(
+	inputstring_t* is, int ccount, COORD* cp) {
 	/*summary: (constructor) initialize the input string
 	args:
 		inputstring* is -> pointer to the input string structure
@@ -10,7 +10,16 @@ void initInputString(
 	*/
 	is->size = ccount;
 	is->currcursorpos = cp;
+	return;
 }
+
+void FreeInputString(inputstring_t* is) {
+	/*summary: free the memory 
+	in the input string*/
+	free(is);
+	return;
+}
+
 
 
 void addChar(inputstring_t* inputstruct, char c) {
@@ -21,10 +30,10 @@ void addChar(inputstring_t* inputstruct, char c) {
 		the character to
 		char c -> character you need to add
 	*/
-	short tCurrPos = inputstruct->size;
+	int tCurrPos = inputstruct->size;
 	inputstruct->string[tCurrPos] = c;
 	/*incrementing size and cursor position*/
-	inputstruct->currcursorpos.X++;
+	inputstruct->currcursorpos->X++;
 	inputstruct->size++;
 }
 
@@ -36,7 +45,7 @@ void removePrevChar(inputstring_t* inputstruct) {
 		inputstring_t inputstructure -> structure that you 
 		need the character from
 	*/
-	inputstruct->currcursorpos.X--;
+	inputstruct->currcursorpos->X--;
 	inputstruct->size--;
 }
 
@@ -47,7 +56,7 @@ void clearInputString(inputstring_t* inputstruct) {
 		need the character from
 	*/
 	inputstruct->size = 0;
-	inputstruct->currcursorpos.X = 0;
+	inputstruct->currcursorpos->X = 0;
 }
 
 
@@ -57,19 +66,10 @@ void parseString(inputstring_t* is) {
 		inputstring_t is -> structure that you 
 		need the character from
 	*/
-	is->currcursorpos.X = 0;
+	is->currcursorpos->X = 0;
 	is->size = 0;
 }
 
-void moveCursor(inputstring_t* is, const HANDLE hstdout) {
-	/*summary: moves the curso
-	args:
-		inputstring_t inputstructure -> structure cursor
-		HANDLE hstdout -> console output
-	*/
-	SetConsoleCursorPosition(
-		hstdout, is->currcursorpos);
-}
 
 void printString(inputstring_t* inputstruct) {
 	/*summary: prints the string;
@@ -89,5 +89,4 @@ void printString(inputstring_t* inputstruct) {
 		printf("\n");
 		return;
 	}
-
 }

@@ -45,7 +45,6 @@ void cls(HANDLE hConsole) {
     SetConsoleCursorPosition(hConsole, coordScreen);
 }
 
-
 void clsLine(COORD line, bool ret) {
     /*summary: clears the content
     of a given line and if 'ret' is
@@ -74,13 +73,12 @@ void clsLine(COORD line, bool ret) {
         line,     /*Coordinates of first cell*/
         &cCharsWritten)) /*Receive number of characters written*/
     {
-        SetConsoleCursorPosition(hstdout, btl);
+        SetConsoleCursorPosition(hstdout, *btl);
         return;
     }
-    SetConsoleCursorPosition(hstdout, btl);
+    SetConsoleCursorPosition(hstdout, *btl);
     return;
 }
-
 
 void clsChar(COORD line, bool ret) {
     /*summary: clears one character
@@ -114,85 +112,82 @@ void clsChar(COORD line, bool ret) {
         line,     /*Coordinates of first cell*/
         &cCharsWritten)) /*Receive number of characters written*/
     {
-        SetConsoleCursorPosition(hstdout, btl);
+        SetConsoleCursorPosition(hstdout, *btl);
         return;
     }
-    btl.X--;
-    SetConsoleCursorPosition(hstdout, btl);
+    btl->X--;
+    SetConsoleCursorPosition(hstdout, *btl);
     return;
-}
-
-/*---HELPER FUNCTIONS---*/
-
-static void setBlueColor(HANDLE hConsole) {
-    /*sets the red color to the console*/
-    SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE |
-        FOREGROUND_INTENSITY);
-}
-
-static void setRedColor(HANDLE hConsole) {
-    /*sets the red color to the console*/
-    SetConsoleTextAttribute(hConsole, FOREGROUND_RED |
-        FOREGROUND_INTENSITY);
-}
-
-static void setGreenColor(HANDLE hConsole) {
-    /*sets the green color to the console*/
-    SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN |
-        FOREGROUND_INTENSITY);
 }
 
 static void printEndLine(HANDLE hConsole) {
     /*prints 'x' at the end of the console*/
     setBlueColor(hConsole);
-    SetConsoleCursorPosition(hConsole, brgt);
+    SetConsoleCursorPosition(hConsole, *brgt);
     printf("x");
 }
 
-static bool drawGraph(HANDLE hConsole, COORD winSize) {
+void setBlueColor() {
+    /*summary: sets the red color to the console*/
+    SetConsoleTextAttribute(hstdout, FOREGROUND_BLUE |
+        FOREGROUND_INTENSITY);
+}
+
+void setRedColor() {
+    /*summary: sets the red color to the console*/
+    SetConsoleTextAttribute(hstdout, FOREGROUND_RED |
+        FOREGROUND_INTENSITY);
+}
+
+void setGreenColor() {
+    /*summary: sets the green color to the console*/
+    SetConsoleTextAttribute(hstdout, FOREGROUND_GREEN |
+        FOREGROUND_INTENSITY);
+}
+
+static bool drawGraph(COORD winSize) {
     /*summary: draw the skeleton of the graph
     args:
-        HANDLE hConsole -> console output
         COORD winSize -> size of the window
     */
     /*setting console attributes*/
-    setBlueColor(hConsole);
+    setBlueColor();
 
     /*placing cursors*/
-    SetConsoleCursorPosition(hConsole, tlft);
+    SetConsoleCursorPosition(hstdout, *tlft);
     printf("x");
-    SetConsoleCursorPosition(hConsole, tmid);
+    SetConsoleCursorPosition(hstdout, *tmid);
     printf("x");
-    SetConsoleCursorPosition(hConsole, trgt);
+    SetConsoleCursorPosition(hstdout, *trgt);
     printf("x");
-    SetConsoleCursorPosition(hConsole, blft);
+    SetConsoleCursorPosition(hstdout, *blft);
     printf("x");
-    SetConsoleCursorPosition(hConsole, bmid);
+    SetConsoleCursorPosition(hstdout, *bmid);
     printf("x");
-    SetConsoleCursorPosition(hConsole, brgt);
+    SetConsoleCursorPosition(hstdout, *brgt);
     printf("x");
-    SetConsoleCursorPosition(hConsole, brgt);
+    SetConsoleCursorPosition(hstdout, *brgt);
     printf("x");
 
     /*drawing the skeleton of the graph*/
     /*moving cursor to mid and placing origin*/
-    SetConsoleCursorPosition(hConsole, mmid);
+    SetConsoleCursorPosition(hstdout, *mmid);
     printf("0");
 
     /*drawing x range*/
-    COORD xNeg = { mmid.X - XRANGE, mmid.Y };
-    COORD xPos = { mmid.X + XRANGE, mmid.Y };
+    COORD xNeg = { mmid->X - XRANGE, mmid->Y };
+    COORD xPos = { mmid->X + XRANGE, mmid->Y };
 
     /*temp variables used for iteration*/
-    COORD t_xNeg = { mmid.X - 1, mmid.Y };
-    COORD t_xNegNum = { mmid.X - 1, mmid.Y  + 1};
-    COORD t_xPos = { mmid.X + 1, mmid.Y };
-    COORD t_xPosNum = { mmid.X + 1, mmid.Y  + 1};
+    COORD t_xNeg = { mmid->X - 1, mmid->Y };
+    COORD t_xNegNum = { mmid->X - 1, mmid->Y  + 1};
+    COORD t_xPos = { mmid->X + 1, mmid->Y };
+    COORD t_xPosNum = { mmid->X + 1, mmid->Y  + 1};
     
     /*marking the x negative quadrant*/
     while (xNeg.X <= t_xNeg.X) {
         SetConsoleCursorPosition(
-            hConsole, t_xNeg);
+            hstdout, t_xNeg);
         printf("-");
         t_xNeg.X--;
     }
@@ -200,18 +195,18 @@ static bool drawGraph(HANDLE hConsole, COORD winSize) {
     /*marking the x positive quadrant*/
     while (xPos.X >= t_xPos.X) {
         SetConsoleCursorPosition(
-            hConsole, t_xPos);
+            hstdout, t_xPos);
         printf("-");
         t_xPos.X++;
     }
 
-    setGreenColor(hConsole);
+    setGreenColor(hstdout);
     
     /*marking the x number line*/
     while (xNeg.X <= t_xNegNum.X) {
         SetConsoleCursorPosition(
-            hConsole, t_xNegNum);
-        int val = t_xNegNum.X - mmid.X;
+            hstdout, t_xNegNum);
+        int val = t_xNegNum.X - mmid->X;
         if (val % 2 == 0){
             printf("%d", val / 2);
         }
@@ -221,53 +216,52 @@ static bool drawGraph(HANDLE hConsole, COORD winSize) {
     /*marking the x number line*/
     while (xPos.X >= t_xPosNum.X) {
         SetConsoleCursorPosition(
-            hConsole, t_xPosNum);
-        int val = t_xPosNum.X - mmid.X;
+            hstdout, t_xPosNum);
+        int val = t_xPosNum.X - mmid->X;
         if (val % 2 == 0){
             printf("%d", val / 2);
         }
         t_xPosNum.X++;
     }
 
-    setBlueColor(hConsole);
+    setBlueColor(hstdout);
 
     /*drawing y range*/
-    COORD yNeg = { mmid.X,
-        mmid.Y - YRANGE };
-    COORD yPos = { mmid.X,
-        mmid.Y + YRANGE };
+    COORD yNeg = { mmid->X,
+        mmid->Y - YRANGE };
+    COORD yPos = { mmid->X,
+        mmid->Y + YRANGE };
 
     /*temp variables used
     for iteration*/
-    COORD t_yNeg = { mmid.X,
-        mmid.Y - 1 };
-    COORD t_yPos = { mmid.X,
-        mmid.Y + 1 };
+    COORD t_yNeg = { mmid->X,
+        mmid->Y - 1 };
+    COORD t_yPos = { mmid->X,
+        mmid->Y + 1 };
 
     while (yNeg.Y <= t_yNeg.Y) {
         SetConsoleCursorPosition(
-            hConsole, t_yNeg);
+            hstdout, t_yNeg);
         printf(
-            "|%d", mmid.Y - t_yNeg.Y);
+            "|%d", mmid->Y - t_yNeg.Y);
         t_yNeg.Y--;
     }
 
     while (yPos.Y >= t_yPos.Y) {
         SetConsoleCursorPosition(
-            hConsole, t_yPos);
-        printf("|%d", mmid.Y - t_yPos.Y);
+            hstdout, t_yPos);
+        printf("|%d", mmid->Y - t_yPos.Y);
         t_yPos.Y++;
     }
 
-    printEndLine(hConsole);
+    printEndLine(hstdout);
 
     return 1;
 }
 
-static bool drawTable(HANDLE hConsole, COORD winSize) {
+static bool drawTable(COORD winSize) {
     /*summary: draws the table for the coordinates
     args:
-        HANDLE hConsole -> console output
         COORD winSize -> size of window
     
     x------x------x
@@ -281,26 +275,76 @@ static bool drawTable(HANDLE hConsole, COORD winSize) {
     */
 
     /*printing the headers of the table*/
-    COORD tcoord = { tlft.X , tlft.Y + 1 };
-    SetConsoleCursorPosition(hConsole, tcoord);
-    setGreenColor(hConsole);
+    COORD tcoord = { tlft->X , tlft->Y + 1 };
+    SetConsoleCursorPosition(hstdout, tcoord);
+    setGreenColor(hstdout);
     printf(" coordinates ");
 
     /*iterating through coordinates*/
     int tSize = 0;
     while (GlobalContainer.size > tSize) {
         SetConsoleCursorPosition(
-            hConsole, tcoord);
+            hstdout, tcoord);
         /*obtaining the x and y val*/
         printf("%d->(%d, %d)", tSize + 1 , 1, 2);
         tcoord.Y++;
     }
 
 
-    printEndLine(hConsole);
+    printEndLine(hstdout);
     return true;
 }
 
+void InitConsoleCoordinates(COORD consolesize) {
+    /*summary: allocates memory and initialize the
+    console coordinates
+    args: 
+        COORD consolesize -> size of the console
+    */
+
+    /*allocating memory for the coordinates*/
+    tlft = malloc(sizeof(COORD));
+    tmid = malloc(sizeof(COORD)); 
+    trgt = malloc(sizeof(COORD)); 
+    mmid = malloc(sizeof(COORD)); 
+    blft = malloc(sizeof(COORD)); 
+    bmid = malloc(sizeof(COORD)); 
+    brgt = malloc(sizeof(COORD)); 
+    btl  = malloc(sizeof(COORD));
+
+
+    /*setting up the coordinates*/
+    tlft->X = 0;
+    tlft->Y = 0;
+    tmid->X = consolesize.X / 2;
+    tmid->Y = 0;
+    trgt->X = consolesize.X - 1;
+    trgt->Y = 0;
+    mmid->X = consolesize.X / 2;
+    mmid->Y = consolesize.Y / 2;
+    blft->X = 0;
+    blft->Y = consolesize.Y;
+    bmid->X = consolesize.X / 2;
+    bmid->Y = consolesize.Y;
+    brgt->X = consolesize.X - 1;
+    brgt->Y = consolesize.Y;
+    btl->X = 0;
+    btl->Y = consolesize.Y + 1;
+
+}
+
+void FreeConsoleCoordinates() {
+    /*summary: free memory of the 
+    console coordinates*/
+    free(tlft);
+    free(tmid);
+    free(trgt);
+    free(mmid);
+    free(blft);
+    free(bmid);
+    free(brgt);
+    free(btl);
+}
 
 /*---MAIN FUNCTIONS---*/
 bool InitConsole(void) {
@@ -343,26 +387,10 @@ bool InitConsole(void) {
     COORD consoleSize = {
         scrBufferWidth - 1, winHeight - 3 };
 
-    /*setting up the coordinates*/
-    tlft.X = 0;
-    tlft.Y = 0;
-    tmid.X = consoleSize.X / 2;
-    tmid.Y = 0;
-    trgt.X = consoleSize.X - 1;
-    trgt.Y = 0;
-    mmid.X = consoleSize.X / 2;
-    mmid.Y = consoleSize.Y / 2;
-    blft.X = 0;
-    blft.Y = consoleSize.Y;
-    bmid.X = consoleSize.X / 2;
-    bmid.Y = consoleSize.Y;
-    brgt.X = consoleSize.X - 1;
-    brgt.Y = consoleSize.Y;
-    btl.X = 0;
-    btl.Y = consoleSize.Y + 1;
+    InitConsoleCoordinates(consoleSize);
 
-    drawGraph(hstdout, consoleSize);
-    drawTable(hstdout, consoleSize);
+    drawGraph(consoleSize);
+    drawTable(consoleSize);
    
 	return true;
 }
@@ -379,13 +407,14 @@ static void processKeyEvent(
         addChar(INPUTSTRING, asciichar);
         if (key.wVirtualKeyCode == VK_BACK) {
             removePrevChar(INPUTSTRING);
-            clsChar(INPUTSTRING->currcursorpos, true);
+            clsChar(*INPUTSTRING->currcursorpos, true);
             //moveCursor(INPUTSTRING, hstdout);
         }
         else if (key.wVirtualKeyCode == VK_RETURN) {
             clearInputString(INPUTSTRING);
-            moveCursor(INPUTSTRING, hstdout);
-            clsLine(btl, true);
+            CURRENTCHARCOUNT = 0;
+            //moveCursor(INPUTSTRING, hstdout);
+            clsLine(*btl, true);
         }
     }
 
@@ -395,12 +424,12 @@ int MainConsole(void) {
 
     DWORD cNumRead, i;
     DWORD fdwMode = ENABLE_WINDOW_INPUT;
-    int currentchar = 0;
+    CURRENTCHARCOUNT = 0;
 
     /*Initialize theV
     String Structure*/
     INPUTSTRING = malloc(sizeof(inputstring_t));
-    initInputString(INPUTSTRING, 0, btl);
+    InitInputString(INPUTSTRING, 0, btl);
     
     /*setting the console mode*/
     if (!SetConsoleMode(hstdin, fdwMode)) {
@@ -409,8 +438,8 @@ int MainConsole(void) {
     }
 
     /*move the cursor to the bottom*/
-    btl.Y -= 1;
-    SetConsoleCursorPosition(hstdout, btl);
+    btl->Y -= 1;
+    SetConsoleCursorPosition(hstdout, *btl);
 
     while (1) {
         if (!ReadConsoleInput(
@@ -426,15 +455,19 @@ int MainConsole(void) {
         for (i = 0; i < cNumRead; i++) {
             switch (irInBuf[i].EventType) {
             case KEY_EVENT:
-                processKeyEvent(irInBuf[i].Event.KeyEvent);
-                currentchar++;
+                if (CURRENTCHARCOUNT < MAXCHARCOUNT * 2) {
+                    /*process inputs only if the current count is 
+                    less than MAXCHARCOUNT*/
+                    processKeyEvent(irInBuf[i].Event.KeyEvent);
+                }
+                CURRENTCHARCOUNT++;
             default:
                 break;
             }
         }
-
     }
     printEndLine(hstdout);
-    free(INPUTSTRING);
+    FreeConsoleCoordinates();
+    FreeInputString(INPUTSTRING);
     return 1;
 }

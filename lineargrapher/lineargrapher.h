@@ -9,8 +9,6 @@
 #include "coordcontainer.h"
 #include "inputstring.h"
 
-#define MAXCHARCOUNT 10
-
 /*handles the console input and output*/
 static HANDLE hstdout, hstdin;
 /*stores the console buffer information*/
@@ -32,6 +30,10 @@ structure that holds the information
 about the input string
 */
 static inputstring_t* INPUTSTRING = NULL;
+
+/**/
+static int CURRENTCHARCOUNT;
+
 
 /*
 structure that holds the basic information
@@ -65,20 +67,26 @@ mmid -> mid point
 blft -> bot left point
 bmid -> bot mid point
 brgt -> bot right point
+---
 */
-static COORD tlft;
-static COORD tmid;
-static COORD trgt;
-static COORD mmid;
-static COORD blft;
-static COORD bmid;
-static COORD brgt;
-static COORD btl;
+static COORD* tlft;
+static COORD* tmid;
+static COORD* trgt;
+static COORD* mmid;
+static COORD* blft;
+static COORD* bmid;
+static COORD* brgt;
+static COORD* btl;
 
 /*initialize the console*/
 bool InitConsole();
 /*main console function*/
 int MainConsole();
+
+/*initialize the console coordinates*/
+void InitConsoleCoordinates(COORD consolesize);
+/*free the memory of all console coordinates*/
+void FreeConsoleCoordinates();
 
 /*clears the screen*/
 void cls(HANDLE hConsole);
@@ -88,9 +96,9 @@ void clsLine(COORD line, bool ret);
 void clsChar(COORD line, bool ret);
 
 /*draws the skeleton of the graph*/
-static bool drawGraph(HANDLE hConsole, COORD winSize);
+static bool drawGraph(COORD winSize);
 /*draws the coordinates table*/
-static bool drawTable(HANDLE hConsole, COORD winSize);
+static bool drawTable(COORD winSize);
 /*processing keyevents*/
 static void processKeyEvent(KEY_EVENT_RECORD key);
 
@@ -98,11 +106,11 @@ static void processKeyEvent(KEY_EVENT_RECORD key);
 /*endline*/
 static void printEndLine(HANDLE hConsole);
 
-
 /*color function sets color to text*/
-static void setBlueColor(HANDLE hConsole);
-static void setRedColor(HANDLE hConsole);
-static void setGreenColor(HANDLE hConsole);
+void setBlueColor();
+void setRedColor();
+void setGreenColor();
+
 
 #endif // GRAPHER_H
 
