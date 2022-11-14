@@ -6,6 +6,5 @@ int main(void){
     /*Initialize the Graph*/
     InitConsole();
     MainConsole();
-
     return 0;
 }

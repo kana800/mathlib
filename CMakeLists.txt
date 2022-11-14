@@ -10,10 +10,10 @@ add_subdirectory(lineargrapher)
 # build with testing features for 
 # mathlib
 if (TESTING)
+	add_subdirectory(external/check)
 	# adding the test directories
-	add_subdirectory(test)
+	add_subdirectory(tests)
 endif()
-
 
 
 add_executable(mathlib "demo/demograph.c")
