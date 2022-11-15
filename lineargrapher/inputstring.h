@@ -2,8 +2,9 @@
 
 #include <Windows.h>
 #include <stdio.h>
+#include <stdbool.h>
 
-#define MAXCHARCOUNT 10
+#define MAXCHARCOUNT 20
 
 /*
 structure that holds the information
@@ -11,14 +12,14 @@ about the input string
 */
 typedef struct InputString {
 	char string[MAXCHARCOUNT]; /*input string*/
-	short size; /*current word count*/
-	COORD* currcursorpos; /*current cursor position*/
+	int size; /*current word count*/
+	COORD* cursorpos; /*current cursor position*/
 } inputstring_t;
 
-void InitInputString(inputstring_t* is, int ccount, COORD* cp);
+inputstring_t* CreateInputStringStruct(COORD* cursorpos);
 void FreeInputString(inputstring_t* is);
 
-void addChar(inputstring_t* inputstruct, char c);
+bool addChar(inputstring_t* inputstruct, char c);
 void removePrevChar(inputstring_t* inputstruct);
 void clearInputString(inputstring_t* inputstruct);
 void parseString(inputstring_t* is);

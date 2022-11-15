@@ -1,16 +1,17 @@
 #include "inputstring.h"
 
-void InitInputString(
-	inputstring_t* is, int ccount, COORD* cp) {
-	/*summary: (constructor) initialize the input string
+
+inputstring_t* CreateInputStringStruct(COORD* cursorpos) {
+	/*summary: allocates memory for input string struct
+	and returns a pointer
 	args:
-		inputstring* is -> pointer to the input string structure
-		short ccount -> current char count default = 0
-		COORD cp -> current cursor position
+		COORD* cp -> current cursor position
 	*/
-	is->size = ccount;
-	is->currcursorpos = cp;
-	return;
+	inputstring_t* tis;
+	tis = malloc(sizeof(inputstring_t));
+	tis->size = 0;
+	tis->cursorpos = cursorpos;
+	return tis;
 }
 
 void FreeInputString(inputstring_t* is) {
@@ -22,7 +23,7 @@ void FreeInputString(inputstring_t* is) {
 
 
 
-void addChar(inputstring_t* inputstruct, char c) {
+bool addChar(inputstring_t* inputstruct, char c) {
 	/*summary: add character to the 
 	input string
 	args: 
@@ -30,11 +31,17 @@ void addChar(inputstring_t* inputstruct, char c) {
 		the character to
 		char c -> character you need to add
 	*/
-	int tCurrPos = inputstruct->size;
-	inputstruct->string[tCurrPos] = c;
-	/*incrementing size and cursor position*/
-	inputstruct->currcursorpos->X++;
-	inputstruct->size++;
+	if (inputstruct->size < MAXCHARCOUNT) {
+		int tCurrPos = inputstruct->size;
+		inputstruct->string[tCurrPos] = c;
+		/*incrementing size and cursor position*/
+		inputstruct->cursorpos->X++;
+		inputstruct->size++;
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 
@@ -45,8 +52,14 @@ void removePrevChar(inputstring_t* inputstruct) {
 		inputstring_t inputstructure -> structure that you 
 		need the character from
 	*/
-	inputstruct->currcursorpos->X--;
-	inputstruct->size--;
+	if (inputstruct->size > 0) {
+		inputstruct->cursorpos->X--;
+		inputstruct->size--;
+		return;
+	}
+	else {
+		return;
+	}
 }
 
 void clearInputString(inputstring_t* inputstruct) {
@@ -56,7 +69,7 @@ void clearInputString(inputstring_t* inputstruct) {
 		need the character from
 	*/
 	inputstruct->size = 0;
-	inputstruct->currcursorpos->X = 0;
+	inputstruct->cursorpos->X = 0;
 }
 
 
@@ -66,7 +79,7 @@ void parseString(inputstring_t* is) {
 		inputstring_t is -> structure that you 
 		need the character from
 	*/
-	is->currcursorpos->X = 0;
+	is->cursorpos->X = 0;
 	is->size = 0;
 }
 

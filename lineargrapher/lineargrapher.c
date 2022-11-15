@@ -407,7 +407,7 @@ static void processKeyEvent(
         addChar(INPUTSTRING, asciichar);
         if (key.wVirtualKeyCode == VK_BACK) {
             removePrevChar(INPUTSTRING);
-            clsChar(*INPUTSTRING->currcursorpos, true);
+            clsChar(*INPUTSTRING->cursorpos, true);
             //moveCursor(INPUTSTRING, hstdout);
         }
         else if (key.wVirtualKeyCode == VK_RETURN) {
@@ -426,20 +426,20 @@ int MainConsole(void) {
     DWORD fdwMode = ENABLE_WINDOW_INPUT;
     CURRENTCHARCOUNT = 0;
 
-    /*Initialize theV
-    String Structure*/
-    INPUTSTRING = malloc(sizeof(inputstring_t));
-    InitInputString(INPUTSTRING, 0, btl);
-    
+    INPUTSTRING = CreateInputStringStruct(btl);
+
     /*setting the console mode*/
     if (!SetConsoleMode(hstdin, fdwMode)) {
         fprintf(stderr, "Unable To Set Mode");
         return false;
     }
 
+
     /*move the cursor to the bottom*/
     btl->Y -= 1;
     SetConsoleCursorPosition(hstdout, *btl);
+    clsLine(*btl, true);
+
 
     while (1) {
         if (!ReadConsoleInput(
@@ -455,12 +455,7 @@ int MainConsole(void) {
         for (i = 0; i < cNumRead; i++) {
             switch (irInBuf[i].EventType) {
             case KEY_EVENT:
-                if (CURRENTCHARCOUNT < MAXCHARCOUNT * 2) {
-                    /*process inputs only if the current count is 
-                    less than MAXCHARCOUNT*/
-                    processKeyEvent(irInBuf[i].Event.KeyEvent);
-                }
-                CURRENTCHARCOUNT++;
+				processKeyEvent(irInBuf[i].Event.KeyEvent);
             default:
                 break;
             }
