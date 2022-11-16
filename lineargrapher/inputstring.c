@@ -23,7 +23,7 @@ void FreeInputString(inputstring_t* is) {
 
 
 
-bool addChar(inputstring_t* inputstruct, char c) {
+bool addChar(inputstring_t* is, char c) {
 	/*summary: add character to the 
 	input string
 	args: 
@@ -31,12 +31,12 @@ bool addChar(inputstring_t* inputstruct, char c) {
 		the character to
 		char c -> character you need to add
 	*/
-	if (inputstruct->size < MAXCHARCOUNT) {
-		int tCurrPos = inputstruct->size;
-		inputstruct->string[tCurrPos] = c;
+	if (is->size < MAXCHARCOUNT) {
+		int tCurrPos = is->size;
+		is->string[tCurrPos] = c;
 		/*incrementing size and cursor position*/
-		inputstruct->cursorpos->X++;
-		inputstruct->size++;
+		is->cursorpos->X++;
+		is->size++;
 		return true;
 	}
 	else {
@@ -45,31 +45,32 @@ bool addChar(inputstring_t* inputstruct, char c) {
 }
 
 
-void removePrevChar(inputstring_t* inputstruct) {
+bool removePrevChar(inputstring_t* is) {
 	/*summary: remove previous character from the 
 	input struct
 	args:
-		inputstring_t inputstructure -> structure that you 
+		inputstring_t is -> structure that you 
 		need the character from
+	return: true/false
 	*/
-	if (inputstruct->size > 0) {
-		inputstruct->cursorpos->X--;
-		inputstruct->size--;
-		return;
+	if (is->size > 0) {
+		is->cursorpos->X--;
+		is->size--;
+		return true;
 	}
 	else {
-		return;
+		return false;
 	}
 }
 
-void clearInputString(inputstring_t* inputstruct) {
+bool clearInputString(inputstring_t* is) {
 	/*summary: clears the content in the string
 	args:
-		inputstring_t inputstructure -> structure that you 
+		inputstring_t isure -> structure that you 
 		need the character from
 	*/
-	inputstruct->size = 0;
-	inputstruct->cursorpos->X = 0;
+	is->size = 0;
+	is->cursorpos->X = 0;
 }
 
 
@@ -79,25 +80,24 @@ void parseString(inputstring_t* is) {
 		inputstring_t is -> structure that you 
 		need the character from
 	*/
-	is->cursorpos->X = 0;
-	is->size = 0;
+
 }
 
 
-void printString(inputstring_t* inputstruct) {
+void printString(inputstring_t* is) {
 	/*summary: prints the string;
 	use this for DEBUGGING only;
 	args:
-		inputstring_t inputstructure -> structure print
+		inputstring_t isure -> structure print
 	*/
-	if (inputstruct->size == 0) {
+	if (is->size == 0) {
 		printf("Empty String\n");
 		return;
 	}
 	else {
 		printf(": ");
-		for (int i = 0; i < inputstruct->size; i++) {
-			printf("%c", inputstruct->string[i]);
+		for (int i = 0; i < is->size; i++) {
+			printf("%c", is->string[i]);
 		}
 		printf("\n");
 		return;

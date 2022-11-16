@@ -395,7 +395,6 @@ bool InitConsole(void) {
 	return true;
 }
 
-
 static void processKeyEvent(
     KEY_EVENT_RECORD key) {
     /*processes keyboard events and 
@@ -408,12 +407,11 @@ static void processKeyEvent(
         if (key.wVirtualKeyCode == VK_BACK) {
             removePrevChar(INPUTSTRING);
             clsChar(*INPUTSTRING->cursorpos, true);
-            //moveCursor(INPUTSTRING, hstdout);
         }
         else if (key.wVirtualKeyCode == VK_RETURN) {
             clearInputString(INPUTSTRING);
-            CURRENTCHARCOUNT = 0;
-            //moveCursor(INPUTSTRING, hstdout);
+            /*parsing the string*/
+            //bool parseret = parseString(INPUTSTRING);
             clsLine(*btl, true);
         }
     }

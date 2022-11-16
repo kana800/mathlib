@@ -8,6 +8,7 @@
 
 #include "coordcontainer.h"
 #include "inputstring.h"
+#include "parser.h"
 
 /*handles the console input and output*/
 static HANDLE hstdout, hstdin;

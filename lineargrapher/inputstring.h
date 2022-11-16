@@ -1,4 +1,5 @@
 #ifndef INPUTSTRING_H
+#define INPUTSTRING_H
 
 #include <Windows.h>
 #include <stdio.h>
@@ -16,14 +17,17 @@ typedef struct InputString {
 	COORD* cursorpos; /*current cursor position*/
 } inputstring_t;
 
+/*---main functions---*/
 inputstring_t* CreateInputStringStruct(COORD* cursorpos);
 void FreeInputString(inputstring_t* is);
 
-bool addChar(inputstring_t* inputstruct, char c);
-void removePrevChar(inputstring_t* inputstruct);
-void clearInputString(inputstring_t* inputstruct);
-void parseString(inputstring_t* is);
-void printString(inputstring_t* inputstruct);
+/*---helper functions---*/
+bool addChar(inputstring_t* is, char c);
+bool removePrevChar(inputstring_t* is);
+bool clearInputString(inputstring_t* is);
+
+/*---helper functions[debug]---*/
+void printString(inputstring_t* is);
 
 
 #endif // !INPUTSTRING_H

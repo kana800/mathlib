@@ -3,6 +3,7 @@ This file consist of the test cases that test components of the linear grapher
 module
 */
 #include "../lineargrapher/inputstring.h"
+#include "../lineargrapher/parser.h"
 
 #include "Windows.h"
 #include <stdio.h>
@@ -11,6 +12,13 @@ module
 
 static inputstring_t* is;
 static COORD* tempCursor;
+
+static void freeResources() {
+    free(tempCursor);
+    free(is);
+}
+
+/*---INPUTSTRING---*/
 
 START_TEST (test_createinputstringstruct) {
     /*
@@ -50,7 +58,6 @@ START_TEST (test_inputstring_addchar) {
 }
 END_TEST
 
-
 START_TEST (test_inputstring_removechar) {
     /*
     test cases for the input string
@@ -79,7 +86,10 @@ START_TEST (test_inputstring_removechar) {
 END_TEST
 
 START_TEST (test_inputstring_addchar_edgecases) {
-    /*test cases for the input string addChar (edgecases)*/ 
+    /*
+    test cases for the input string addChar 
+    (edgecases)
+    */ 
 
     /*add char to the input string*/
     char* testarr1[] = { 'a','b','c','d','e','f','g','h',
@@ -106,12 +116,63 @@ START_TEST (test_inputstring_addchar_edgecases) {
     /*cursor 'X' should be move backwards by 1*/
     ck_assert_int_eq(is->cursorpos->X, 0);
     ck_assert_int_eq(is->cursorpos->Y, 0);
-
-    free(tempCursor);
-    free(is);
 }
 END_TEST
 
+
+START_TEST(test_inputstring_removechar_edgecases) {
+
+}
+END_TEST
+
+START_TEST(test_inputstring_clearinputstring) {
+
+}
+END_TEST
+
+
+/*---PARSER---*/
+START_TEST(test_parser_parseString) {
+    /*
+    test cases for the parseString function
+    */
+}
+END_TEST
+
+void addchar(inputstring_t * is, char* arr) {
+	for (int i = 0; i < sizeof(arr)/sizeof(char); i++) {
+		addChar(is, arr[i]);
+	}
+}
+
+START_TEST(test_parser_isvalidgrammar) {
+    /*
+    test cases for the parseString function
+    */
+    clearInputString(is);
+
+    char tgrammar1[] = "add";
+    addchar(is, tgrammar1);
+    ck_assert_int_eq(isvalidgrammar(is), true);
+    clearInputString(is);
+
+    char tgrammar2[] = "rmv";
+    addchar(is, tgrammar2);
+    ck_assert_int_eq(isvalidgrammar(is), true);
+    clearInputString(is);
+
+    char tgrammar3[] = "plt";
+    addchar(is, tgrammar3);
+    ck_assert_int_eq(isvalidgrammar(is), true);
+    clearInputString(is);
+
+    char tgrammar4[] = "grd";
+    addchar(is, tgrammar4);
+    ck_assert_int_eq(isvalidgrammar(is), true);
+    clearInputString(is);
+
+}
+END_TEST
 
 Suite* inputstring_suite(void) {
     /*TEST SUITE for inputstring test cases*/
@@ -130,18 +191,15 @@ Suite* inputstring_suite(void) {
     return s;
 }
 
-Suite* coordinates_suite(void) {
+Suite* parser_suite(void) {
     Suite* s;
     TCase* tc_core;
 
-    s = suite_create("InputStringTest");
+    s = suite_create("ParserTest");
 
     /* core test cases */
     tc_core = tcase_create("Core");
-    tcase_add_test(tc_core, test_createinputstringstruct);
-    tcase_add_test(tc_core, test_inputstring_addchar);
-    tcase_add_test(tc_core, test_inputstring_removechar);
-    tcase_add_test(tc_core, test_inputstring_addchar_edgecases);
+    tcase_add_test(tc_core, test_parser_isvalidgrammar);
     suite_add_tcase(s, tc_core);
     return s;
 }
@@ -151,13 +209,21 @@ int main(void)
 {
     int number_failed;
 	Suite *s;
-	SRunner *sr;
+    Suite* parsersuite;
+    SRunner *sr;
 
 	s = inputstring_suite();
+    parsersuite = parser_suite();
+
 	sr = srunner_create(s);
+    srunner_add_suite(sr, parsersuite);
 
 	srunner_run_all(sr, CK_VERBOSE);
 	number_failed = srunner_ntests_failed(sr);
-	srunner_free(sr);
+
+    /*freeing the resources*/
+    freeResources();
+    srunner_free(sr);
+
 	return (number_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
