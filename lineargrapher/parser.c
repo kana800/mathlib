@@ -1,25 +1,25 @@
 #include "parser.h"
 
 
-//bool parseString(inputstring_t* is) {
-//	/*summary: parses the string according
-//	to the given grammar;
-//	args:
-//		inputstring_t* is -> pointer to the input
-//		string;
-//	*/
-//
-//	/*looping through the string; till the end*/
-//	int tSize = 0;
-//	while (is->size >= tSize) {
-//		printf("%d %c", tSize, is->string[tSize]);
-//		tSize++;
-//	}
-//	return true;
-//}
+bool parseString(inputstring_t* is) {
+	/*summary: parses the string according
+	to the given grammar;
+	args:
+		inputstring_t* is -> pointer to the input
+		string;
+	*/
+
+	/*looping through the string; till the end*/
+	int tSize = 0;
+	while (is->size >= tSize) {
+		printf("%d %c", tSize, is->string[tSize]);
+		tSize++;
+	}
+	return true;
+}
 
 
-bool isvalidgrammar(inputstring_t* is) {
+bool g_isvalidgrammar(inputstring_t* is) {
 	/*summary: checks if the user has
 	inputted valid grammar;
 	example:
@@ -33,22 +33,35 @@ bool isvalidgrammar(inputstring_t* is) {
 	always the first three characters of the
 	string should be consist of the grammar
 	*/
-	char tgrammarstr[GRAMMARSTRLEN + 1];
+	char tgrammarstr[GRAMMARSTRLEN];
 	/*populating the temp grammar string*/
-	for (int i = 0; i < GRAMMARSTRLEN; i++) {
+	for (int i = 0; i < GRAMMARSTRLEN - 1; i++) {
 		tgrammarstr[i] = is->string[i];
 	}
-	/*
-	looping through the grammar to check
-	if valid string is present
-	*/
+
 	for (int i = 0; i < GRAMMARCNT; i++) {
-		// need to fix here
-		// doesnt compare properly
-		if (strcmp(GRAMMARLIST[i],
-			tgrammarstr) == 0) {
-			return false;
-		}
+		if (g_strcompare(tgrammarstr,
+			GRAMMARLIST[i])) return true;
 	}
-	return strcmp(GRAMMARLIST[0], tgrammarstr);
+	return false;
+}
+
+int g_strcompare(const char* str1, 
+	const char* str2) {
+	/*summary: compare the given two strings
+	and return whether its equal or not;
+	args:
+		str1 -> string one
+		str2 -> string two
+	str1 will be compared against str2
+	return:
+		ret val 1; string is equal
+		ret val 0; string is not equal
+	*/
+
+	/*looping through the string*/
+	for (int i = 0; i < GRAMMARSTRLEN - 1; i++) {
+		if (str1[i] != str2[i]) return 0;
+	}
+	return 1;
 }

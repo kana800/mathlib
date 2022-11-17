@@ -1,3 +1,7 @@
+/*
+InputString is structure that holds information
+about the user-input;
+*/
 #ifndef INPUTSTRING_H
 #define INPUTSTRING_H
 
@@ -18,16 +22,23 @@ typedef struct InputString {
 } inputstring_t;
 
 /*---main functions---*/
-inputstring_t* CreateInputStringStruct(COORD* cursorpos);
-void FreeInputString(inputstring_t* is);
+
+/*construct a inputstring object*/
+inputstring_t * is_createisstruct(COORD * cursorpos);
+/*destruct the inputstring object*/
+void is_freeis(inputstring_t* is);
 
 /*---helper functions---*/
-bool addChar(inputstring_t* is, char c);
-bool removePrevChar(inputstring_t* is);
-bool clearInputString(inputstring_t* is);
+
+/*adds a character to the inputstring*/
+bool is_addChar(inputstring_t* is, char c);
+/*removes a character from the inputstring*/
+bool is_removePrevChar(inputstring_t* is);
+/*clears the inputstring buffer*/
+bool is_clearInputString(inputstring_t* is);
 
 /*---helper functions[debug]---*/
-void printString(inputstring_t* is);
+static void is_printString(inputstring_t* is);
 
 
 #endif // !INPUTSTRING_H

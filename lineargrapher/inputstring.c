@@ -1,7 +1,6 @@
 #include "inputstring.h"
 
-
-inputstring_t* CreateInputStringStruct(COORD* cursorpos) {
+inputstring_t* is_createisstruct(COORD* cursorpos) {
 	/*summary: allocates memory for input string struct
 	and returns a pointer
 	args:
@@ -14,22 +13,22 @@ inputstring_t* CreateInputStringStruct(COORD* cursorpos) {
 	return tis;
 }
 
-void FreeInputString(inputstring_t* is) {
+void is_freeis(inputstring_t* is) {
 	/*summary: free the memory 
 	in the input string*/
 	free(is);
 	return;
 }
 
-
-
-bool addChar(inputstring_t* is, char c) {
+bool is_addChar(inputstring_t* is, char c) {
 	/*summary: add character to the 
 	input string
 	args: 
 		inputstring_t inputstruct -> structure you need to add
 		the character to
 		char c -> character you need to add
+	return:
+		true | false
 	*/
 	if (is->size < MAXCHARCOUNT) {
 		int tCurrPos = is->size;
@@ -44,14 +43,14 @@ bool addChar(inputstring_t* is, char c) {
 	}
 }
 
-
-bool removePrevChar(inputstring_t* is) {
+bool is_removePrevChar(inputstring_t* is) {
 	/*summary: remove previous character from the 
 	input struct
 	args:
 		inputstring_t is -> structure that you 
 		need the character from
-	return: true/false
+	return: 
+		true | false
 	*/
 	if (is->size > 0) {
 		is->cursorpos->X--;
@@ -63,28 +62,19 @@ bool removePrevChar(inputstring_t* is) {
 	}
 }
 
-bool clearInputString(inputstring_t* is) {
+bool is_clearInputString(inputstring_t* is) {
 	/*summary: clears the content in the string
 	args:
 		inputstring_t isure -> structure that you 
 		need the character from
+	return:
+		true | false
 	*/
 	is->size = 0;
 	is->cursorpos->X = 0;
 }
 
-
-void parseString(inputstring_t* is) {
-	/*summary: parses the string and clear
-	args:
-		inputstring_t is -> structure that you 
-		need the character from
-	*/
-
-}
-
-
-void printString(inputstring_t* is) {
+static void printString(inputstring_t* is) {
 	/*summary: prints the string;
 	use this for DEBUGGING only;
 	args:
