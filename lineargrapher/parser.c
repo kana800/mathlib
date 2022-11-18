@@ -11,11 +11,17 @@ bool parseString(inputstring_t* is) {
 
 	/*looping through the string; till the end*/
 	int tSize = 0;
-	while (is->size >= tSize) {
-		printf("%d %c", tSize, is->string[tSize]);
+	while (is->size > tSize) {
+		printf("tokenid: %d - %c\n", tSize, is->string[tSize]);
 		tSize++;
 	}
-	return true;
+
+	/*checking if the grammar is valid*/
+	if (g_isvalidgrammar(is)) {
+		return true;
+	}
+
+	return false;
 }
 
 

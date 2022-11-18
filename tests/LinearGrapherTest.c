@@ -26,7 +26,6 @@ static void addcharmult(char* arr, int size) {
         int size -> size of the arr
     */
     for (int i = 0; i < size; i++) {
-        printf("adding char %c \n", arr[i]);
         is_addChar(is, arr[i]);
     }
 }
@@ -163,7 +162,7 @@ START_TEST(test_parser_parseString) {
 
     char* testline = "add (4,3)";
     addcharmult(testline, 9);
-    parseString(is);
+    ck_assert_int_eq(parseString(is), 1);
 
 }
 END_TEST
