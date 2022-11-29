@@ -74,12 +74,13 @@ bool is_clearInputString(inputstring_t* is) {
 	is->cursorpos->X = 0;
 }
 
-static void printString(inputstring_t* is) {
+static void is_printString(inputstring_t* is) {
 	/*summary: prints the string;
 	use this for DEBUGGING only;
 	args:
 		inputstring_t isure -> structure print
 	*/
+    printf("------------PRINT STRING--------------\n");
 	if (is->size == 0) {
 		printf("Empty String\n");
 		return;

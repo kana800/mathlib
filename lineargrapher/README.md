@@ -106,11 +106,16 @@ when the `is_addChar(inputstring_t* is, char c)` method is called the following 
 
 #### Parsing
 I thought of getting the user input and then **parsing**  the input and call the appropriate function.
-For example if `add (4,3)` was the inputted by the user. It will _add the coordinate_ `(4,3)` _to the table_. To make it easier, I am going to make every method that user needs to input short.
+For example if `add (4,3)` was the inputted by the user. It will _add the coordinate_ `(4,3)` _to the table_. To make it easier, I am going to make every method that user needs to input short `3` lettered command.
 
 - `add (4,3)` -> add coordinate
 - `rmv <idx>` -> removes the coordinate with given index
 - `plt <idx1>,<idx2>,<idx3>` -> plots the coordinates represented by the `idx1`, `idx2` and `idx3`
+
+The `inputstring->string` variable is copied another variable that is allocated in the 
+heap; I could have avoided this if I created the `inputstring_t`'s `string` member in the
+heap since I don't have much time I am going to :sparkles:improvise:sparkles:.
+
 
 #### `add`
 
@@ -182,3 +187,6 @@ typed coordinate and allocate memory for it.
 </p>
 
 <todo Removing coordinate from the container>
+
+
+---

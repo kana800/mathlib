@@ -10,6 +10,7 @@ module
 #include <stdlib.h>
 #include <check.h>
 
+
 static inputstring_t* is;
 static COORD* tempCursor;
 
@@ -145,14 +146,52 @@ END_TEST
 
 START_TEST(test_inputstring_clearinputstring) {
     /*
-
-    bool is_clearInputString(inputstring_t* is);
+    test cases for the clearinputstring function
+        bool is_clearInputString(
+        inputstring_t* is);
     */
 }
 END_TEST
 
 
 /*---PARSER---*/
+START_TEST(test_parser_createStringBuffer) {
+    /*
+    test cases for the createStringBuffer 
+    method;
+
+    char * createStringBuffer(inputstring_t* is);
+    */
+    printf("--------------------------------------\n");
+    printf("------------STRING BUFFER-------------\n");
+    //is_clearInputString(is);
+    //char* testline = "12345";
+    //addcharmult(testline, 5);
+    //
+    //char* testString = createStringBuffer(is);
+    //for (int i = 0; i <= 5; i++) {
+    //    ck_assert_int_eq(testline[i], testString[i]);
+    //    printf("testline - %c : teststring - %c \n", 
+    //        testline[i], testString[i]);
+    //}
+    //freeStringBuffer(testString);
+
+    is_clearInputString(is);
+    char* testline2 = "d is cat";
+    char* testlineans = "discat";
+    addcharmult(testline2, 8);
+    char* testString2 = createStringBuffer(is);
+    for (int i = 0; i <= 6; i++) {
+        ck_assert_int_eq(testlineans[i], testString2[i]);
+        printf("testline - %c : teststring - %c \n", 
+            testlineans[i], testString2[i]);
+    }
+
+    freeStringBuffer(testString2);
+}
+END_TEST
+
+
 START_TEST(test_parser_parseString) {
     /*
     test cases for the parseString function
@@ -163,7 +202,29 @@ START_TEST(test_parser_parseString) {
     char* testline = "add (4,3)";
     addcharmult(testline, 9);
     ck_assert_int_eq(parseString(is), 1);
+}
+END_TEST
 
+
+START_TEST(test_parser_g_shiftleft) {
+    /*
+    test cases for the g_isvalidgrammar function
+        g_isvalidgrammar(inputstring_t* is);
+    */
+    is_clearInputString(is);
+
+    is_addChar(is, '0');
+    is_addChar(is, '1');
+    is_addChar(is, '2');
+    is_addChar(is, '3');
+    is_addChar(is, '4');
+    is_addChar(is, '5');
+    is_addChar(is, '6');
+
+    g_shiftleft(is, 2);
+
+    is_clearInputString(is);
+    printf("--------------------------------------\n");
 }
 END_TEST
 
@@ -226,8 +287,10 @@ Suite* parser_suite(void) {
 
     /* core test cases */
     tc_core = tcase_create("Core");
+    tcase_add_test(tc_core, test_parser_createStringBuffer);
     tcase_add_test(tc_core, test_parser_parseString);
     tcase_add_test(tc_core, test_parser_g_isvalidgrammar);
+    tcase_add_test(tc_core, test_parser_g_shiftleft);
     tcase_add_test(tc_core, test_parser_g_strcompare);
     suite_add_tcase(s, tc_core);
     return s;
