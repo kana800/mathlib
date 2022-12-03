@@ -131,22 +131,28 @@ static int g_parseCoordinate(char* str){
 	indx:	3 4 5 6
 		FALSE
 	*/
+
 	for (int i = start + 1; i < commaIndex; i++) {
-		printf("l1 %c\n", str[i]);
-		if (!isDigit(str[i])) {
-			return -1;
+		if (isDigit(str[i])) {
+			printf("l1 %c\n", str[i]);
 		}
+		return -1;
 	}
 	for (int i = commaIndex + 1; i < end - 1; i++) {
-		printf("l2 %c\n", str[i]);
-		if (!isDigit(str[i])) {
-			return -1;
+		if (isDigit(str[i])) {
+			printf("l2 %c\n", str[i]);
 		}
+		return -1;
 	}
 	/*
 	TODO:
 		find a way to change characters to a number
 		'524' -> 524
+		Many libraries will have a "decorator" so it'd be like MY_LIB_DEC
+
+MY_LIB_DEC int doSomething() { }
+
+And that can be #define'd any way you want.
 	*/
 
 

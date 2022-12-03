@@ -5,7 +5,7 @@ project(mathlib C)
 set(TESTING 1)
 
 # adding the grapher library
-add_subdirectory(lineargrapher)
+#add_subdirectory(lineargrapher)
 
 # build with testing features for 
 # mathlib
@@ -15,12 +15,12 @@ if (TESTING)
 	add_subdirectory(tests)
 endif()
 
+add_subdirectory(lib)
 
-add_executable(mathlib "demo/demograph.c")
+#add_executable(mathlib "demo/demograph.c" "lib/coordinate.h")
 
-
-target_link_libraries(mathlib 
-	PRIVATE LINEARGRAPHER)
-target_include_directories(mathlib
-	PRIVATE LINEARGRAPHER)
+#target_link_libraries(mathlib 
+#	PRIVATE LINEARGRAPHER)
+#target_include_directories(mathlib
+#	PRIVATE LINEARGRAPHER)
 
