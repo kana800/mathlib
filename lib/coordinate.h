@@ -21,20 +21,33 @@ typedef struct coordinate {
 
 // add multiple coordinates together
 coord c_addcoordinate(
-	coord c1, coord c2, ...) {
+	int count, coord c1, coord c2, ...) {
 	/*summary: add multiple coordiantes together
-	args: coord
+	args:
+		int count -> sentinel value;
+			number of arguments passed
+		coord
 	return:
 		coord
 	*/
+
+	// adding the default two arguments
+	// have a separate function for this later
+	coord temp = 
+		{ .x = c1.x + c2.x, .y = c1.y + c2.y };
+	count -= 2;
+
 	va_list ptr;
-	va_start(ptr, c1);
+	va_start(ptr, c2);
 
-	coord temp = {.x = 0, .y = 0};
-
-
-
+	for (int i = 0; i < count; i++) {
+		coord test = va_arg(ptr, coord);
+		temp = { .x = temp.x + test.x, .y = temp.y + test.y };
+		printf("test coord (%d,%d)", test.x, test.y);
+	}
 	va_end(ptr);
+
+	return temp;
 }
 
 
