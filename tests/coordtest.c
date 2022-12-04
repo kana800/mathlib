@@ -1,22 +1,46 @@
-/**/
+/*test cases for the coordinate library*/
 #include <check.h>
 #include <stdio.h>
-
+#include <stdlib.h>
+#include <time.h>
 
 #include "../lib/coordinate.h"
 
-START_TEST(test_parser_c_addcoordinate) {
+START_TEST(test_parser_c_arithmeticcoordinate) {
     /*summary:
     coord c_addcoordinate(coord c1, coord c2, ...)
+    coord c_subcoordinate(coord c1, coord c2, ...)
     */
 
     // test coordinates
-    coord t1 = { .x = 1, .y = 0 };
-    coord t3 = { .x = 2, .y = 0 };
+    coord t1 = { .x = 1, .y = 2 };
+    coord t2 = { .x = 3, .y = 4 };
+    coord t3 = { .x = 2, .y = 5 };
 
-    coord t2 = c_addcoordinate(3, t1, t1, t1);
-    printf("coordinate (%d, %d)", t2.x, t2.y);
-    ck_assert_int_eq(t2.x, t1.x);
+    coord t5 = c_addcoordinate(3, t1, t2, t3);
+    ck_assert_int_eq(t5.x, 6);
+    ck_assert_int_eq(t5.y, 11);
+
+    coord t6 = c_subcoordinate(3, t1, t2, t3);
+    ck_assert_int_eq(t6.x, -4);
+    ck_assert_int_eq(t6.y, -7);
+
+}
+END_TEST
+
+START_TEST(test_parser_c_findmidpoint) {
+    /*summary:
+    coord c_subcoordinate(coord c1, coord c2, ...)
+    */
+
+    // test coordinates
+    coord t1 = { .x = 1, .y = 2 };
+    coord t2 = { .x = 3, .y = 4 };
+
+    coord t5 = c_findmidpoint(t1, t2);
+    ck_assert_int_eq(t5.x, 2);
+    ck_assert_int_eq(t5.y, 3);
+
 }
 END_TEST
 
@@ -29,10 +53,7 @@ Suite* coordinate_suite(void) {
 
     /* core test cases */
     tc_core = tcase_create("Core");
-    tcase_add_test(tc_core, test_parser_c_addcoordinate);
-    //tcase_add_test(tc_core, test_inputstring_addchar);
-    //tcase_add_test(tc_core, test_inputstring_removechar);
-    //tcase_add_test(tc_core, test_inputstring_addchar_edgecases);
+    tcase_add_test(tc_core, test_parser_c_arithmeticcoordinate);
     suite_add_tcase(s, tc_core);
     return s;
 }
