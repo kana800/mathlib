@@ -10,6 +10,7 @@ START_TEST(test_parser_c_arithmeticcoordinate) {
     /*summary:
     coord c_addcoordinate(coord c1, coord c2, ...)
     coord c_subcoordinate(coord c1, coord c2, ...)
+    coord c_divcoordinate(coord c1, coord c2, ...)
     */
 
     // test coordinates
@@ -25,6 +26,21 @@ START_TEST(test_parser_c_arithmeticcoordinate) {
     ck_assert_int_eq(t6.x, -4);
     ck_assert_int_eq(t6.y, -7);
 
+    coord t7 = c_divcoordinate(3, t1, t2, t3);
+    ck_assert_int_eq(t7.x, 0);
+    ck_assert_int_eq(t7.y, 0);
+
+    coord t9 = c_multcoordinate(3, t1, t2, t3);
+    ck_assert_int_eq(t9.x, 6);
+    ck_assert_int_eq(t9.y, 40);
+
+    // edge cases for variadic functions
+
+    // providing count value more than given
+    // amount of arguments.
+    coord t8 = c_addcoordinate(10, t1, t2, t3);
+    //ck_assert_int_eq(t8.x, 6);
+    //ck_assert_int_eq(t8.y, 11);
 }
 END_TEST
 
