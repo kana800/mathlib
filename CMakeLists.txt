@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.8)
 
 project(mathlib C)
 
-set(TESTING 1)
+set(TESTING 0)
 
 # adding the grapher library
 #add_subdirectory(lineargrapher)
