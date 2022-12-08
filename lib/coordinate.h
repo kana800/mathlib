@@ -13,6 +13,7 @@ USAGE
 #include <stdlib.h>
 #include <stdarg.h>
 
+#define DEBUG 1
 
 // coordinate structure
 typedef struct coordinate {
@@ -22,11 +23,19 @@ typedef struct coordinate {
 
 // forward declaration
 coord addcoordinate(int count, ...);
+coord subcoordinate(int count, ...);
+coord divcoordinate(int count, ...);
+coord multcoordinate(int count, ...);
+
+
+#ifndef _MSC_VER
 
 #define VA_NUM_ARGS_HELPER(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, N, ...)	N
 #define VA_NUM_ARGS(...)	VA_NUM_ARGS_HELPER(__VA_ARGS__, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
-
+// have to test this in a gcc compiler
 #define c_addcoordinate(...) addcoordinate(VA_NUM_ARGS(__VA_ARGS__), __VA_ARGS__)
+
+#endif
 
 // create a coordinate in the heap
 coord* c_createcoordinate(int x, int y) {
@@ -53,12 +62,13 @@ coord addcoordinate(int count, ...) {
 
 	coord temp = { .x = 0, .y = 0 };
 
-	printf("detected count is %d \n", count);
 	va_list ptr;
 	va_start(ptr, count);
 	for (int i = 0; i < count; i++) {
 		coord test = va_arg(ptr, coord);
-		printf("coordinate %d: (%d,%d) \n", count, test.x, test.y);
+#ifdef DEBUG
+		printf("addcoordinate %d: (%d,%d) \n", i, test.x, test.y);
+#endif
 		temp.x += test.x;
 		temp.y += test.y;
 	}
@@ -68,8 +78,7 @@ coord addcoordinate(int count, ...) {
 }
 
 // subtract multiple coordinates together
-coord c_subcoordinate(
-	int count, coord c1, coord c2, ...) {
+coord subcoordinate(int count, ...) {
 	/*summary: subtract multiple coordinates together
 	args:
 		int count -> sentinel value;
@@ -79,16 +88,18 @@ coord c_subcoordinate(
 		coord
 	*/
 
-	coord temp = 
-		{ .x = c1.x - c2.x, .y = c1.y - c2.y };
-	/*accounting for the c1 and c2 coordinates*/
-	count -= 2;
 
 	va_list ptr;
-	va_start(ptr, c2);
+	va_start(ptr, count);
 
-	for (int i = 0; i < count; i++) {
-		coord test = va_arg(ptr, coord);
+	coord test = va_arg(ptr, coord);
+	coord temp = { .x = test.x, .y = test.y };
+
+	for (int i = 1; i < count; i++) {
+		test = va_arg(ptr, coord);
+#ifdef DEBUG
+		printf("subcoordinate %d: (%d,%d) \n", i, test.x, test.y);
+#endif
 		temp.x -= test.x;
 		temp.y -= test.y;
 	}
@@ -98,8 +109,7 @@ coord c_subcoordinate(
 }
 
 // divide multiple coordinates together
-coord c_divcoordinate(
-	int count, coord c1, coord c2, ...) {
+coord divcoordinate(int count, ...) {
 	/*summary: divide multiple coordinates together
 	args:
 		int count -> sentinel value;
@@ -116,22 +126,15 @@ coord c_divcoordinate(
 	*/
 
 	coord temp = { .x = 0,.y = 0 };
-	// cant divide by zero; so we
-	// are skipping these values
-	if ((c2.x != 0) || (c2.y != 0)) {
-		temp.x = c1.x / c2.x;
-		temp.y = c1.y / c2.y;
-	}
-
-	/*accounting for the c1 and c2 coordinates*/
-	count -= 2;
 
 	va_list ptr;
-	va_start(ptr, c2);
+	va_start(ptr, count);
 
 	for (int i = 0; i < count; i++) {
 		coord test = va_arg(ptr, coord);
-
+#ifdef DEBUG
+		printf("divcoordinate %d: (%d,%d) \n", i, test.x, test.y);
+#endif
 		if ((temp.x != 0) || (temp.y != 0)) {
 			temp.x /= test.x;
 			temp.y /= test.y;
@@ -147,8 +150,7 @@ coord c_divcoordinate(
 }
 
 // multiple multiple coordinates together
-coord c_multcoordinate(
-	int count, coord c1, coord c2, ...) {
+coord multcoordinate(int count, ...) {
 	/*summary: multiply multiple coordinates together
 	args:
 		int count -> sentinel value;
@@ -164,16 +166,16 @@ coord c_multcoordinate(
 		coord
 	*/
 
-	coord temp = { .x = c1.x * c2.x,.y = c1.y * c2.y };
-
-	/*accounting for the c1 and c2 coordinates*/
-	count -= 2;
+	coord temp = { .x = 1,.y = 1 };
 
 	va_list ptr;
-	va_start(ptr, c2);
+	va_start(ptr, count);
 
 	for (int i = 0; i < count; i++) {
 		coord test = va_arg(ptr, coord);
+#ifdef DEBUG
+		printf("multcoordinate %d: (%d,%d) \n", i, test.x, test.y);
+#endif
 		temp.x *= test.x;
 		temp.y *= test.y;
 	}

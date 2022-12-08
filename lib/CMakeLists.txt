@@ -1,18 +1,14 @@
 cmake_minimum_required(VERSION 3.2)
 
 
-set(HEADERS 
+set(COORD_HEADERS 
 	"coordinate.h"
 )
+set(COORD_SRC
+	"coordinate.c"
+)
 
-set(TESTING 1)
-
-add_library(coord ${HEADERS} "coordinate.c")
-
-if (TESTING)
-add_executable(coordtest ${HEADERS} "coordinate.c")
-endif()
-
+add_library(coord ${COORD_HEADERS} ${COORD_SRC})
 
 set_target_properties(
 	coord PROPERTIES 
