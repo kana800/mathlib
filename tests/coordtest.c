@@ -8,32 +8,32 @@
 
 START_TEST(test_parser_c_arithmeticcoordinate) {
     /*summary:
-    coord c_addcoordinate(coord c1, coord c2, ...)
-    coord c_subcoordinate(coord c1, coord c2, ...)
-    coord c_divcoordinate(coord c1, coord c2, ...)
+    cartesiancoord c_addcoordinate(coord c1, coord c2, ...)
+    cartesiancoord c_subcoordinate(coord c1, coord c2, ...)
+    cartesiancoord c_divcoordinate(coord c1, coord c2, ...)
     */
 
     // test coordinates
-    coord t1 = { .x = 1, .y = 2 };
-    coord t2 = { .x = 3, .y = 4 };
-    coord t3 = { .x = 2, .y = 5 };
+    cartesiancoord t1 = { .x = 1, .y = 2 };
+    cartesiancoord t2 = { .x = 3, .y = 4 };
+    cartesiancoord t3 = { .x = 2, .y = 5 };
 
-    coord t5 = addcoordinate(3, t1, t2, t3);
+    cartesiancoord t5 = addcartesiancoordinate(3, t1, t2, t3);
     ck_assert_int_eq(t5.x, 6);
     ck_assert_int_eq(t5.y, 11);
     printf("---\n");
 
-    coord t6 = subcoordinate(3, t1, t2, t3);
+    cartesiancoord t6 = subcartesiancoordinate(3, t1, t2, t3);
     ck_assert_int_eq(t6.x, -4);
     ck_assert_int_eq(t6.y, -7);
     printf("---\n");
 
-    coord t7 = divcoordinate(3, t1, t2, t3);
+    cartesiancoord t7 = divcartesiancoordinate(3, t1, t2, t3);
     ck_assert_int_eq(t7.x, 0);
     ck_assert_int_eq(t7.y, 0);
     printf("---\n");
 
-    coord t9 = multcoordinate(3, t1, t2, t3);
+    cartesiancoord t9 = multcartesiancoordinate(3, t1, t2, t3);
     ck_assert_int_eq(t9.x, 6);
     ck_assert_int_eq(t9.y, 40);
     printf("---\n");
@@ -60,10 +60,10 @@ START_TEST(test_parser_c_findmidpoint) {
     */
 
     // test coordinates
-    coord t1 = { .x = 1, .y = 2 };
-    coord t2 = { .x = 3, .y = 4 };
+    cartesiancoord t1 = { .x = 1, .y = 2 };
+    cartesiancoord t2 = { .x = 3, .y = 4 };
 
-    coord t5 = c_findmidpoint(t1, t2);
+    cartesiancoord t5 = c_findmidpoint(t1, t2);
     ck_assert_int_eq(t5.x, 2);
     ck_assert_int_eq(t5.y, 3);
 
