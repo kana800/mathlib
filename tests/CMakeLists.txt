@@ -14,21 +14,22 @@ endif()
 
 # src files for libraries
 if (LibTest)
-	set(SOURCES 
-		"coordtest.c"
+	set(HEADERS 
+		"coordtest.h"
+		"mattest.h"
 	)
 endif()
 
-add_executable(MathLibTest ${SOURCES})
+add_executable(MathLibTest "main.c" ${HEADERS})
 
 target_include_directories(MathLibTest
-	PRIVATE coord check
+	PRIVATE coord matrix check
 )
 
 target_link_libraries(MathLibTest
-	PRIVATE coord check
+	PRIVATE coord matrix check
 )
 
 target_link_libraries(MathLibTest
-	PRIVATE coord check
+	PRIVATE coord matrix check
 )
