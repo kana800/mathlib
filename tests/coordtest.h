@@ -6,11 +6,20 @@
 
 #include "../lib/coordinate.h"
 
-START_TEST(test_parser_c_arithmeticcoordinate) {
+START_TEST(test_c_createcoordinate) {
     /*summary:
-    cartesiancoord c_addcoordinate(coord c1, coord c2, ...)
-    cartesiancoord c_subcoordinate(coord c1, coord c2, ...)
-    cartesiancoord c_divcoordinate(coord c1, coord c2, ...)
+    test for creation of cartesian and polar
+    coordinate in the heap;
+    */
+}
+END_TEST
+
+START_TEST(test_c_arithmeticcoordinate) {
+    /*summary:
+    test for basic arithmetic functions of coordinates
+    cartesiancoord c_addcoordinate(int count, ...)
+    cartesiancoord c_subcoordinate(int count, ...)
+    cartesiancoord c_divcoordinate(int count, ...)
     */
 
     // test coordinates
@@ -54,7 +63,7 @@ START_TEST(test_parser_c_arithmeticcoordinate) {
 }
 END_TEST
 
-START_TEST(test_parser_c_findmidpoint) {
+START_TEST(test_c_findmidpoint) {
     /*summary:
     coord c_subcoordinate(coord c1, coord c2, ...)
     */
@@ -79,30 +88,8 @@ Suite* coordinate_suite(void) {
 
     /* core test cases */
     tc_core = tcase_create("Core");
-    tcase_add_test(tc_core, test_parser_c_arithmeticcoordinate);
-    tcase_add_test(tc_core, test_parser_c_findmidpoint);
+    tcase_add_test(tc_core, test_c_arithmeticcoordinate);
+    tcase_add_test(tc_core, test_c_findmidpoint);
     suite_add_tcase(s, tc_core);
     return s;
-}
-
-
-
-int main(void)
-{
-    int number_failed;
-	Suite *s;
-    SRunner *sr;
-
-	s = coordinate_suite();
-
-	sr = srunner_create(s);
-    //srunner_add_suite(sr);
-
-	srunner_run_all(sr, CK_VERBOSE);
-	number_failed = srunner_ntests_failed(sr);
-
-    /*freeing the resources*/
-    srunner_free(sr);
-
-	return (number_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 }

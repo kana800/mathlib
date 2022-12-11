@@ -17,16 +17,28 @@ USAGE
 
 // coordinate structure
 typedef struct coordinate {
-	int x;
-	int y;
+	int x; // x value
+	int y; // y value
 } cartesiancoord;
 
-// forward declaration
+typedef struct polarcoordinate {
+	float r; // radius
+	float theta; // angle
+} polarcoord;
+
+// forward declaration cartesian functions
+
 cartesiancoord addcartesiancoordinate(int count, ...);
 cartesiancoord subcartesiancoordinate(int count, ...);
 cartesiancoord divcartesiancoordinate(int count, ...);
 cartesiancoord multcartesiancoordinate(int count, ...);
 
+// forward declaration of polar functions
+
+polarcoord addpolarcoordinate(int count, ...);
+polarcoord subpolarcoordinate(int count, ...);
+polarcoord divpolarcoordinate(int count, ...);
+polarcoord multpolarcoordinate(int count, ...);
 
 #ifndef _MSC_VER
 
@@ -37,7 +49,7 @@ cartesiancoord multcartesiancoordinate(int count, ...);
 
 #endif
 
-// create a coordinate in the heap
+// create a cartesian coordinate in the heap
 cartesiancoord* c_createcartesiancoordinate(int x, int y) {
 	/*summary: create a cartesiancoordinate structure in the heap
 	args:
@@ -48,6 +60,19 @@ cartesiancoord* c_createcartesiancoordinate(int x, int y) {
 		(cartesiancoord*)malloc(sizeof(cartesiancoord));
 	temp->x = x;
 	temp->y = y;
+}
+
+// create a polar coordinate in the heap
+polarcoord* c_createpolarcoordinate(int r, int theta) {
+	/*summary: create a polarcoordinate structure in the heap
+	args:
+		int r -> r polarcoordinate
+		int theta -> theta polarcoordinate
+	*/
+	polarcoord* temp = \
+		(polarcoord*)malloc(sizeof(polarcoord));
+	temp->r = r;
+	temp->theta = theta;
 }
 
 // add multiple coordinates together
