@@ -1,5 +1,5 @@
-#include "coordtest.h"
-#include "mattest.h"
+#include "libtest/coordtest.h"
+#include "libtest/mattest.h"
 
 // keeps in track of the points allocated in the
 // heap

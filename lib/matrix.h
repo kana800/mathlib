@@ -3,12 +3,13 @@
 
 #include <stdio.h>
 #include <stdarg.h>
+#include <errno.h>
 
 #define DEBUG 1
 
 // matrix structure
 typedef struct matrix_ {
-	int* matrixptr; // pointer to the matrix
+	float* matrixptr; // pointer to the matrix
 	int size; // size of the matrix
 	int row; // row count
 	int col; // col count
@@ -18,7 +19,16 @@ typedef struct matrix_ {
 //matrix* createMatrix(int row, int col, ...);
 //int getSize(matrix* m);
 
-void createMatrix(int row, int col, ...) {
+static void printMatrix(matrix* m) {
+	/*summary: prints the matrix passed 
+	as an argument
+	args:
+		matrix* m -> pointer to the matrix
+	*/
+
+}
+
+matrix* createMatrix(int row, int col, ...) {
 	/*summary: creates a matrix structure in 
 	the heap and return its pointer
 	args:
@@ -38,7 +48,14 @@ void createMatrix(int row, int col, ...) {
 	ret:
 		matrix* m -> ptr to a matrix object
 	*/
-	//int* matptr = malloc(sizeof(int) * (row * col));
+	float* matptr = malloc(sizeof(float) * (row * col) + 2);
+	matrix* m = malloc(sizeof(matrix));
+	
+	// initializing data;
+	m->row = row;
+	m->col = col;
+	m->matrixptr = matptr;
+	m->size = row * col;
 
 	// row and col count
 	int rc_count = row * col;
@@ -48,31 +65,73 @@ void createMatrix(int row, int col, ...) {
 	va_list ptr;
 	va_start(ptr, col);
 	for (int i = 0; i < rc_count; i++) {
-		float data = va_arg(ptr, float);
+		float data = (float)va_arg(ptr, int);
+		matptr[i] = data;
+		if (col_count == col) {
+			col_count = 0;
+			row_count++;
+		}
 #ifdef DEBUG
 		printf("data at (%d, %d) = %.2f\n",
-			row_count, col_count, data);
+			row_count + 1, col_count + 1, data);
 #endif
-		if ((rc_count%col) == 0) row_count++;
-		if (col_count == col) col_count = 0;
-
 		col_count++;
 	}
-
-
-	// loading the data to the matrix
-	//for (int i = 0; i < (row * col); i++) {
-	//}
 	va_end(ptr);
-
+	return m;
 };
 
+void freeMatrix(matrix* m) {
+	/*summary: release the 
+	memory of the matrix
+	args:
+		matrix* m -> matrix 
+	*/
+	int tSize = m->size;
+	// releasing the block memory
+	free(m->matrixptr);
+	// releasing the matrix
+	free(m);
+}
 
 
 int getSize(matrix* m) {
+	/*summary: return the size of
+	the given matrix
+	args:
+		matrix* m -> matrix
+	ret:
+		int -> size of the matrix
+	*/
 	return m->size;
 }
 
 
+float getData(matrix* m,int row, int col) {
+	/*summary: return the data in the
+	row and col location
+	args:
+		matrix* m -> matrix
+		int row -> row number
+		int col -> col number
+	errorhandling:
+		if the row count is exceeds
+		data point you will get the
+		last data point of the matrix
+	ret:
+		float -> data at the given loc
+	*/
+	int rowcount = (row - 1) * (col - 1);
+	// checking if valid row count is given
+	if (rowcount > m->size) {
+		perror(
+			"Given Row and Col Combination"
+			"Exceed Matrix Size\n");
+		return m->matrixptr[m->size];
+	}
+	return m->matrixptr[rowcount];
+}
+
+void addMatrix(matrix* a, matrix* c);
 
 #endif // MATRIX_H
