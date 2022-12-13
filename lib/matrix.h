@@ -48,7 +48,7 @@ matrix* createMatrix(int row, int col, ...) {
 	ret:
 		matrix* m -> ptr to a matrix object
 	*/
-	float* matptr = malloc(sizeof(float) * (row * col) + 2);
+	float* matptr = malloc(sizeof(float) * (row * col));
 	matrix* m = malloc(sizeof(matrix));
 	
 	// initializing data;
@@ -132,6 +132,82 @@ float getData(matrix* m,int row, int col) {
 	return m->matrixptr[rowcount];
 }
 
-void addMatrix(matrix* a, matrix* c);
+void addMatrix(matrix* a, matrix* c) {
+	/*summary: add two matrices together;
+	matrix* a will be replaced with the newer
+	values;
+	args:
+		matrix* a = A
+		matrix* c = C
+		A = A + C
+	*/
+	// checking for compatibility
+	if ((a->row != c->row) 
+		|| (a->col != c->col)) {
+		perror("Matrix Row and Cols Doesn't Match\n");
+		return;
+	}
+
+	// normal loop; will optimize later
+	int a_rc_count = a->row * a->col;
+	int c_rc_count = c->row * c->col;
+	for (int i = 0; i < a_rc_count; i++) {
+		a->matrixptr[i] += c->matrixptr[i];
+	}
+
+	return;
+}
+
+void subMatrix(matrix* a, matrix* c) {
+	/*summary: substract two matrices together; 
+	matrix* a will be replaced with the newer values
+	args:
+		matrix* a = A
+		matrix* c = C
+		A = A - C
+	*/
+	// checking for compatibility
+	if ((a->row != c->row) 
+		|| (a->col != c->col)) {
+		perror("Matrix Row and Cols Doesn't Match\n");
+		return;
+	}
+
+	// normal loop; will optimize later
+	int a_rc_count = a->row * a->col;
+	int c_rc_count = c->row * c->col;
+	for (int i = 0; i < a_rc_count; i++) {
+		a->matrixptr[i] -= c->matrixptr[i];
+	}
+
+	return;
+}
+
+matrix* multMatrix(matrix* a, matrix* c) {
+	/*summary: multiply two matrices together;
+	creates a new matrix and return its ptr
+	args:
+		matrix* a = A
+		matrix* b = B
+	ret:	
+		ans = A * B
+	*/
+}
+
+void scalarMultMatrix(float a, matrix* b) {
+	/*summary: INPLACE Multiplication
+	multiply matrix by a scalar value
+	args:
+		float a = a
+		matrix* b = B
+		B = a * B
+	*/
+
+	// normal loop; will optimize later
+	int b_rc_count = b->row * b->col;
+	for (int i = 0; i < b_rc_count; i++) {
+		b->matrixptr[i] *= a;
+	}
+}
 
 #endif // MATRIX_H
