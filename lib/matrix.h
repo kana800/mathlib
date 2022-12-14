@@ -144,7 +144,7 @@ void addMatrix(matrix* a, matrix* c) {
 	// checking for compatibility
 	if ((a->row != c->row) 
 		|| (a->col != c->col)) {
-		perror("Matrix Row and Cols Doesn't Match\n");
+		fprintf(stderr, "Matrices are not compatible\n");
 		return;
 	}
 
@@ -169,7 +169,7 @@ void subMatrix(matrix* a, matrix* c) {
 	// checking for compatibility
 	if ((a->row != c->row) 
 		|| (a->col != c->col)) {
-		perror("Matrix Row and Cols Doesn't Match\n");
+		fprintf(stderr, "Matrices are not compatible\n");
 		return;
 	}
 
@@ -192,6 +192,35 @@ matrix* multMatrix(matrix* a, matrix* c) {
 	ret:	
 		ans = A * B
 	*/
+
+	// checking for compatibility
+	// A (r x c) B (r x c)
+	// aC == bR
+	// ans matrix dimensions -> aR x bC
+	if (a->col != c->row) {
+		fprintf(stderr, "Matrices are not compatible\n");
+		return a;
+	}
+	// generate a matrix with ans dimension
+	float* matptr = malloc(
+		sizeof(float) * (a->row * c->col));
+
+	// iterating through the data
+	int start = 0;
+	int end = a->col;
+	for (int i = 0; i < a->row; i++) {
+		for (int j = start; j < end; j++) {
+#if DEBUG
+			printf(
+				"%d: matrixptr[%d] -> %.2f\n"
+				, j, j, a->matrixptr[j]);
+		}
+#endif
+		start = end;
+		end += a->col;
+	}
+	
+	return a;
 }
 
 void scalarMultMatrix(float a, matrix* b) {
@@ -204,8 +233,7 @@ void scalarMultMatrix(float a, matrix* b) {
 	*/
 
 	// normal loop; will optimize later
-	int b_rc_count = b->row * b->col;
-	for (int i = 0; i < b_rc_count; i++) {
+	for (int i = 0; i < b->size; i++) {
 		b->matrixptr[i] *= a;
 	}
 }
