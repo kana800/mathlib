@@ -18,16 +18,22 @@
 
 #### Creation Of A Matrix
 
-The `matrix` is created on the **heap** as a continuous chunk of data; 
-
 ```c
-int *mptr = malloc(sizeof(int) * (row * col))
+typedef struct matrix_ {
+	float* matrixptr; // pointer to the matrix
+	int size; // size of the matrix
+	int row; // row count
+	int col; // col count
+	float** rowmatrix; // pointer to the row in the matrix
+	float** colmatrix; // pointer to the columns in the matrix
+} matrix;
 ```
 
-The matrix `structure` holds information like `size`, `row` and `col` count.
-To help the counting and travesing the matrix
+The matrix is created as a continuous `1D` array and `int* rowmatrix` and `int* colmatrix` is used
+to keep in track of the rows and columns in the given matrix;
 
-Once you have created the matrix; you have to **release** it using the function `freeMatrix`;
+<insert image of matrix_ custom datastructure here>
+
 
 #### Accessing Data Of A Matrix
 

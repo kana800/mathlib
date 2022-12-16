@@ -13,6 +13,7 @@ typedef struct matrix_ {
 	int size; // size of the matrix
 	int row; // row count
 	int col; // col count
+	float** colmatrix; // pointer to the columns in the matrix
 } matrix;
 
 // forward declaration
@@ -49,6 +50,9 @@ matrix* createMatrix(int row, int col, ...) {
 		matrix* m -> ptr to a matrix object
 	*/
 	float* matptr = malloc(sizeof(float) * (row * col));
+	// pointer to the col matrices
+	float* colmtr = malloc(sizeof(float*) * col);
+	// allocation of memory for the matrix datastructure
 	matrix* m = malloc(sizeof(matrix));
 	
 	// initializing data;
@@ -78,6 +82,12 @@ matrix* createMatrix(int row, int col, ...) {
 		col_count++;
 	}
 	va_end(ptr);
+
+	// populating the col matrices
+	for (int i = 0; i < rc_count; i++) {
+		float* p = &matptr[i];
+	}
+
 	return m;
 };
 
@@ -94,7 +104,6 @@ void freeMatrix(matrix* m) {
 	free(m);
 }
 
-
 int getSize(matrix* m) {
 	/*summary: return the size of
 	the given matrix
@@ -105,7 +114,6 @@ int getSize(matrix* m) {
 	*/
 	return m->size;
 }
-
 
 float getData(matrix* m,int row, int col) {
 	/*summary: return the data in the
@@ -191,6 +199,11 @@ matrix* multMatrix(matrix* a, matrix* c) {
 		matrix* b = B
 	ret:	
 		ans = A * B
+
+	This is not the best algorithm to multiply
+	a matrix with n-dimensions; I am running out
+	time hence the shitty O(n^3) implementation
+
 	*/
 
 	// checking for compatibility
@@ -206,18 +219,30 @@ matrix* multMatrix(matrix* a, matrix* c) {
 		sizeof(float) * (a->row * c->col));
 
 	// iterating through the data
-	int start = 0;
-	int end = a->col;
+	int a_start = 0;
+	int a_end = a->col;
+
+	// keeps in track columns
+	int b_start = 0;
+	int b_end = c->col;
+
+	float sum = 0;
+
 	for (int i = 0; i < a->row; i++) {
-		for (int j = start; j < end; j++) {
+		// obtaining the row values of the Matrix A
+		for (int j = a_start, l = b_start; j < a_end; j++) {
 #if DEBUG
 			printf(
-				"%d: matrixptr[%d] -> %.2f\n"
-				, j, j, a->matrixptr[j]);
-		}
+				"row %d: matrixptr a [%d] -> %.2f\t",
+				i, j, a->matrixptr[j]);
 #endif
-		start = end;
-		end += a->col;
+			// obtaining the column values of the Matrix B
+			// have to repeat this a->row times
+		}
+
+		// setting pos in the array
+		a_start = a_end;
+		a_end += a->col;
 	}
 	
 	return a;
