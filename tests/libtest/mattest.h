@@ -16,7 +16,7 @@ START_TEST(test_m_creatematrix) {
             1, 2, 3, 4, 5, 6, 7, 8, 9);
     for (int i = 0; i < 9; i++) {
         ck_assert_float_eq(
-            (float)i + 1, testM->matrixptr[i]);
+            (float)i + 1, testM->matrixptr[i].d);
     }
     freeMatrix(testM);
 }
@@ -57,14 +57,14 @@ START_TEST(test_m_addMatrix) {
 
     for (int i = 0; i < a->size; i++) {
         ck_assert_float_eq(
-            c->matrixptr[i], a->matrixptr[i]);
+            c->matrixptr[i].d, a->matrixptr[i].d);
     }
 
     // addition should fail in this matrix
     addMatrix(a, d);
     for (int i = 0; i < a->size; i++) {
         ck_assert_float_eq(
-            a->matrixptr[i], a->matrixptr[i]);
+            a->matrixptr[i].d, a->matrixptr[i].d);
     }
 
     freeMatrix(a);
@@ -90,14 +90,14 @@ START_TEST(test_m_subMatrix) {
 
     for (int i = 0; i < a->size; i++) {
         ck_assert_float_eq(
-            c->matrixptr[i], a->matrixptr[i]);
+            c->matrixptr[i].d, a->matrixptr[i].d);
     }
 
     // substraction should fail in this matrix
     subMatrix(a, d);
     for (int i = 0; i < a->size; i++) {
         ck_assert_float_eq(
-            a->matrixptr[i], a->matrixptr[i]);
+            a->matrixptr[i].d, a->matrixptr[i].d);
     }
 
     freeMatrix(a);
@@ -126,7 +126,7 @@ START_TEST(test_m_scalarMultMatrix) {
 
     for (int i = 0; i < a->size; i++) {
         ck_assert_float_eq(
-            a->matrixptr[i], a->matrixptr[i]);
+            a->matrixptr[i].d, a->matrixptr[i].d);
     }
 
     // B * 10

@@ -7,9 +7,23 @@
 
 #define DEBUG 1
 
+// data structure
+typedef struct data_ {
+	int row; // row number
+	int col; // col number
+	float d; // data point
+} element;
+
+// element container
+typedef struct elementcontainer_ {
+	element* d;
+	element* next;
+	element* prev;
+} elementcontainer;
+
 // matrix structure
 typedef struct matrix_ {
-	float* matrixptr; // pointer to the matrix
+	element* matrixptr; // pointer to the matrix
 	int size; // size of the matrix
 	int row; // row count
 	int col; // col count
@@ -49,12 +63,10 @@ matrix* createMatrix(int row, int col, ...) {
 	ret:
 		matrix* m -> ptr to a matrix object
 	*/
-	float* matptr = malloc(sizeof(float) * (row * col));
-	// pointer to the col matrices
-	float* colmtr = malloc(sizeof(float*) * col);
+	element* matptr = malloc(sizeof(element) * (row * col));
 	// allocation of memory for the matrix datastructure
 	matrix* m = malloc(sizeof(matrix));
-	
+
 	// initializing data;
 	m->row = row;
 	m->col = col;
@@ -66,27 +78,37 @@ matrix* createMatrix(int row, int col, ...) {
 	int row_count = 0;
 	int col_count = 0;
 
+	int section = col_count;
+	int inc_section = col;
+
 	va_list ptr;
 	va_start(ptr, col);
 	for (int i = 0; i < rc_count; i++) {
 		float data = (float)va_arg(ptr, int);
-		matptr[i] = data;
+		matptr[i].row = row_count;
+		matptr[i].col = col_count;
+		matptr[i].d = data;
+
+		// end of the row reached
 		if (col_count == col) {
 			col_count = 0;
+			section = row_count;
+			inc_section--;
 			row_count++;
 		}
+
 #ifdef DEBUG
 		printf("data at (%d, %d) = %.2f\n",
 			row_count + 1, col_count + 1, data);
 #endif
 		col_count++;
+		section += inc_section;
 	}
 	va_end(ptr);
 
-	// populating the col matrices
-	for (int i = 0; i < rc_count; i++) {
-		float* p = &matptr[i];
-	}
+#ifdef DEBUG
+	printf("----------------------------------\n");
+#endif
 
 	return m;
 };
@@ -102,6 +124,14 @@ void freeMatrix(matrix* m) {
 	free(m->matrixptr);
 	// releasing the matrix
 	free(m);
+}
+
+void freeElementContainer(elementcontainer* e) {
+	/*summary: release memory allocated in the
+	elementcontainer;
+	args:
+		elementcontainer* e -> elementcontainer 
+	*/
 }
 
 int getSize(matrix* m) {
@@ -135,9 +165,9 @@ float getData(matrix* m,int row, int col) {
 		perror(
 			"Given Row and Col Combination"
 			"Exceed Matrix Size\n");
-		return m->matrixptr[m->size];
+		return m->matrixptr[m->size].d;
 	}
-	return m->matrixptr[rowcount];
+	return m->matrixptr[rowcount].d;
 }
 
 void addMatrix(matrix* a, matrix* c) {
@@ -160,7 +190,7 @@ void addMatrix(matrix* a, matrix* c) {
 	int a_rc_count = a->row * a->col;
 	int c_rc_count = c->row * c->col;
 	for (int i = 0; i < a_rc_count; i++) {
-		a->matrixptr[i] += c->matrixptr[i];
+		a->matrixptr[i].d += c->matrixptr[i].d;
 	}
 
 	return;
@@ -185,7 +215,7 @@ void subMatrix(matrix* a, matrix* c) {
 	int a_rc_count = a->row * a->col;
 	int c_rc_count = c->row * c->col;
 	for (int i = 0; i < a_rc_count; i++) {
-		a->matrixptr[i] -= c->matrixptr[i];
+		a->matrixptr[i].d -= c->matrixptr[i].d;
 	}
 
 	return;
@@ -202,7 +232,7 @@ matrix* multMatrix(matrix* a, matrix* c) {
 
 	This is not the best algorithm to multiply
 	a matrix with n-dimensions; I am running out
-	time hence the shitty O(n^3) implementation
+	time reasoning for the shitty O(n^3) implementation
 
 	*/
 
@@ -259,7 +289,7 @@ void scalarMultMatrix(float a, matrix* b) {
 
 	// normal loop; will optimize later
 	for (int i = 0; i < b->size; i++) {
-		b->matrixptr[i] *= a;
+		b->matrixptr[i].d *= a;
 	}
 }
 
