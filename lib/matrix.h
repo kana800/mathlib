@@ -12,27 +12,22 @@ typedef struct data_ {
 	int row; // row number
 	int col; // col number
 	float d; // data point
+	int index; // normal index number
 } element;
 
 // element container
 typedef struct elementcontainer_ {
-	element* d;
-	element* next;
-	element* prev;
+	element* e; // matrix information 
+	element* next; // pointer to the next element
 } elementcontainer;
 
 // matrix structure
 typedef struct matrix_ {
-	element* matrixptr; // pointer to the matrix
+	elementcontainer* matrixptr; // pointer to the matrix
 	int size; // size of the matrix
 	int row; // row count
 	int col; // col count
-	float** colmatrix; // pointer to the columns in the matrix
 } matrix;
-
-// forward declaration
-//matrix* createMatrix(int row, int col, ...);
-//int getSize(matrix* m);
 
 static void printMatrix(matrix* m) {
 	/*summary: prints the matrix passed 
@@ -63,14 +58,12 @@ matrix* createMatrix(int row, int col, ...) {
 	ret:
 		matrix* m -> ptr to a matrix object
 	*/
-	element* matptr = malloc(sizeof(element) * (row * col));
 	// allocation of memory for the matrix datastructure
 	matrix* m = malloc(sizeof(matrix));
-
 	// initializing data;
 	m->row = row;
 	m->col = col;
-	m->matrixptr = matptr;
+	m->matrixptr = NULL;
 	m->size = row * col;
 
 	// row and col count
@@ -81,13 +74,18 @@ matrix* createMatrix(int row, int col, ...) {
 	int section = col_count;
 	int inc_section = col;
 
+
+	// elementcontainer
+	elementcontainer* nxtptr = NULL;
+
 	va_list ptr;
 	va_start(ptr, col);
 	for (int i = 0; i < rc_count; i++) {
 		float data = (float)va_arg(ptr, int);
-		matptr[i].row = row_count;
-		matptr[i].col = col_count;
-		matptr[i].d = data;
+		// creating a new element object
+		element* tempE = malloc(sizeof(element));
+		elementcontainer* tempContainer = malloc(
+			sizeof(elementcontainer));
 
 		// end of the row reached
 		if (col_count == col) {
@@ -101,9 +99,21 @@ matrix* createMatrix(int row, int col, ...) {
 		printf("data at (%d, %d) = %.2f\n",
 			row_count + 1, col_count + 1, data);
 #endif
+		tempE->col = col_count + 1;
+		tempE->row = row_count + 1;
+		tempE->d = data;
+		tempE->index = i;
+
+		// adding data to the element container
+		tempContainer->e = tempE;
+		tempContainer->next = nxtptr;
+		nxtptr = tempContainer;
+
+		//
 		col_count++;
 		section += inc_section;
 	}
+	m->matrixptr = nxtptr;
 	va_end(ptr);
 
 #ifdef DEBUG
@@ -114,8 +124,8 @@ matrix* createMatrix(int row, int col, ...) {
 };
 
 void freeMatrix(matrix* m) {
-	/*summary: release the 
-	memory of the matrix
+	/*summary: release the matrix
+	from the heap
 	args:
 		matrix* m -> matrix 
 	*/
@@ -126,12 +136,24 @@ void freeMatrix(matrix* m) {
 	free(m);
 }
 
-void freeElementContainer(elementcontainer* e) {
-	/*summary: release memory allocated in the
-	elementcontainer;
+
+void freeContainer(elementcontainer* e) {
+	/*summary: release the
+	element container from heap
 	args:
-		elementcontainer* e -> elementcontainer 
+		elementcontainer* e -> element
 	*/
+	elementcontainer* tempS = e;
+	while (e != NULL) {
+		element* tempElement = e->e;
+		elementcontainer* tempE = e;
+
+		e = e->next;
+
+		free(tempElement);
+		free(tempE);
+	}
+
 }
 
 int getSize(matrix* m) {
@@ -145,152 +167,189 @@ int getSize(matrix* m) {
 	return m->size;
 }
 
-float getData(matrix* m,int row, int col) {
-	/*summary: return the data in the
-	row and col location
+elementcontainer* getRow(matrix* m, int row) {
+	/*summary: returns row from the given matrix
 	args:
 		matrix* m -> matrix
 		int row -> row number
-		int col -> col number
-	errorhandling:
-		if the row count is exceeds
-		data point you will get the
-		last data point of the matrix
-	ret:
-		float -> data at the given loc
+	if given row is greater than number of rows in the
+	matrix elementcontainer will be null
+	return:
+		heap allocated elementcontainer with 
+		only the given row;
+	note:
+		use freeElementContainer();
 	*/
-	int rowcount = (row - 1) * (col - 1);
-	// checking if valid row count is given
-	if (rowcount > m->size) {
-		perror(
-			"Given Row and Col Combination"
-			"Exceed Matrix Size\n");
-		return m->matrixptr[m->size].d;
-	}
-	return m->matrixptr[rowcount].d;
-}
+	if (row > m->row) return NULL;
 
-void addMatrix(matrix* a, matrix* c) {
-	/*summary: add two matrices together;
-	matrix* a will be replaced with the newer
-	values;
-	args:
-		matrix* a = A
-		matrix* c = C
-		A = A + C
-	*/
-	// checking for compatibility
-	if ((a->row != c->row) 
-		|| (a->col != c->col)) {
-		fprintf(stderr, "Matrices are not compatible\n");
-		return;
-	}
-
-	// normal loop; will optimize later
-	int a_rc_count = a->row * a->col;
-	int c_rc_count = c->row * c->col;
-	for (int i = 0; i < a_rc_count; i++) {
-		a->matrixptr[i].d += c->matrixptr[i].d;
-	}
-
-	return;
-}
-
-void subMatrix(matrix* a, matrix* c) {
-	/*summary: substract two matrices together; 
-	matrix* a will be replaced with the newer values
-	args:
-		matrix* a = A
-		matrix* c = C
-		A = A - C
-	*/
-	// checking for compatibility
-	if ((a->row != c->row) 
-		|| (a->col != c->col)) {
-		fprintf(stderr, "Matrices are not compatible\n");
-		return;
-	}
-
-	// normal loop; will optimize later
-	int a_rc_count = a->row * a->col;
-	int c_rc_count = c->row * c->col;
-	for (int i = 0; i < a_rc_count; i++) {
-		a->matrixptr[i].d -= c->matrixptr[i].d;
-	}
-
-	return;
-}
-
-matrix* multMatrix(matrix* a, matrix* c) {
-	/*summary: multiply two matrices together;
-	creates a new matrix and return its ptr
-	args:
-		matrix* a = A
-		matrix* b = B
-	ret:	
-		ans = A * B
-
-	This is not the best algorithm to multiply
-	a matrix with n-dimensions; I am running out
-	time reasoning for the shitty O(n^3) implementation
-
-	*/
-
-	// checking for compatibility
-	// A (r x c) B (r x c)
-	// aC == bR
-	// ans matrix dimensions -> aR x bC
-	if (a->col != c->row) {
-		fprintf(stderr, "Matrices are not compatible\n");
-		return a;
-	}
-	// generate a matrix with ans dimension
-	float* matptr = malloc(
-		sizeof(float) * (a->row * c->col));
-
-	// iterating through the data
-	int a_start = 0;
-	int a_end = a->col;
-
-	// keeps in track columns
-	int b_start = 0;
-	int b_end = c->col;
-
-	float sum = 0;
-
-	for (int i = 0; i < a->row; i++) {
-		// obtaining the row values of the Matrix A
-		for (int j = a_start, l = b_start; j < a_end; j++) {
-#if DEBUG
-			printf(
-				"row %d: matrixptr a [%d] -> %.2f\t",
-				i, j, a->matrixptr[j]);
-#endif
-			// obtaining the column values of the Matrix B
-			// have to repeat this a->row times
+	elementcontainer* tempM = m->matrixptr;
+	elementcontainer* rowptr = NULL;
+	while (tempM != NULL) {
+		if (tempM->e->row == row) {
+			element* tempE = malloc(sizeof(element));
+			elementcontainer* tempRow = 
+				malloc(sizeof(elementcontainer));
+			// copying the values
+			tempE->d = tempM->e->d;
+			tempE->row = tempM->e->row;
+			tempE->col = tempM->e->col;
+			tempE->index = tempM->e->index;
+			// container
+			tempRow->e = tempE;
+			tempRow->next = rowptr;
+			rowptr = tempRow;
 		}
-
-		// setting pos in the array
-		a_start = a_end;
-		a_end += a->col;
+		tempM = tempM->next;
 	}
-	
-	return a;
+	return rowptr;
 }
 
-void scalarMultMatrix(float a, matrix* b) {
-	/*summary: INPLACE Multiplication
-	multiply matrix by a scalar value
+elementcontainer* getCol(matrix* m, int col) {
+	/*summary: returns col from the given matrix
 	args:
-		float a = a
-		matrix* b = B
-		B = a * B
+		matrix* m -> matrix
+		int col -> col number
+	if given col is greater than number of cols in the
+	matrix elementcontainer will be null
+	return:
+		heap allocated elementcontainer with 
+		only the given col;
+	note:
+		use freeElementContainer();
+	*/
+	if (col > m->col) return NULL;
+
+	elementcontainer* tempM = m->matrixptr;
+	elementcontainer* colptr = NULL;
+	while (tempM != NULL) {
+		if (tempM->e->col == col) {
+			element* tempE = malloc(sizeof(element));
+			elementcontainer* tempRow = 
+				malloc(sizeof(elementcontainer));
+			// copying the values
+			tempE->d = tempM->e->d;
+			tempE->row = tempM->e->row;
+			tempE->col = tempM->e->col;
+			tempE->index = tempM->e->index;
+			// container
+			tempRow->e = tempE;
+			tempRow->next = colptr;
+			colptr = tempRow;
+		}
+		tempM = tempM->next;
+	}
+	return colptr;
+}
+
+float getData(matrix* m, int row, int col) {
+	/*summary: returns data from the given
+	row and col
+	if the row and col is over the size of the matrix
+	function will return the last value of the matrix
+	args:
+		matrix* m -> pointer to the matrix
+		int row -> row
+		int col -> col
+	ret:
+		float -> m->e->d [matrixptr->elementcontainer->data]
 	*/
 
-	// normal loop; will optimize later
-	for (int i = 0; i < b->size; i++) {
-		b->matrixptr[i].d *= a;
+	// checking if the given row size and col size is 
+	// overbounds
+	if ((row > m->row) || (col > m->col))
+		return m->matrixptr->e->d;
+
+	elementcontainer* tempE = m->matrixptr;
+	while (tempE != NULL) {
+		if ((row == tempE->e->row)
+			&& (col == tempE->e->col)) {
+			return tempE->e->d;
+		}
+		tempE = tempE->next;
 	}
+	return m->matrixptr->e->d;
+}
+
+void addMatrix(matrix* a, matrix* b) {
+	/*summary: add two matrices together
+	args:
+		matrix* a -> matrix one
+		matrix* b -> matrix two
+	addition values of mat a + mat b will be replaced 
+	inplace of mat a
+	ie:
+		MAT A + MAT B = MAT A
+	*/
+
+	// check if the rows and col are 
+	// same size
+	if ((a->row == b->row) 
+		&& (a->col == b->col)) {
+		// looping through the matrices 
+		elementcontainer* tempA = a->matrixptr;
+		elementcontainer* tempB = b->matrixptr;
+		while ((tempA != NULL) || (tempB != NULL)) {
+
+#ifdef  DEBUG == 0
+			printf("MAT A + MAT B: \n\t"
+				"(%d, %d) %.2f + (%d,%d) %.2f = %.2f\n",
+				tempA->e->row, tempA->e->col,
+				tempA->e->d,
+				tempB->e->row, tempB->e->col,
+				tempB->e->d,
+				tempA->e->d + tempB->e->d);
+#endif
+			tempA->e->d += tempB->e->d;
+			tempA = tempA->next;
+			tempB = tempB->next;
+		}
+	}
+	else {
+		fprintf(stderr, "Incompatible Matrices\n");
+		return;
+	}
+
+}
+
+void subMatrix(matrix* a, matrix* b) {
+	/*summary: substract two matrices together
+	args:
+		matrix* a -> matrix one
+		matrix* b -> matrix two
+	substracted values of mat a - mat b will be replaced 
+	inplace of mat a
+	ie:
+		MAT A - MAT B = MAT A
+	*/
+
+	// check if the rows and col are 
+	// same size
+	if ((a->row == b->row) 
+		&& (a->col == b->col)) {
+		// looping through the matrices 
+		elementcontainer* tempA = a->matrixptr;
+		elementcontainer* tempB = b->matrixptr;
+		while ((tempA != NULL) || (tempB != NULL)) {
+
+#ifdef  DEBUG
+			printf("MAT A - MAT B: \n\t"
+				"(%d, %d) %.2f - (%d,%d) %.2f = %.2f\n",
+				tempA->e->row, tempA->e->col,
+				tempA->e->d,
+				tempB->e->row, tempB->e->col,
+				tempB->e->d,
+				tempA->e->d - tempB->e->d);
+#endif
+			tempA->e->d -= tempB->e->d;
+			tempA = tempA->next;
+			tempB = tempB->next;
+		}
+	}
+	else {
+		fprintf(stderr, "Incompatible Matrices\n");
+		return;
+	}
+
 }
 
 #endif // MATRIX_H
