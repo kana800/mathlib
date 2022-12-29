@@ -5,8 +5,6 @@
 #include <stdarg.h>
 #include <errno.h>
 
-#define DEBUG 1
-
 // data structure
 typedef struct data_ {
 	int row; // row number
@@ -36,6 +34,20 @@ static void printMatrix(matrix* m) {
 		matrix* m -> pointer to the matrix
 	*/
 
+}
+
+static void printElementContainer(
+	elementcontainer* e) {
+	/*summary: prints the element container*/
+    elementcontainer* tempE = e;
+    while (tempE != NULL) {
+        printf("(%d) Data at (%d, %d) : %.2f\n",
+            tempE->e->index,
+            tempE->e->row,
+            tempE->e->col,
+            tempE->e->d);
+        tempE = tempE->next;
+    }
 }
 
 matrix* createMatrix(int row, int col, ...) {
@@ -95,10 +107,6 @@ matrix* createMatrix(int row, int col, ...) {
 			row_count++;
 		}
 
-#ifdef DEBUG
-		printf("data at (%d, %d) = %.2f\n",
-			row_count + 1, col_count + 1, data);
-#endif
 		tempE->col = col_count + 1;
 		tempE->row = row_count + 1;
 		tempE->d = data;
@@ -109,19 +117,29 @@ matrix* createMatrix(int row, int col, ...) {
 		tempContainer->next = nxtptr;
 		nxtptr = tempContainer;
 
-		//
 		col_count++;
 		section += inc_section;
 	}
 	m->matrixptr = nxtptr;
 	va_end(ptr);
-
-#ifdef DEBUG
-	printf("----------------------------------\n");
-#endif
-
 	return m;
 };
+
+matrix* createEmptyMatrix(int row, int col) {
+	/*summary: creates an empty matrix
+	args:
+		int row
+		int col
+	ret:
+		matrix ptr
+	*/
+	matrix* m = malloc(sizeof(matrix));
+	m->row = row;
+	m->col = col;
+	m->matrixptr = NULL;
+	m->size = row * col;
+	return m;
+}
 
 void freeMatrix(matrix* m) {
 	/*summary: release the matrix
@@ -135,7 +153,6 @@ void freeMatrix(matrix* m) {
 	// releasing the matrix
 	free(m);
 }
-
 
 void freeContainer(elementcontainer* e) {
 	/*summary: release the
@@ -289,16 +306,6 @@ void addMatrix(matrix* a, matrix* b) {
 		elementcontainer* tempA = a->matrixptr;
 		elementcontainer* tempB = b->matrixptr;
 		while ((tempA != NULL) || (tempB != NULL)) {
-
-#ifdef  DEBUG == 0
-			printf("MAT A + MAT B: \n\t"
-				"(%d, %d) %.2f + (%d,%d) %.2f = %.2f\n",
-				tempA->e->row, tempA->e->col,
-				tempA->e->d,
-				tempB->e->row, tempB->e->col,
-				tempB->e->d,
-				tempA->e->d + tempB->e->d);
-#endif
 			tempA->e->d += tempB->e->d;
 			tempA = tempA->next;
 			tempB = tempB->next;
@@ -330,16 +337,6 @@ void subMatrix(matrix* a, matrix* b) {
 		elementcontainer* tempA = a->matrixptr;
 		elementcontainer* tempB = b->matrixptr;
 		while ((tempA != NULL) || (tempB != NULL)) {
-
-#ifdef  DEBUG
-			printf("MAT A - MAT B: \n\t"
-				"(%d, %d) %.2f - (%d,%d) %.2f = %.2f\n",
-				tempA->e->row, tempA->e->col,
-				tempA->e->d,
-				tempB->e->row, tempB->e->col,
-				tempB->e->d,
-				tempA->e->d - tempB->e->d);
-#endif
 			tempA->e->d -= tempB->e->d;
 			tempA = tempA->next;
 			tempB = tempB->next;
@@ -350,6 +347,82 @@ void subMatrix(matrix* a, matrix* b) {
 		return;
 	}
 
+}
+
+float multiplyMatrixHelper(
+	elementcontainer* r, elementcontainer* c) {
+	/*summary:HELPER
+	multiply row with a column and provide the
+	summation of the product
+	args:
+		elementcontainer* r -> row
+		elementcontainer* c -> column
+	ret:
+		sum of (r1 x c1) + (r1 x c2) + ... + (r1 x cn)
+	*/
+
+	elementcontainer* tempRow = r;
+	elementcontainer* tempCol = c;
+	float sum = 0;
+	while ((tempRow != NULL) 
+		|| (tempCol != NULL)) {
+		sum += (tempRow->e->d * tempCol->e->d);
+		tempRow = tempRow->next;
+		tempCol = tempCol->next;
+	}
+	return sum;
+}
+
+matrix* multiplyMatrix(matrix* a, matrix* b) {
+	/*summary: multiply two matrices together
+	args:
+		matrix* a -> MAT A
+		matrix* b -> MAT B
+	ret:
+		MAT A * MAT B
+	if matrix multiplication is not compatible the
+	ret would be NULL
+	*/
+
+	// checking if matrices are compatible
+	if (a->col != b->row) {
+		fprintf(stderr, "Incompatible Matrices\n");
+		return NULL;
+	}
+
+	// create an empty matrix
+	matrix* tempM = createEmptyMatrix(a->row, b->col);
+	elementcontainer* nxtptr = NULL;
+	int index = 0;
+	// looping through the rows 
+	for (int i = 0; i < a->row; i++) {
+		elementcontainer* te = getRow(a, i + 1);
+		for (int j = 0; j < b->col; j++) {
+			elementcontainer* tc = getCol(b, j + 1);
+			float sum = multiplyMatrixHelper(te, tc);
+			element* tempE = malloc(sizeof(element));
+			elementcontainer* tempContainer = malloc(
+				sizeof(elementcontainer));
+
+			tempE->col = j + 1;
+			tempE->row = i + 1;
+			tempE->d = sum;
+			tempE->index = index;
+
+			// adding data to the element container
+			tempContainer->e = tempE;
+			tempContainer->next = nxtptr;
+			nxtptr = tempContainer;
+
+			index++;
+			freeContainer(tc);
+		}
+		freeContainer(te);
+	}
+	
+	tempM->matrixptr = nxtptr;
+
+	return tempM;
 }
 
 #endif // MATRIX_H

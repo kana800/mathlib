@@ -16,33 +16,24 @@ START_TEST(test_m_creatematrix) {
     matrix* testM = 
         createMatrix(3, 3, \
             1, 2, 3, 4, 5, 6, 7, 8, 9);
-
     ck_assert_int_eq(3 * 3, testM->size);
-
     // iterating through the matrix pointer
     elementcontainer* tempE = testM->matrixptr;
-    printf("-------ElementContainerTest-------\n");
+    float count = 9;
     while (tempE != NULL) {
-        printf("(%d) Data at (%d, %d) : %.2f\n",
-            tempE->e->index,
-            tempE->e->row,
-            tempE->e->col,
-            tempE->e->d);
+        ck_assert_float_eq(tempE->e->d, count);
         tempE = tempE->next;
+        count--;
     }
-
     freeMatrix(testM);
-    printf("----------------------------------\n");
 }
 END_TEST
-
 
 START_TEST(test_m_getData) {
     /*summary:
     test for getData function
         float getData(matrix* m, int row, int col);
     */
-    printf("------------getDataTest-----------\n");
     matrix* testM = 
         createMatrix(3, 3, \
             1, 2, 3, 4, 5, 6, 7, 8, 9);
@@ -53,10 +44,8 @@ START_TEST(test_m_getData) {
     // obtaining data at the end
     ck_assert_float_eq(d2, 9.00);
     freeMatrix(testM);
-    printf("----------------------------------\n");
 }
 END_TEST
-
 
 START_TEST(test_m_arithmeticMatrix) {
     /*summary:
@@ -81,7 +70,6 @@ START_TEST(test_m_arithmeticMatrix) {
     elementcontainer* tempC = c->matrixptr;
     while ((tempA != NULL) 
         || (tempC != NULL)) {
-
         ck_assert_float_eq(tempA->e->d, tempC->e->d);
         tempA = tempA->next;
         tempC = tempC->next;
@@ -100,13 +88,12 @@ START_TEST(test_m_arithmeticMatrix) {
     // substraction should fail in this matrix
     addMatrix(a, d);
     subMatrix(a, d);
-
     freeMatrix(a);
     freeMatrix(b);
     freeMatrix(c);
     freeMatrix(d);
 }
-
+END_TEST
 
 START_TEST(test_m_getRowCol) {
     /*summary:
@@ -149,6 +136,72 @@ START_TEST(test_m_getRowCol) {
     freeContainer(row_1);
     freeContainer(col_1);
 }
+END_TEST
+
+START_TEST(test_m_multiplyMatrix) {
+    /*summary:
+    test for matrix multiplication
+        matrix* m multiplyMatrix(matrix* a, matrix* b);
+    */
+    printf("----------MultiplyMatrix----------\n");
+    // 3 x 3
+    matrix* a = createMatrix(3, 3, \
+            1, 2, 3, 4, 5, 6, 7, 8, 9);
+    matrix* b = createMatrix(3, 3, \
+            10, 20, 30, 40, 50, 60, 70, 80, 90);
+    matrix* ab = createMatrix(3, 3, 300, 360, 420,\
+        660, 810, 960, 1020, 1260, 1500);
+
+    // 2 x 2
+    matrix* d = createMatrix(2, 2, 1, 2, 3, 4);
+    matrix* e = createMatrix(2, 2, 2, 3, 4, 5);
+    matrix* de = createMatrix(2, 2, 10, 13, 22, 29);
+
+    matrix* de_ans = multiplyMatrix(d, e);
+    matrix* ab_ans = multiplyMatrix(a, b);
+
+    // Incompatible
+    matrix* ad_ans = multiplyMatrix(a, d);
+    ck_assert_ptr_null(ad_ans);
+
+    // iterating through the matrix pointer
+    elementcontainer* tempE = de_ans->matrixptr;
+    elementcontainer* tempD = de->matrixptr;
+    while (tempE != NULL) {
+        printf("(%d) Data at (%d, %d) : %.2f\n",
+            tempE->e->index,
+            tempE->e->row,
+            tempE->e->col,
+            tempE->e->d);
+        ck_assert_float_eq(tempE->e->d, tempD->e->d);
+        tempE = tempE->next;
+        tempD = tempD->next;
+    }
+
+    elementcontainer* tempF = ab_ans->matrixptr;
+    elementcontainer* tempG = ab->matrixptr;
+    while (tempF != NULL) {
+        printf("(%d) Data at (%d, %d) : %.2f\n",
+            tempF->e->index,
+            tempF->e->row,
+            tempF->e->col,
+            tempF->e->d);
+        ck_assert_float_eq(tempF->e->d, tempG->e->d);
+        tempF = tempF->next;
+        tempG = tempG->next;
+    }
+
+    freeMatrix(de_ans);
+    freeMatrix(ab_ans);
+    freeMatrix(a);
+    freeMatrix(b);
+    freeMatrix(ab);
+    freeMatrix(d);
+    freeMatrix(e);
+    freeMatrix(de);
+    printf("----------------------------------\n");
+
+}END_TEST
 
 Suite* matrix_suite(void) {
     /*TEST SUITE for inputstring test cases*/
@@ -163,6 +216,7 @@ Suite* matrix_suite(void) {
     tcase_add_test(tc_core, test_m_getData);
     tcase_add_test(tc_core, test_m_arithmeticMatrix);
     tcase_add_test(tc_core, test_m_getRowCol);
+    tcase_add_test(tc_core, test_m_multiplyMatrix);
     suite_add_tcase(s, tc_core);
     return s;
 }
