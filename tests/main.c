@@ -1,5 +1,5 @@
-#include "coordtest.h"
-#include "mattest.h"
+#include "libtest/coordtest.h"
+#include "libtest/mattest.h"
 
 // keeps in track of the points allocated in the
 // heap
@@ -25,11 +25,12 @@ int main(void)
 	Suite *m;
     SRunner *sr;
 
-	s = coordinate_suite();
+	//s = coordinate_suite();
 	m = matrix_suite();
 
-	sr = srunner_create(s);
-    srunner_add_suite(sr, m);
+	//sr = srunner_create(s);
+	sr = srunner_create(m);
+    //srunner_add_suite(sr, m);
 
 	srunner_run_all(sr, CK_VERBOSE);
 	number_failed = srunner_ntests_failed(sr);

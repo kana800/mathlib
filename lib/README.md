@@ -1,37 +1,14 @@
 > This folder contains all the necessary libraries to build a module
 
----
-
 <h3 align="center">Libraries</h3>
 
 
 ### Table Of Content
 
-- [coordinate](coordinate)
+- [coordinate](#coordinate)
+- [matrices](matrices.md)
 
 ---
-
-### Matrices
-
-> This library provides the ability to do **basic** matrix calculations; [MIT **Linear-Algebra** Course](https://ocw.mit.edu/courses/res-18-010-a-2020-vision-of-linear-algebra-spring-2020/)
-
-<a href="" align="center">notes from lectures</a> 
-
-#### Creation Of A Matrix
-
-The `matrix` is created on the **heap** as a continuous chunk of data; 
-If we are allocating a matrix `m` with the size of `r = 3, c = 3`, we can do this easily:
-
-```c
-int *mptr = malloc(sizeof(int) * (row * col))
-```
-
-#### Access Data Of A Matrix
-
-You can easily iterate over the matrix since we know the number of `rows` and `cols` in a matrix;
-
-```c
-```
 
 ### Coordinate
 
@@ -46,3 +23,6 @@ then for values in-between pick the closest pre-calculated value, or linearly in
 This allows results to be looked up from a table rather than being calculated in real time. 
 With modern CPU architectures this method may offer no advantage.[citation needed]
 **The CORDIC algorithm is commonly used in scientific calculators.**
+
+### References
+

@@ -14,10 +14,7 @@ endif()
 
 # src files for libraries
 if (LibTest)
-	set(HEADERS 
-		"coordtest.h"
-		"mattest.h"
-	)
+	add_subdirectory(libtest)
 endif()
 
 add_executable(MathLibTest "main.c" ${HEADERS})
