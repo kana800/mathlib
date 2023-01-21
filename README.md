@@ -10,4 +10,12 @@
 - [Libraries](lib/README.md)
 - Modules
 	- [Linear Grapher](lineargrapher)
-- External
+- [External](external) - External Libraries
+- [Project Euler](projecteuler) - Collection of problems from [project euler](https://projecteuler.net/about)
+	- [Test Cases](tests/projecteulertest)
+
+---
+
+<p align="center">
+<img src="https://projecteuler.net/profile/kanna800.png">
+</p>
