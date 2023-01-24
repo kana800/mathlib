@@ -56,14 +56,15 @@ Taylor Series for `sin(x)` `I = [-1,1]`:
 
 ```c
 // taylor series first 4 terms
-double sin(double rad){
+double sine(double rad){
 	return x - ((x*x*x)/6) 
 	+ ((x*x*x*x*x)/120) 
 	- ((x*x*x*x*x*x*x)/5040)
-	+ ((x*x*x*x*x*x*x*x*x)/362880)
+	+ ((x*x*x*x*x*x*x*x*x)/362880);
 }
 ```
 
+---
 
 ### References
 

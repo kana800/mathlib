@@ -1,5 +1,6 @@
 #include "libtest/coordtest.h"
 #include "libtest/mattest.h"
+#include "libtest/trigtest.h"
 
 // keeps in track of the points allocated in the
 // heap
@@ -23,13 +24,16 @@ int main(void)
     int number_failed;
 	Suite *s;
 	Suite *m;
+	Suite *t;
     SRunner *sr;
 
 	//s = coordinate_suite();
-	m = matrix_suite();
+	//m = matrix_suite();
+	t = trig_suite();
 
 	//sr = srunner_create(s);
-	sr = srunner_create(m);
+	//sr = srunner_create(m);
+	sr = srunner_create(t);
     //srunner_add_suite(sr, m);
 
 	srunner_run_all(sr, CK_VERBOSE);
