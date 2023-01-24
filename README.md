@@ -1,4 +1,4 @@
->A simple math library; Actually I don't know what this is; I make shit related to math and dump it here
+>A simple math library; Actually I don't know what this is; I make shit related to math and dump it here.
 
 ---
 
