@@ -14,7 +14,8 @@ typedef struct matrix_ {
 } matrix;
 ```
 
-`elementcontainer` contains the `elements` which holds the `data` of the matrix. `elementcontainer` will imitate a **double-linked list**, we could have used a **simple array** instead of a **linked-list** which would reduce the *complexity* of code.
+`elementcontainer` contains the `elements` which holds the `data` of the matrix. `elementcontainer` will imitate a **double-linked list**, 
+we could have used a **simple array** instead of a **linked-list** which would reduce the *complexity* of code.
 
 ```c
 typedef struct matrix_ {

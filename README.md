@@ -1,4 +1,4 @@
->A simple math library; Actually I don't know what this is; I make shit related to math and dump it here
+>A simple math library; Actually I don't know what this is; I make shit related to math and dump it here.
 
 ---
 
@@ -10,4 +10,9 @@
 - [Libraries](lib/README.md)
 - Modules
 	- [Linear Grapher](lineargrapher)
-- External
+- [External](external) - External Libraries
+- [Project Euler](projecteuler) - Collection of problems from [project euler](https://projecteuler.net/about)
+	- [Test Cases](tests/projecteulertest)
+
+---
+

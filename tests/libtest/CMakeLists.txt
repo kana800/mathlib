@@ -4,9 +4,5 @@ cmake_minimum_required (VERSION 3.8)
 set(LIBHDRS
 	"coordtest.h"
 	"mattest.h"
-)
-
-set(LIBSRCS
-	"coordtest.c"
-	"mattest.c"
+	"trigtest.h"
 )
