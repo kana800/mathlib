@@ -15,4 +15,3 @@
 	- [Test Cases](tests/projecteulertest)
 
 ---
-

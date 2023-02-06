@@ -34,4 +34,3 @@ set_target_properties(
 	coord matrix PROPERTIES 
 	LINKER_LANGUAGE C
 )
-
