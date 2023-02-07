@@ -7,6 +7,7 @@
 
 ### Table Of Content
 
+- [Animations](animations)
 - [Libraries](lib/README.md)
 - Modules
 	- [Linear Grapher](lineargrapher)

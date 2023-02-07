@@ -11,5 +11,8 @@ trig: lib/trig.h
 	gcc -c $(TRIGFILES)  -o $(BUILDDIR)trig.o
 	ls -al $(BUILDDIR)
 	ar -rcs $(BUILDDIR)trig.a $(BUILDDIR)trig.o
+
 trigtest: trig
 	gcc $(LIBTEST)trigtest.c -o trigtest -static -L. $(BUILDDIR)trig.a -lm
+cleantest: 
+	rm -r trigtest

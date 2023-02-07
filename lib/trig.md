@@ -44,6 +44,10 @@ double cos(double rad){
 }
 ```
 
+<p style="text-align: center" align="center">
+  <img src=".images\trig\costaylor.png" alt="taylor equation for cos">
+</p>
+
 Taylor Series for `sin(x)` `I = [-1,1]`:
 
 <p style="text-align: center" align="center">
