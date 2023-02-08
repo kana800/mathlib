@@ -39,7 +39,7 @@ double cos(double rad){
 <p style="text-align: center" align="center">
   <img src=".images\cos_taylor_cmp.gif" alt="comparison of cos taylor and numpy cos">
   <br>
-  <a>comparison of cos taylor with 4 terms and numpy cos</a>
+  <p>comparison of cos taylor with 4 terms and numpy cos</p>
 </p>
 
 Taylor Series for `sin(x)` `I = [-1,1]`:
@@ -53,6 +53,12 @@ double sine(double rad){
 	+ ((x*x*x*x*x*x*x*x*x)/362880);
 }
 ```
+
+<p style="text-align: center" align="center">
+  <img src=".images\sin_taylor_cmp.gif" alt="comparison of sine taylor and numpy sine">
+  <br>
+  <a>comparison of sine taylor with 4 terms and numpy sin</a>
+</p>
 
 ---
 

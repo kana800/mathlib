@@ -1,10 +1,11 @@
 #!/bin/bash
 
 
-
 if [[ $1 == 'gif' ]]; then
-	manim -pql --format=gif coscompare.py GraphScene
+	manim -pql --format=gif triganim.py CosGraphScene
+	manim -pql --format=gif triganim.py SinGraphScene
+else
+	manim -pql triganim.py GraphScene
 fi
-#manim -pql coscompare.py GraphScene
 
 #celluloid media/videos/coscompare/480p15/GraphScene.mp4
