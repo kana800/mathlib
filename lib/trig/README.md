@@ -45,7 +45,7 @@ double cos(double rad){
 ```
 
 <video controls>
-  <source src=".images\cos_taylor_cmp,mp4" type="video/mp4">
+  <source src=".images\cos_taylor_cmp.mp4" type="video/mp4">
 </video>
 
 Taylor Series for `sin(x)` `I = [-1,1]`:

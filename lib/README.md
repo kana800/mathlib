@@ -6,6 +6,6 @@
 
 - [coordinate]()
 - [matrices](matrices.md)
-- [trigonometry](lib/trig.md)
+- [trigonometry](trig/README.md)
 
 ---
