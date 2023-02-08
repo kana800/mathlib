@@ -24,14 +24,6 @@ Another option is to use Chebyshev Approximation;
 
 Taylor Series for `cos(x)` `I = [-1,1]`:
 
-<p style="text-align: center" align="center">
-  <img src=".images\trig\cos_taylor.png" alt="taylor equation for cos">
-</p>
-
-<p style="text-align: center" align="center">
-  <img src=".images\trig\cos_taylor_2.png" alt="taylor equation for cos">
-</p>
-
 we could write a simple `c` function that would calculate the `cosine` value
 
 ```c
@@ -46,18 +38,11 @@ double cos(double rad){
 
 <p style="text-align: center" align="center">
   <img src=".images\cos_taylor_cmp.gif" alt="comparison of cos taylor and numpy cos">
+  <br>
   <a>comparison of cos taylor with 4 terms and numpy cos</a>
 </p>
 
 Taylor Series for `sin(x)` `I = [-1,1]`:
-
-<p style="text-align: center" align="center">
-  <img src=".images\trig\sin_taylor.png" alt="taylor equation for sin">
-</p>
-
-<p style="text-align: center" align="center">
-  <img src=".images\trig\sin_taylor_2.png" alt="taylor equation for sin">
-</p>
 
 ```c
 // taylor series first 4 terms
