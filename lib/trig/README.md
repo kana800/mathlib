@@ -44,9 +44,9 @@ double cos(double rad){
 }
 ```
 
-<video controls>
-  <source src=".images\cos_taylor_cmp.mp4" type="video/mp4">
-</video>
+<p style="text-align: center" align="center">
+  <img src=".images\cos_taylor_cmp.png" alt="comparison of cos taylor and numpy cos">
+</p>
 
 Taylor Series for `sin(x)` `I = [-1,1]`:
 

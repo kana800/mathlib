@@ -1,0 +1,3 @@
+# This file is used internally by FFMPEG.
+file 'file:/home/ws/personal/mathlib/animations/triganim/media/videos/coscompare/480p15/partial_movie_files/GraphScene/4266129954_3187335577_2252647571.mp4'
+file 'file:/home/ws/personal/mathlib/animations/triganim/media/videos/coscompare/480p15/partial_movie_files/GraphScene/1442284246_36632488_1416943696.mp4'

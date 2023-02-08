@@ -3,12 +3,10 @@
 
 ### Table Of Content
 
-- [Animations](animations)
-- [Libraries](lib/README.md)
-- Modules
-	- [Linear Grapher](lineargrapher)
+- [Animations](animations): contains animations for documentation
 - [External](external) - External Libraries
-- [Project Euler](projecteuler) - Collection of problems from [project euler](https://projecteuler.net/about)
-	- [Test Cases](tests/projecteulertest)
-
----
+- [Libraries](lib): contains all the necessary Libraries
+- [Modules](modules) : contains all the modules
+- [PyLib](pylib): Extended `c` libraries ported to `python`
+- [tests](tests): test cases for all the code 
+- [Project Euler](projecteuler): collection of problems from [project euler](https://projecteuler.net/about) solved using modules and libraries
