@@ -9,7 +9,9 @@ def loadlibrarytrig():
     loads the absolute path and returns
     library
     """
-    trigpath = "./triglib/trig.so"
+    #note that the trig path is relative the 
+    #animation folder
+    trigpath = "../../build/trig/trig.so"
     triglib = ctypes.CDLL(trigpath)
     return triglib
 
@@ -27,3 +29,6 @@ def wrapargsret(func):
 def pytrig_cos_taylor(x, func):
     return func(x) 
 
+
+def pytrig_sin_taylor(x, func):
+    return func(x)

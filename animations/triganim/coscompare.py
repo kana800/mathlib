@@ -5,8 +5,11 @@ the math.h and mathlib cos values
 
 from manim import *
 import csv
+import imp
 import numpy as np
-import trig
+
+
+trig = imp.load_source('trig',"../../pylib/trig/trig.py")
 
 class GraphScene(Scene):
 

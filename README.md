@@ -8,5 +8,5 @@
 - [Libraries](lib): contains all the necessary Libraries
 - [Modules](modules) : contains all the modules
 - [PyLib](pylib): Extended `c` libraries ported to `python`
-- [tests](tests): test cases for all the code 
 - [Project Euler](projecteuler): collection of problems from [project euler](https://projecteuler.net/about) solved using modules and libraries
+- [Tests](tests): test cases for all the code 
