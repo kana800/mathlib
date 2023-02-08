@@ -1,7 +1,5 @@
-#ifndef TRIG_H
-#define TRIG_H
+#include "trig.h"
 
-#include <stdio.h>
 
 double cos_taylor(double x) {
 	/*summary: return the cos value
@@ -28,4 +26,3 @@ double sine_taylor(double x) {
 		- ((x * x * x * x * x * x * x) / 5040)
 		+ ((x * x * x * x * x * x * x * x * x) / 362880);
 }
-#endif // !TRIG_H

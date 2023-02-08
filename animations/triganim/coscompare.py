@@ -6,36 +6,43 @@ the math.h and mathlib cos values
 from manim import *
 import csv
 import numpy as np
-
-DATAFILE = '../../data/cos_mathlib.csv'
-YRANGE = []
-COS_MATH_H = []
-COS_MATHLIB = []
-
-with open(DATAFILE, newline='') as csvfile:
-    reader = csv.reader(csvfile, delimiter=',')
-    for row in reader:
-        YRANGE.append(row[0])
-        COS_MATHLIB.append(row[1])
-
+import trig
 
 class GraphScene(Scene):
 
     def construct(self):
+
+        triglib = trig.loadlibrarytrig()
+        func = trig.wrapargsret(triglib.cos_taylor)
+
         axes = Axes(
             y_range = [-2,2,1],
             x_range = [-6,6,1] 
         )
+
         axes.add_coordinates()
+        axes_labels = axes.get_axis_labels()
+
+        
+        cos_taylor_4 = axes.plot(
+                lambda x: trig.pytrig_cos_taylor(x, func),
+                color = YELLOW,
+                x_range = [-6,6])
+
+        numpy_cos = axes.plot(lambda x: np.cos(x),
+                              x_range = [-6,6],
+                              color=BLUE)
+
+
+        cos_taylor_label = axes.get_graph_label(
+            cos_taylor_4,  label = Tex("$cos-t(4)$").scale(0.65), x_val=-10, direction=UP / 2
+        )
+        numpy_cos_label = axes.get_graph_label(numpy_cos, label=Tex("np cos").scale(0.65))
+
+        plot = VGroup(axes, cos_taylor_4, numpy_cos)
+        labels = VGroup(axes_labels, cos_taylor_label, numpy_cos_label)
+        self.add(plot, labels)
+
 
         self.play(Write(axes))
-        self.wait(1)
-
-        curve = axes.plot(lambda x: int(float(COS_MATHLIB[x])),
-                            color = YELLOW,
-                            x_range = [0,4]
-                          )
-        #curve = axes.plot(lambda x: np.sin(x))
-        self.play(Write(curve))
-        self.wait(5)
-
+        self.wait(5) 

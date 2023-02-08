@@ -44,9 +44,9 @@ double cos(double rad){
 }
 ```
 
-<p style="text-align: center" align="center">
-  <img src=".images\trig\costaylor.png" alt="taylor equation for cos">
-</p>
+<video controls>
+  <source src=".images\cos_taylor_cmp,mp4" type="video/mp4">
+</video>
 
 Taylor Series for `sin(x)` `I = [-1,1]`:
 

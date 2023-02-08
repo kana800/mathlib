@@ -5,7 +5,7 @@
 #include <assert.h>
 #include <math.h>
 
-#include "../../lib/trig.h"
+#include "../../lib/trig/trig.h"
 
 void outputdatafile(double (*functpointer)(double),
 		double minrange, double maxrange){

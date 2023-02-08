@@ -4,8 +4,8 @@
 
 ### Table Of Content
 
-- [coordinate](#coordinate)
+- [coordinate]()
 - [matrices](matrices.md)
-- [trigonometry](trig.md)
+- [trigonometry](lib/trig.md)
 
 ---
