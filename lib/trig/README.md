@@ -45,7 +45,8 @@ double cos(double rad){
 ```
 
 <p style="text-align: center" align="center">
-  <img src=".images\cos_taylor_cmp.png" alt="comparison of cos taylor and numpy cos">
+  <img src=".images\cos_taylor_cmp.gif" alt="comparison of cos taylor and numpy cos">
+  <a>comparison of cos taylor with 4 terms and numpy cos</a>
 </p>
 
 Taylor Series for `sin(x)` `I = [-1,1]`:
