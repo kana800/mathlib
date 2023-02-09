@@ -3,7 +3,6 @@ wrapper for trig.h library
 """
 import ctypes
 
-
 def loadlibrarytrig():
     """summary:
     loads the absolute path and returns
@@ -11,10 +10,9 @@ def loadlibrarytrig():
     """
     #note that the trig path is relative the 
     #animation folder
-    trigpath = "../../build/trig/trig.so"
+    trigpath = "../../build/trig/triglib.so"
     triglib = ctypes.CDLL(trigpath)
     return triglib
-
 
 def wrapargsret(func):
     """summary
@@ -26,9 +24,9 @@ def wrapargsret(func):
     func.restype = ctypes.c_double
     return func
 
-def pytrig_cos_taylor(x, func):
+def pytrig_cos(x, func):
     return func(x) 
 
-
-def pytrig_sin_taylor(x, func):
+def pytrig_sin(x, func):
     return func(x)
+

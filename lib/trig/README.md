@@ -15,8 +15,6 @@ linearly interploate between the values.
 like sine and cosine using only addition, substraction, bit shitfing and with the help of a small
 look up table. 
 
-Another option is to use Chebyshev Approximation; 
-
 ---
 
 
@@ -39,7 +37,7 @@ double cos(double rad){
 <p style="text-align: center" align="center">
   <img src=".images\cos_taylor_cmp.gif" alt="comparison of cos taylor and numpy cos">
   <br>
-  <p>comparison of cos taylor with 4 terms and numpy cos</p>
+  <a>comparison of cos taylor with 4 terms and numpy cos</a>
 </p>
 
 Taylor Series for `sin(x)` `I = [-1,1]`:
@@ -60,7 +58,29 @@ double sine(double rad){
   <a>comparison of sine taylor with 4 terms and numpy sin</a>
 </p>
 
----
+
+Both `sin(x)` and `cos(x)` lose accuracy after the range `[-1,1]`; we can calulate more terms to increase the accuracy further or we can use the fact that `cos` and `sin` repeat itself at `2pi` respectively and calculate `sin`and `cos` using those values. check out Austin Helney's blog about on "implementation on `cos`" for more information of this method; 
+
+### LUTs 
+
+The idea is precomputing `sin` and `cos` values and dropping them into an array.
+> Austin Henley used a python script to generate a `c` header file; I will be using that script with some small 
+adjustments to generate the header files.
+
+<a style="text-align:center" href="">Generating the Header files</a>
+
+
+<p style="text-align: center" align="center">
+  <img src=".images\sin_lut.gif" alt="comparison of sine taylor, numpy sine and sine lut">
+  <br>
+  <a>comparison of sine taylor with 4 terms, numpy sine and sine lut</a>
+</p>
+
+<p style="text-align: center" align="center">
+  <img src=".images\cos_lut.gif" alt="comparison of cos taylor, numpy cos and cos lut">
+  <br>
+  <a>comparison of cos taylor with 4 terms, numpy cos and cos lut</a>
+</p>
 
 ### References
 
