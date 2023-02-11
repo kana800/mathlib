@@ -29,4 +29,3 @@ def pytrig_cos(x, func):
 
 def pytrig_sin(x, func):
     return func(x)
-

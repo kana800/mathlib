@@ -5,7 +5,7 @@
 ### Table Of Content
 
 - [coordinate]()
-- [matrices](matrices.md)
+- [matrices](matrix/matrices.md)
 - [trigonometry](trig/README.md)
 
 ---
