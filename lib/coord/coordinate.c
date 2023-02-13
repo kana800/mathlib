@@ -1,45 +1,4 @@
-/*coordinate.h
-	polar and cartesian coordinate system 
-HISTORY
-	v 0.10 First Public Release
-
-USAGE
-	
-
-*/
-#ifndef ML_COORDINATE
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
-
-#define DEBUG 1
-
-// coordinate structure
-typedef struct coordinate {
-	int x; // x value
-	int y; // y value
-} cartesiancoord;
-
-typedef struct polarcoordinate {
-	float r; // radius
-	float theta; // angle
-} polarcoord;
-
-// forward declaration cartesian functions
-
-cartesiancoord addcartesiancoordinate(int count, ...);
-cartesiancoord subcartesiancoordinate(int count, ...);
-cartesiancoord divcartesiancoordinate(int count, ...);
-cartesiancoord multcartesiancoordinate(int count, ...);
-
-// forward declaration of polar functions
-
-polarcoord addpolarcoordinate(int count, ...);
-polarcoord subpolarcoordinate(int count, ...);
-polarcoord divpolarcoordinate(int count, ...);
-polarcoord multpolarcoordinate(int count, ...);
-
+#include "coordinate.h"
 #ifndef _MSC_VER
 
 #define VA_NUM_ARGS_HELPER(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, N, ...)	N
@@ -60,6 +19,7 @@ cartesiancoord* c_createcartesiancoordinate(int x, int y) {
 		(cartesiancoord*)malloc(sizeof(cartesiancoord));
 	temp->x = x;
 	temp->y = y;
+	return temp;
 }
 
 // create a polar coordinate in the heap
@@ -73,6 +33,7 @@ polarcoord* c_createpolarcoordinate(int r, int theta) {
 		(polarcoord*)malloc(sizeof(polarcoord));
 	temp->r = r;
 	temp->theta = theta;
+	return temp;
 }
 
 // add multiple coordinates together
@@ -113,8 +74,6 @@ cartesiancoord subcartesiancoordinate(int count, ...) {
 	return:
 		cartesiancoord
 	*/
-
-
 	va_list ptr;
 	va_start(ptr, count);
 
@@ -225,5 +184,3 @@ cartesiancoord c_findmidpoint(cartesiancoord c1, cartesiancoord c2) {
 
 	return temp;
 }
-
-#endif // !ML_COORDINATE
