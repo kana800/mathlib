@@ -1,4 +1,4 @@
-#include "coordinate.h"
+#include "coord.h"
 #ifndef _MSC_VER
 
 #define VA_NUM_ARGS_HELPER(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, N, ...)	N
@@ -37,7 +37,7 @@ polarcoord* c_createpolarcoordinate(int r, int theta) {
 }
 
 // add multiple coordinates together
-cartesiancoord addcartesiancoordinate(int count, ...) {
+cartesiancoord* addcartesiancoordinate(int count, ...) {
 	/*summary: add multiple cartesiancoordinates together
 	args:
 		int count -> sentinel value;
@@ -47,17 +47,18 @@ cartesiancoord addcartesiancoordinate(int count, ...) {
 		cartesiancoord
 	*/
 
-	cartesiancoord temp = { .x = 0, .y = 0 };
+	cartesiancoord* temp = c_createcartesiancoordinate(0, 0);
 
 	va_list ptr;
 	va_start(ptr, count);
 	for (int i = 0; i < count; i++) {
-		cartesiancoord test = va_arg(ptr, cartesiancoord);
+		cartesiancoord* test = va_arg(ptr, cartesiancoord*);
 #ifdef DEBUG
-		printf("addcartesiancoordinate %d: (%d,%d) \n", i, test.x, test.y);
+		printf("addcartesiancoordinate %d: (%d,%d) \n",
+				i, test->x, test->y);
 #endif
-		temp.x += test.x;
-		temp.y += test.y;
+		temp->x += test->x;
+		temp->y += test->y;
 	}
 	va_end(ptr);
 
@@ -65,7 +66,7 @@ cartesiancoord addcartesiancoordinate(int count, ...) {
 }
 
 // subtract multiple cartesiancoordinates together
-cartesiancoord subcartesiancoordinate(int count, ...) {
+cartesiancoord* subcartesiancoordinate(int count, ...) {
 	/*summary: subtract multiple cartesiancoordinates together
 	args:
 		int count -> sentinel value;
@@ -77,16 +78,18 @@ cartesiancoord subcartesiancoordinate(int count, ...) {
 	va_list ptr;
 	va_start(ptr, count);
 
-	cartesiancoord test = va_arg(ptr, cartesiancoord);
-	cartesiancoord temp = { .x = test.x, .y = test.y };
+	cartesiancoord* test = va_arg(ptr, cartesiancoord*);
+	cartesiancoord* temp = c_createcartesiancoordinate(
+			test->x, test->y);
 
 	for (int i = 1; i < count; i++) {
-		test = va_arg(ptr, cartesiancoord);
+		test = va_arg(ptr, cartesiancoord* );
 #ifdef DEBUG
-		printf("subcartesiancoordinate %d: (%d,%d) \n", i, test.x, test.y);
+		printf("subcartesiancoordinate %d: (%d,%d) \n",
+				i, test->x, test->y);
 #endif
-		temp.x -= test.x;
-		temp.y -= test.y;
+		temp->x -= test->x;
+		temp->y -= test->y;
 	}
 	va_end(ptr);
 
@@ -94,7 +97,7 @@ cartesiancoord subcartesiancoordinate(int count, ...) {
 }
 
 // divide multiple cartesiancoordinates together
-cartesiancoord divcartesiancoordinate(int count, ...) {
+cartesiancoord* divcartesiancoordinate(int count, ...) {
 	/*summary: divide multiple cartesiancoordinates together
 	args:
 		int count -> sentinel value;
@@ -110,19 +113,21 @@ cartesiancoord divcartesiancoordinate(int count, ...) {
 		cartesiancoord
 	*/
 
-	cartesiancoord temp = { .x = 0,.y = 0 };
-
 	va_list ptr;
 	va_start(ptr, count);
 
-	for (int i = 0; i < count; i++) {
-		cartesiancoord test = va_arg(ptr, cartesiancoord);
+	cartesiancoord* test = va_arg(ptr, cartesiancoord*);
+	cartesiancoord* temp = c_createcartesiancoordinate(
+			test->x, test->y);
+
+	for (int i = 1; i < count; i++) {
+		test = va_arg(ptr, cartesiancoord *);
 #ifdef DEBUG
-		printf("divcartesiancoordinate %d: (%d,%d) \n", i, test.x, test.y);
+		printf("divcartesiancoordinate %d: (%d,%d) \n", i, test->x, test->y);
 #endif
-		if ((temp.x != 0) || (temp.y != 0)) {
-			temp.x /= test.x;
-			temp.y /= test.y;
+		if ((temp->x != 0) || (temp->y != 0)) {
+			temp->x /= test->x;
+			temp->y /= test->y;
 		}
 		else {
 			continue;
@@ -135,7 +140,7 @@ cartesiancoord divcartesiancoordinate(int count, ...) {
 }
 
 // multiple multiple cartesiancoordinates together
-cartesiancoord multcartesiancoordinate(int count, ...) {
+cartesiancoord* multcartesiancoordinate(int count, ...) {
 	/*summary: multiply multiple cartesiancoordinates together
 	args:
 		int count -> sentinel value;
@@ -151,18 +156,18 @@ cartesiancoord multcartesiancoordinate(int count, ...) {
 		cartesiancoord
 	*/
 
-	cartesiancoord temp = { .x = 1,.y = 1 };
+	cartesiancoord* temp = c_createcartesiancoordinate(1, 1);
 
 	va_list ptr;
 	va_start(ptr, count);
 
 	for (int i = 0; i < count; i++) {
-		cartesiancoord test = va_arg(ptr, cartesiancoord);
+		cartesiancoord* test = va_arg(ptr, cartesiancoord*);
 #ifdef DEBUG
-		printf("multcartesiancoordinate %d: (%d,%d) \n", i, test.x, test.y);
+		printf("multcartesiancoordinate %d: (%d,%d) \n", i, test->x, test->y);
 #endif
-		temp.x *= test.x;
-		temp.y *= test.y;
+		temp->x *= test->x;
+		temp->y *= test->y;
 	}
 	va_end(ptr);
 
@@ -170,17 +175,17 @@ cartesiancoord multcartesiancoordinate(int count, ...) {
 }
 
 // find midpoint between two cartesiancoordinates
-cartesiancoord c_findmidpoint(cartesiancoord c1, cartesiancoord c2) {
+cartesiancoord* c_findmidpoint(cartesiancoord* c1, cartesiancoord* c2) {
 	/*summary: find midpoint between two cartesiancoordinates
 	args:
 		cartesiancoord
 	return:
 		cartesiancoord
 	*/
-	cartesiancoord temp = { .x = 0, .y = 0 };
+	cartesiancoord* temp = c_createcartesiancoordinate(0, 0);
 
-	temp.x = (c1.x + c2.x) / 2;
-	temp.y = (c1.y + c2.y) / 2;
+	temp->x = (c1->x + c2->x) / 2;
+	temp->y = (c1->y + c2->y) / 2;
 
 	return temp;
 }

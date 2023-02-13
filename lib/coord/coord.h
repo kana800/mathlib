@@ -25,12 +25,15 @@ typedef struct polarcoordinate {
 } polarcoord;
 
 // forward declaration cartesian functions
-cartesiancoord addcartesiancoordinate(int count, ...);
-cartesiancoord subcartesiancoordinate(int count, ...);
-cartesiancoord divcartesiancoordinate(int count, ...);
-cartesiancoord multcartesiancoordinate(int count, ...);
+cartesiancoord* c_createcartesiancoordinate(int x, int y);
+cartesiancoord* addcartesiancoordinate(int count, ...);
+cartesiancoord* subcartesiancoordinate(int count, ...);
+cartesiancoord* divcartesiancoordinate(int count, ...);
+cartesiancoord* multcartesiancoordinate(int count, ...);
+cartesiancoord* c_findmidpoint(cartesiancoord* c1, cartesiancoord* c2);
 
 // forward declaration of polar functions
+polarcoord* c_createpolarcoordinate(int r, int theta);
 polarcoord addpolarcoordinate(int count, ...);
 polarcoord subpolarcoordinate(int count, ...);
 polarcoord divpolarcoordinate(int count, ...);
