@@ -30,13 +30,12 @@ cartesiancoord* addcartesiancoordinate(int count, ...);
 cartesiancoord* subcartesiancoordinate(int count, ...);
 cartesiancoord* divcartesiancoordinate(int count, ...);
 cartesiancoord* multcartesiancoordinate(int count, ...);
-cartesiancoord* c_findmidpoint(cartesiancoord* c1, cartesiancoord* c2);
+cartesiancoord* c_findmidpoint(
+		cartesiancoord* c1, cartesiancoord* c2);
 
 // forward declaration of polar functions
 polarcoord* c_createpolarcoordinate(int r, int theta);
-polarcoord addpolarcoordinate(int count, ...);
-polarcoord subpolarcoordinate(int count, ...);
-polarcoord divpolarcoordinate(int count, ...);
-polarcoord multpolarcoordinate(int count, ...);
+polarcoord* addpolarcoordinate(int count, ...);
+polarcoord* subpolarcoordinate(int count, ...);
 
 #endif // !ML_COORDINATE

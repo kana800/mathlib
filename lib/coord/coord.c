@@ -65,15 +65,45 @@ cartesiancoord* addcartesiancoordinate(int count, ...) {
 	return temp;
 }
 
+
+// add polar multiple polar coordinates together
+polarcoord* addpolarcoordinate(int count, ...){
+	/*summary: add polar coordinates together
+	args:
+		int count -> sentinel value;
+			number of arguments passed
+		polarcoord*
+	ret:
+		polarcoord*
+	 */
+	va_list ptr;
+	va_start(ptr, count);
+
+	polarcoord* test = va_arg(ptr, polarcoord*);
+	polarcoord* temp = c_createpolarcoordinate(
+			test->r, test->theta);
+	for (int i = 0; i < count; i++){
+		polarcoord* test = va_arg(ptr, polarcoord*);
+#ifdef DEBUG
+		printf("addpolarcoordinate %d: (%.2f,%.2f) \n",
+				i, test->r, test->theta);
+#endif
+		temp->r += test->r;
+		temp->theta += test->theta;
+	}
+	va_end(ptr);
+	return temp;
+}
+
 // subtract multiple cartesiancoordinates together
 cartesiancoord* subcartesiancoordinate(int count, ...) {
 	/*summary: subtract multiple cartesiancoordinates together
 	args:
 		int count -> sentinel value;
 			number of arguments passed
-		cartesiancoord
+		cartesiancoord*
 	return:
-		cartesiancoord
+		cartesiancoord*
 	*/
 	va_list ptr;
 	va_start(ptr, count);
@@ -96,6 +126,37 @@ cartesiancoord* subcartesiancoordinate(int count, ...) {
 	return temp;
 }
 
+
+polarcoord* subpolarcoordinate(int count, ...){
+	/*summary: substract multiple polarcoordinate together
+	args:
+		int count -> sentinel value;
+			number of arguments passed
+		polarcoordinate*
+	return:
+		polarcoordinate*
+	*/
+	va_list ptr;
+	va_start(ptr, count);
+
+	polarcoord* test = va_arg(ptr, polarcoord*);
+	polarcoord* temp = c_createpolarcoordinate(
+			test->r, test->theta);
+
+	for (int i = 1; i < count; i++) {
+		test = va_arg(ptr, polarcoord* );
+#ifdef DEBUG
+		printf("subpolarcoordinate %d: (%.2f,%.2f) \n",
+				i, test->r, test->theta);
+#endif
+		temp->r -= test->r;
+		temp->theta -= test->theta;
+	}
+	va_end(ptr);
+
+	return temp;
+}
+
 // divide multiple cartesiancoordinates together
 cartesiancoord* divcartesiancoordinate(int count, ...) {
 	/*summary: divide multiple cartesiancoordinates together
@@ -112,7 +173,6 @@ cartesiancoord* divcartesiancoordinate(int count, ...) {
 	return:
 		cartesiancoord
 	*/
-
 	va_list ptr;
 	va_start(ptr, count);
 
@@ -155,7 +215,6 @@ cartesiancoord* multcartesiancoordinate(int count, ...) {
 	return:
 		cartesiancoord
 	*/
-
 	cartesiancoord* temp = c_createcartesiancoordinate(1, 1);
 
 	va_list ptr;
