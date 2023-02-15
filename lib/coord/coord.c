@@ -23,7 +23,7 @@ cartesiancoord* c_createcartesiancoordinate(int x, int y) {
 }
 
 // create a polar coordinate in the heap
-polarcoord* c_createpolarcoordinate(int r, int theta) {
+polarcoord* c_createpolarcoordinate(float r, float theta) {
 	/*summary: create a polarcoordinate structure in the heap
 	args:
 		int r -> r polarcoordinate
@@ -65,36 +65,6 @@ cartesiancoord* addcartesiancoordinate(int count, ...) {
 	return temp;
 }
 
-
-// add polar multiple polar coordinates together
-polarcoord* addpolarcoordinate(int count, ...){
-	/*summary: add polar coordinates together
-	args:
-		int count -> sentinel value;
-			number of arguments passed
-		polarcoord*
-	ret:
-		polarcoord*
-	 */
-	va_list ptr;
-	va_start(ptr, count);
-
-	polarcoord* test = va_arg(ptr, polarcoord*);
-	polarcoord* temp = c_createpolarcoordinate(
-			test->r, test->theta);
-	for (int i = 0; i < count; i++){
-		polarcoord* test = va_arg(ptr, polarcoord*);
-#ifdef DEBUG
-		printf("addpolarcoordinate %d: (%.2f,%.2f) \n",
-				i, test->r, test->theta);
-#endif
-		temp->r += test->r;
-		temp->theta += test->theta;
-	}
-	va_end(ptr);
-	return temp;
-}
-
 // subtract multiple cartesiancoordinates together
 cartesiancoord* subcartesiancoordinate(int count, ...) {
 	/*summary: subtract multiple cartesiancoordinates together
@@ -126,36 +96,6 @@ cartesiancoord* subcartesiancoordinate(int count, ...) {
 	return temp;
 }
 
-
-polarcoord* subpolarcoordinate(int count, ...){
-	/*summary: substract multiple polarcoordinate together
-	args:
-		int count -> sentinel value;
-			number of arguments passed
-		polarcoordinate*
-	return:
-		polarcoordinate*
-	*/
-	va_list ptr;
-	va_start(ptr, count);
-
-	polarcoord* test = va_arg(ptr, polarcoord*);
-	polarcoord* temp = c_createpolarcoordinate(
-			test->r, test->theta);
-
-	for (int i = 1; i < count; i++) {
-		test = va_arg(ptr, polarcoord* );
-#ifdef DEBUG
-		printf("subpolarcoordinate %d: (%.2f,%.2f) \n",
-				i, test->r, test->theta);
-#endif
-		temp->r -= test->r;
-		temp->theta -= test->theta;
-	}
-	va_end(ptr);
-
-	return temp;
-}
 
 // divide multiple cartesiancoordinates together
 cartesiancoord* divcartesiancoordinate(int count, ...) {
@@ -246,5 +186,13 @@ cartesiancoord* c_findmidpoint(cartesiancoord* c1, cartesiancoord* c2) {
 	temp->x = (c1->x + c2->x) / 2;
 	temp->y = (c1->y + c2->y) / 2;
 
+	return temp;
+}
+
+// converting polar coordinate to cartesian coordinate
+cartesiancoord* convertpolartocartesian(polarcoord* coord){
+	cartesiancoord* temp = c_createcartesiancoordinate(
+			cos_table_0_01(coord->theta),
+			sin_table_0_01(coord->theta));
 	return temp;
 }

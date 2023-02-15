@@ -60,6 +60,3 @@ double sin_table_0_01(double x){
 	}
 	return ans;
 }
-
-
-

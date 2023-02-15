@@ -11,6 +11,8 @@ USAGE
 #include <stdlib.h>
 #include <stdarg.h>
 
+#include "../trig/trig.h"
+
 #define DEBUG 1
 
 // coordinate structure
@@ -34,8 +36,7 @@ cartesiancoord* c_findmidpoint(
 		cartesiancoord* c1, cartesiancoord* c2);
 
 // forward declaration of polar functions
-polarcoord* c_createpolarcoordinate(int r, int theta);
-polarcoord* addpolarcoordinate(int count, ...);
-polarcoord* subpolarcoordinate(int count, ...);
+polarcoord* c_createpolarcoordinate(float r, float theta);
+cartesiancoord* convertpolartocartesian(polarcoord* coord);
 
 #endif // !ML_COORDINATE

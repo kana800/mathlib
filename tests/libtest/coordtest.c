@@ -40,6 +40,9 @@ int main(int argc, char* argv[]){
 	assert(midpoint->x == 15);
 	assert(midpoint->y == 15);
 
+	polarcoord* temp8 = c_createpolarcoordinate(2, 0.5);
+	cartesiancoord* temp9 = convertpolartocartesian(temp8);
+
 	// freeing
 	free(temp1);
 	free(temp2);

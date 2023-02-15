@@ -25,19 +25,18 @@ coord: lib/coord/coord.h
 	mkdir -p $(BUILDDIR)$@
 	gcc -c -fPIC $(COORDFILES) -o $(BUILDDIR)$@/coord.o
 	# building dynamic library for pylib
-	gcc -shared -o $(BUILDDIR)$@/coordlib.so $(BUILDDIR)$@/coord.o 
+	gcc -shared -o $(BUILDDIR)$@/coordlib.so $(BUILDDIR)$@/coord.o
 	# building a static library for test cases
-	ar -rcs $(BUILDDIR)$@/coord.a $(BUILDDIR)$@/coord.o
+	ar -rcs $(BUILDDIR)$@/coord.a $(BUILDDIR)$@/coord.o $(BUILDDIR)trig/trig.o
 	# copying the coordlib to the respective building
 	mkdir -p $(PYDIR)$@/
 	cp $(BUILDDIR)$@/coordlib.so $(PYDIR)$@/
-
 
 trigtest: trig
 	gcc $(LIBTEST)trigtest.c -o $(BUILDDIR)$^/trigtest -static -L. $(BUILDDIR)$^/trig.a -lm
 
 coordtest: coord
-	gcc $(LIBTEST)coordtest.c -o $(BUILDDIR)$^/coordtest -static -L. $(BUILDDIR)$^/coord.a -lm
+	gcc $(LIBTEST)coordtest.c -o $(BUILDDIR)$^/coordtest -static -L. $(BUILDDIR)$^/coord.a
 
 cleantest: 
 	rm -r trigtest
