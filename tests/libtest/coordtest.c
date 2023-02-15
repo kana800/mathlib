@@ -4,7 +4,7 @@
 #include <time.h>
 #include <assert.h>
 
-#include "../../lib/coord/coord.h"
+#include "coord.h"
 
 int main(int argc, char* argv[]){
 

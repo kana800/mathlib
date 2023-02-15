@@ -1,11 +1,5 @@
 /*test cases for the trignometry library*/
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <assert.h>
-#include <math.h>
-
-#include "../../lib/trig/trig.h"
+#include "trigtest.h"
 
 void outputdatafile(double (*functpointer)(double),
 		double minrange, double maxrange){
@@ -30,6 +24,6 @@ int main(int argc, char** argv){
 	float ans_val_1 = roundf(cos(0.2))/100;
 	assert(test_val_1 == ans_val_1);
 	printf("cos_taylor = %.4f cos_math = %.4f\n", test_val_1, ans_val_1);
-	outputdatafile(cos_taylor,-5,5);
+	//outputdatafile(cos_taylor,-5,5);
 	return 0;
 }

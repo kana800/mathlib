@@ -6,7 +6,7 @@ USAGE
 
 */
 #ifndef ML_COORDINATE
-
+#define ML_COORDINATE
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
