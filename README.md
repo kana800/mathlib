@@ -14,8 +14,11 @@
 ### What is `mathlib`? 
 
 `mathlib` project is collection of small math scripts; Some of these scripts are obtained from books or articles while some are written by me just to the learn the concept of it.
-*If a script is taken off from a book or an article it will be mentioned in the script itself*. There will be some notes from courses and youtube series that I followed to 
-grasp certain topics, you can find them in the [`content`](content) section.
+
+> *If a script is taken off from a book or an article it will be mentioned in the script itself*. 
+
+There will be some notes from courses and youtube series that I followed to 
+grasp certain topics, you can find them in my [`garden`](https://kannna.xyz/garden/) section.
 
 ### Library
 
@@ -27,7 +30,7 @@ git submodule add -b lib https://github.com/kana800/mathlib.git
 
 ### MakeFile
 
-<p style="align=center;">
+<p style="align:center;">
     <img src=".images/makefile.png">
 </p>
 
