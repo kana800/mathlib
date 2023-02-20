@@ -13,21 +13,21 @@ USAGE
 
 #include "../trig/trig.h"
 
-#define DEBUG 1
+#define DEBUG 0
 
 // coordinate structure
 typedef struct coordinate {
-	int x; // x value
-	int y; // y value
+	double x; // x value
+	double y; // y value
 } cartesiancoord;
 
 typedef struct polarcoordinate {
-	float r; // radius
-	float theta; // angle
+	double r; // radius
+	double theta; // angle
 } polarcoord;
 
 // forward declaration cartesian functions
-cartesiancoord* c_createcartesiancoordinate(int x, int y);
+cartesiancoord* c_createcartesiancoordinate(double x, double y);
 cartesiancoord* addcartesiancoordinate(int count, ...);
 cartesiancoord* subcartesiancoordinate(int count, ...);
 cartesiancoord* divcartesiancoordinate(int count, ...);
@@ -36,7 +36,7 @@ cartesiancoord* c_findmidpoint(
 		cartesiancoord* c1, cartesiancoord* c2);
 
 // forward declaration of polar functions
-polarcoord* c_createpolarcoordinate(float r, float theta);
+polarcoord* c_createpolarcoordinate(double r, double theta);
 cartesiancoord* convertpolartocartesian(polarcoord* coord);
 
 #endif // !ML_COORDINATE

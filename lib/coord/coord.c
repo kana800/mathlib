@@ -9,7 +9,7 @@
 #endif
 
 // create a cartesian coordinate in the heap
-cartesiancoord* c_createcartesiancoordinate(int x, int y) {
+cartesiancoord* c_createcartesiancoordinate(double x, double y) {
 	/*summary: create a cartesiancoordinate structure in the heap
 	args:
 		int x -> x cartesiancoordinate
@@ -23,7 +23,7 @@ cartesiancoord* c_createcartesiancoordinate(int x, int y) {
 }
 
 // create a polar coordinate in the heap
-polarcoord* c_createpolarcoordinate(float r, float theta) {
+polarcoord* c_createpolarcoordinate(double r, double theta) {
 	/*summary: create a polarcoordinate structure in the heap
 	args:
 		int r -> r polarcoordinate

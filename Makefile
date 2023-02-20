@@ -8,6 +8,8 @@ PYDIR := pylib/
 
 TRIGFILES := lib/trig/trig.c
 COORDFILES := lib/coord/coord.c
+MATRIXFILES := lib/matrix/matrix.c
+
 LIBTEST := tests/libtest/
 
 trig: lib/trig/trig.h
@@ -32,12 +34,22 @@ coord: lib/coord/coord.h
 	mkdir -p $(PYDIR)$@/
 	cp $(BUILDDIR)$@/coordlib.so $(PYDIR)$@/
 
+matrix: lib/matrix/matrix.h
+	mkdir -p $(BUILDDIR)$@
+	gcc -c lib/matrix/matrix.c -o $(BUILDDIR)$@/mat.o
+	ar -rc $(BUILDDIR)$@/libmat.a $(BUILDDIR)$@/mat.o
+	mkdir -p $(PYDIR)$@/
+
 trigtest: trig
 	$(CC) $(LIBTEST)$@.c -lm -ltrig -o $(BUILDDIR)$^/$@ -I lib/$^ -L $(BUILDDIR)$^
 
 coordtest: coord
 #	gcc $(LIBTEST)coordtest.c -static -L. $(BUILDDIR)$^/coord.a -o $(BUILDDIR)$^/coordtest  
 	$(CC) $(LIBTEST)$@.c -lm -lcoord -o $(BUILDDIR)$^/$@ -I lib/$^ -L $(BUILDDIR)$^
+
+mattest: matrix
+	$(CC) $(LIBTEST)$@.c -lm -lmat -o $(BUILDDIR)$^/$@ -I lib/$^ -L $(BUILDDIR)$^
+
 
 cleantest: 
 	rm -r trigtest

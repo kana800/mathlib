@@ -8,8 +8,9 @@
 
 int main(int argc, char* argv[]){
 
-	cartesiancoord* temp1 = c_createcartesiancoordinate(5,5);
-	cartesiancoord* temp2 = c_createcartesiancoordinate(5,5);
+	/*
+	cartesiancoord* temp1 = c_createcartesiancoordinate(5.0,5);
+	cartesiancoord* temp2 = c_createcartesiancoordinate(5.0,5);
 	
 	assert(temp1->x == 5);
 	assert(temp1->y == 5);
@@ -30,7 +31,6 @@ int main(int argc, char* argv[]){
 	cartesiancoord* temp6 = divcartesiancoordinate(2, temp1, temp2);
 	assert(temp6->x == 1);
 	assert(temp6->y == 1);
-
 	// testing out multiple inputs
 	cartesiancoord* temp7 = addcartesiancoordinate(3, temp1, temp2, temp5);
 	assert(temp7->x == 35);
@@ -39,17 +39,19 @@ int main(int argc, char* argv[]){
 	cartesiancoord* midpoint = c_findmidpoint(temp5, temp1);
 	assert(midpoint->x == 15);
 	assert(midpoint->y == 15);
-
-	polarcoord* temp8 = c_createpolarcoordinate(2, 0.5);
+	*/
+	polarcoord* temp8 = c_createpolarcoordinate(2.0, 0.5);
 	cartesiancoord* temp9 = convertpolartocartesian(temp8);
 
+	printf("polarcoord (%.2f,%.2f) -> cartesiancoord (%.2f,%.2f)\n",temp8->r, temp8->theta, temp9->x, temp9->y) ;
+
 	// freeing
-	free(temp1);
-	free(temp2);
-	free(temp3);
-	free(temp4);
-	free(temp5);
-	free(temp6);
-	free(temp7);
-	free(midpoint);
+	//free(temp1);
+	//free(temp2);
+	//free(temp3);
+	//free(temp4);
+	//free(temp5);
+	//free(temp6);
+	//free(temp7);
+	//free(midpoint);
 }
