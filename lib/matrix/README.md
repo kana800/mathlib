@@ -2,7 +2,6 @@
 
 > This library provides the ability to do **basic** matrix calculations; [MIT **Linear-Algebra** Course](https://ocw.mit.edu/courses/res-18-010-a-2020-vision-of-linear-algebra-spring-2020/)
 
-
 The `matrix` datastructure holds all the key components to the matrix;
 
 ```c

@@ -4,8 +4,8 @@
 
 ### Table Of Content
 
-- [coordinate](coord/coord.md)
-- [matrices](matrix/matrices.md)
+- [coordinate](coord/README.md)
+- [matrices](matrix/README.md)
 - [trigonometry](trig/README.md)
 
 ---
