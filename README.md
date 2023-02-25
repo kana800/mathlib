@@ -30,8 +30,8 @@ git submodule add -b lib https://github.com/kana800/mathlib.git
 
 ### MakeFile
 
-<p style="align:center;">
-    <img src=".images/makefile.png">
+<p style="text-align: center" align="center">
+  <img src=".images/makefile.png" alt="makefile image">
 </p>
 
 ### References
