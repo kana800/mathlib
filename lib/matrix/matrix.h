@@ -27,17 +27,4 @@ typedef struct matrix_ {
 	int col; // col count
 } matrix;
 
-static void printElementContainer(elementcontainer* e);
-matrix* createMatrix(int row, int col, ...);
-matrix* createEmptyMatrix(int row, int col); 
-void freeMatrix(matrix* m);
-void freeContainer(elementcontainer* e);
-elementcontainer* getRow(matrix* m, int row);
-elementcontainer* getCol(matrix* m, int col); 
-float getData(matrix* m, int row, int col); 
-void addMatrix(matrix* a, matrix* b);
-void subMatrix(matrix* a, matrix* b);
-float multiplyMatrixHelper(elementcontainer* r, elementcontainer* c); 
-matrix* multiplyMatrix(matrix* a, matrix* b); 
-
 #endif // MATRIX_H
