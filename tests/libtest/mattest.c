@@ -7,5 +7,8 @@
 
 
 int main(int argc, char *argv[]){
+	matrix* m = createIdentityMatrix(4);
+	printmatrix(m);
+	freeMatrix(m);
 	return 0;
 }
