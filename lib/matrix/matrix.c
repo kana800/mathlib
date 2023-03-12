@@ -114,16 +114,13 @@ matrix* multiplyMatrix(matrix* a, matrix* b){
 			tcol =  0;
 		}
 		int sum = 0;
-		printf("C(%d,%d)=\n", trow, tcol);
 		for (int k = 0; k < b->rowc; k++){
 			int a_idx = a_rd*(trow - 1) + k;
 			int b_idx = b_cd*(k) + tcol;
 			int a_val = A[a_idx];
 			int b_val = B[b_idx];
-			printf("A[%d]*B[%d]=%d*%d\n",a_idx,b_idx,a_val,b_val);
 			sum += a_val * b_val;
 		}
-		printf("%d C(%d,%d) -> %d\n",p,trow,tcol, sum);
 		arr[p] = sum;
 		// moving to next column
 		tcol += 1;
