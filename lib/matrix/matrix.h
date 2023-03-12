@@ -18,6 +18,7 @@ void freeMatrix(matrix* m);
 
 matrix* createIdentityMatrix(int dim);
 matrix* createMatrix(int row,int col, ...);
-
+//matrix* addMatrix(matrix* a,matrix* b,...);
+matrix* multiplyMatrix(matrix* a, matrix* b);
 
 #endif // MATRIX_H
