@@ -6,6 +6,8 @@
 #include <errno.h>
 #include <stdlib.h>
 
+#define swapRow(...) var_swaprow((swaprow_args){__VA_ARGS__});
+
 typedef struct __matrix__{
 	int* matrix;
 	int size; // size of the matrix
@@ -13,12 +15,35 @@ typedef struct __matrix__{
 	int colc; // col count
 } matrix;
 
+typedef struct {
+	matrix* a;
+	int r1;
+	int r2;
+	int inplace;
+} swaprow_args;
+
 void printmatrix(const matrix* m);
 void freeMatrix(matrix* m);
 
 matrix* createIdentityMatrix(int dim);
 matrix* createMatrix(int row,int col, ...);
-//matrix* addMatrix(matrix* a,matrix* b,...);
+matrix* createEmptyMatrix(int row,int col);
+
+// matrix operations
+matrix* addMatrix(matrix* a,matrix* b);
+matrix* subMatrix(matrix* a,matrix* b);
 matrix* multiplyMatrix(matrix* a, matrix* b);
+//matrix* getInverse(matrix* a);
+//
+//
+//matrix* swapRow_base(matrix* a, int r1, int r2, int inplace);
+//matrix* var_swaprow(swaprow_args in);
+
+matrix* getPermutation(int dim, int r1, int r2);
+
+// helper function
+int getRowIndex(matrix* a, int r);
+int getColIndex(matrix* a, int r);
+
 
 #endif // MATRIX_H

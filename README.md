@@ -13,9 +13,7 @@
 
 ### What is `mathlib`? 
 
-`mathlib` project is collection of small math scripts; Some of these scripts are obtained from books or articles while some are written by me just to the learn the concept of it.
-
-> *If a script is taken off from a book or an article it will be mentioned in the script itself*. 
+`mathlib` project is collection of small math scripts; I wrote them to mainly solidify my understanding on certain topics.
 
 There will be some notes from courses and youtube series that I followed to 
 grasp certain topics, you can find them in my [`garden`](https://kannna.xyz/garden/) section.

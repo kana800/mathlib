@@ -6,11 +6,11 @@ void printmatrix(const matrix* m){
 	 *args: const matrix* m -> matrix
 	 *ret: none*/	
 	int* tM = m->matrix;
-	printf("Row Picture: \n");
 	for (int i = 0; i < m->size; i++){
 		printf(" %d ", tM[i]);
 	}
-	printf("\n");
+	printf("shape (%d,%d)\n",
+			m->rowc, m->colc);
 }
 
 
@@ -73,13 +73,82 @@ matrix* createMatrix(int row, int col, ...){
 	return m;
 }
 
-//matrix* addMatrix(matrix* a,matrix* b,...){
-	/*summary: add two matrices together or 
-	 * multiple matrices together
-	 *args: matrix* a -> matrix #1
-	 	matrix* b -> matrix #2
-	 *ret: (new matrix) ptr to a matrix*/	
-//}
+matrix* createEmptyMatrix(int row, int col){
+	/*summary: create an empty matrix with shape 
+	 * of row x col and data will be zero-initialized
+	 *args: int row -> row count
+	 	int col -> col count
+		remember matrix start with 0-index;
+		it is expected by the user to provide
+		correct number of elements
+	 *ret: matrix * -> row x col matrix*/
+	int size = row * col;
+	matrix* m = malloc(sizeof(matrix));
+	int* arr = calloc(size, sizeof(int));
+	m->matrix = arr;
+	m->rowc = row;
+	m->colc = col;
+	m->size = size;
+	return m;
+}
+
+matrix* addMatrix(matrix* a,matrix* b){
+      /*summary: add two matrices together 
+       *args: matrix* a -> matrix #1
+       	matrix* b -> matrix #2
+       *ret: (new matrix) ptr to a matrix*/	
+
+	//is it compatible
+	if ((a->rowc != b->rowc) &&
+		(a->colc != b->colc)){
+		fprintf(stderr, 
+			"Matrices Shape Isn't Compatible\n");
+		return NULL;
+	}
+
+	matrix* m = createEmptyMatrix(a->rowc, b->colc);
+	int* A = a->matrix;
+	int* B = b->matrix;
+	int* arr = m->matrix;
+	int size = m->size;
+
+	for (int i = 0; i < size; i++)
+		arr[i] = A[i] + B[i]; 
+	
+	m->matrix = arr;
+	m->size = size;
+	return m;
+}
+
+
+matrix* subMatrix(matrix* a,matrix* b){
+      /*summary: sub two matrices together 
+       *args: matrix* a -> matrix #1
+       	matrix* b -> matrix #2
+       *ret: (new matrix) ptr to a matrix*/	
+
+	//is it compatible
+	if ((a->rowc != b->rowc) &&
+		(a->colc != b->colc)){
+		fprintf(stderr, 
+			"Matrices Shape Isn't Compatible\n");
+		return NULL;
+	}
+
+	matrix* m = createEmptyMatrix(a->rowc, b->colc);
+	int* A = a->matrix;
+	int* B = b->matrix;
+	int* arr = m->matrix;
+	int size = m->size;
+
+	for (int i = 0; i < size; i++)
+		arr[i] = A[i] - B[i]; 
+	
+	m->matrix = arr;
+	m->size = size;
+	return m;
+}
+
 
 matrix* multiplyMatrix(matrix* a, matrix* b){
 	/*summary: multiply two matrices together
@@ -128,4 +197,63 @@ matrix* multiplyMatrix(matrix* a, matrix* b){
 	m->matrix = arr;
 	m->size = size;
 	return m;
+}
+
+
+matrix* getPermutation(int dim, int r1, int r2){
+	/*summary: return permutation Matrix
+	 * identity matrix with swapped rows
+	 * with dimension size;
+	 *args: dim -> dimension of the matrix
+		int r1 -> row number #1
+		int r2 -> row number #2
+		swap r1 -> r2;
+	 * ret: (new matrix)ptr to a identity matrix*/
+	matrix* i = createIdentityMatrix(dim); 
+	int startindex = getRowIndex(i,r1);
+	printf("row index %d\n", startindex);
+	return i;
+}
+
+
+//matrix* getInverse(matrix* a){
+//	/*summary: return inverse of a matrix a
+//	 *args: matrix *a -> matrix that you want
+//	 the inverse 
+//	 *ret: (new matrix)ptr to a matrix*/
+//}
+//
+//matrix* swapRow_base(matrix* a, int r1, int r2, int inplace){
+//	/*summary: swap rows in the matrices
+//	 *args: matrix *a -> matrix #1
+//		int r1 -> row 1
+//		int r2 -> row 2
+//		int inplace -> inplace replacement
+//			or get new array
+//			default: inplace
+//	 */
+//}
+//
+//matrix* var_swaprow(swaprow_args in){
+//	/*summary: helperfunction 
+//	 * set default args for 
+//	 * swapRow_base*/
+//	int inplace = in.inplace ? in.inplace : 0;
+//	return swapRow_base(in.a, in.r1, 
+//			in.r2, inplace);
+//}
+
+
+int getRowIndex(matrix* a, int r){
+	/*summary: return an starting index of
+	 * appopriate row
+	 *args: matrix* a -> matrix
+	 	int r -> row id
+	 *ret: row number*/
+	if (r > a->rowc){
+		fprintf(stderr,
+			"Row id is greater than row count\n");
+		return -1;	
+	}
+	return (a->rowc*(r - 1));
 }
