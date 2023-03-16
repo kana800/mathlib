@@ -43,6 +43,7 @@ matrix* getPermutation(int dim, int r1, int r2);
 
 // helper function
 int getRowIndex(matrix* a, int r);
+int* getRowPtr(matrix* a, int r);
 int getColIndex(matrix* a, int r);
 
 

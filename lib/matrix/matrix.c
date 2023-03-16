@@ -25,25 +25,25 @@ void freeMatrix(matrix* m){
 }
 
 
-matrix* createIdentityMatrix(int dim){
+matrix* createIdentityMatrix(int d){
 	/*summary: creates an identity matrix
 	 *args: int dim ->  number of dimensions
 			2 -> 2x2
 			3 -> 3x3
 			4 -> 4x4
 	 *ret: matrix -> Identity Matrix*/
-	int size = dim*dim;
+	int size = d * d;
 	matrix* m = malloc(sizeof(matrix));
 	int* arr = calloc(size, sizeof(int));
 	// row count and col count
 	int row = 0;
 	int col = 0;
-	for (int i = 1; i <= dim; i++) 
-		arr[((dim+1)*i-dim) - 1] = 1;
+	for (int i = 1; i <= d; i++) 
+		arr[((d+1)*i-d) - 1] = 1;
 	m->matrix = arr;
 	m->size = size;
-	m->rowc = dim;
-	m->colc = dim;
+	m->rowc = d;
+	m->colc = d;
 	return m;
 }
 
@@ -210,8 +210,16 @@ matrix* getPermutation(int dim, int r1, int r2){
 		swap r1 -> r2;
 	 * ret: (new matrix)ptr to a identity matrix*/
 	matrix* i = createIdentityMatrix(dim); 
-	int startindex = getRowIndex(i,r1);
-	printf("row index %d\n", startindex);
+	int si_r1 = getRowIndex(i,r1);
+	int si_r2 = getRowIndex(i,r2);
+	printf("%d-%d\n", si_r1, si_r2);
+	for (int a = 0; a < i->rowc; a++){
+		int j = i->matrix[si_r1];
+		i->matrix[si_r1] = i->matrix[si_r2];
+		i->matrix[si_r2] = j;
+		si_r1++;
+		si_r2++;
+	}
 	return i;
 }
 
@@ -252,8 +260,43 @@ int getRowIndex(matrix* a, int r){
 	 *ret: row number*/
 	if (r > a->rowc){
 		fprintf(stderr,
-			"Row id is greater than row count\n");
+			"Row ID is greater than Row count\n");
 		return -1;	
 	}
 	return (a->rowc*(r - 1));
+}
+
+int* getRowPtr(matrix *a, int r){
+	/*summary: return an array with
+	 * with pointerappopriate row
+	 *args: matrix* a -> matrix
+	 	int r -> row id
+	 *ret: row number*/
+	if (r > a->rowc){
+		fprintf(stderr,
+			"Row ID is greater than Row count\n");
+		return NULL;	
+	}
+	
+	int si = a->rowc*(r-1);
+	int* ra = calloc(a->rowc,sizeof(int));
+	for (int c = 0; c >= a->rowc; c++){
+		ra[c] = a->matrix[si];
+		si++;
+	}
+	return ra;
+}
+
+int getColIndex(matrix *a, int c){
+	/*summary: return an starting index of
+	 * appopriate row
+	 *args: matrix* a -> matrix
+	 	int r -> row id
+	 *ret: row number*/
+	if (c > a->colc){
+		fprintf(stderr,
+			"Col ID is greater than Col count\n");
+		return -1;	
+	}
+	return (a->colc*(c - 1));
 }
