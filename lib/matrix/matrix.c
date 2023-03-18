@@ -224,13 +224,12 @@ matrix* getPermutation(int dim, int r1, int r2){
 }
 
 
-//matrix* getInverse(matrix* a){
-//	/*summary: return inverse of a matrix a
-//	 *args: matrix *a -> matrix that you want
-//	 the inverse 
-//	 *ret: (new matrix)ptr to a matrix*/
-//}
-//
+matrix* getInverse(matrix* a){
+	/*summary: return inverse of a matrix a
+	 *args: matrix *a -> matrix that you want
+	 the inverse 
+	 *ret: (new matrix)ptr to a matrix*/
+}
 //matrix* swapRow_base(matrix* a, int r1, int r2, int inplace){
 //	/*summary: swap rows in the matrices
 //	 *args: matrix *a -> matrix #1
