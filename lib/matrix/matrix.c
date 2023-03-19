@@ -229,27 +229,18 @@ matrix* getInverse(matrix* a){
 	 *args: matrix *a -> matrix that you want
 	 the inverse 
 	 *ret: (new matrix)ptr to a matrix*/
-}
-//matrix* swapRow_base(matrix* a, int r1, int r2, int inplace){
-//	/*summary: swap rows in the matrices
-//	 *args: matrix *a -> matrix #1
-//		int r1 -> row 1
-//		int r2 -> row 2
-//		int inplace -> inplace replacement
-//			or get new array
-//			default: inplace
-//	 */
-//}
-//
-//matrix* var_swaprow(swaprow_args in){
-//	/*summary: helperfunction 
-//	 * set default args for 
-//	 * swapRow_base*/
-//	int inplace = in.inplace ? in.inplace : 0;
-//	return swapRow_base(in.a, in.r1, 
-//			in.r2, inplace);
-//}
 
+	// checking if the matrix is invertible
+	
+}
+
+int getDeterminant(matrix* a){
+	/*summary: return the determinant 
+	 * of a matrix
+	 *args: matrix *a -> matrix
+	 *ret: determintant of a matrix*/
+	
+}
 
 int getRowIndex(matrix* a, int r){
 	/*summary: return an starting index of
@@ -265,37 +256,17 @@ int getRowIndex(matrix* a, int r){
 	return (a->rowc*(r - 1));
 }
 
-int* getRowPtr(matrix *a, int r){
-	/*summary: return an array with
-	 * with pointerappopriate row
-	 *args: matrix* a -> matrix
-	 	int r -> row id
-	 *ret: row number*/
-	if (r > a->rowc){
-		fprintf(stderr,
-			"Row ID is greater than Row count\n");
-		return NULL;	
-	}
-	
-	int si = a->rowc*(r-1);
-	int* ra = calloc(a->rowc,sizeof(int));
-	for (int c = 0; c >= a->rowc; c++){
-		ra[c] = a->matrix[si];
-		si++;
-	}
-	return ra;
-}
-
-int getColIndex(matrix *a, int c){
+int getColIndex(matrix *a, int j, int n){
 	/*summary: return an starting index of
 	 * appopriate row
 	 *args: matrix* a -> matrix
 	 	int r -> row id
+		int n -> element id
 	 *ret: row number*/
-	if (c > a->colc){
+	if (j > a->colc){
 		fprintf(stderr,
 			"Col ID is greater than Col count\n");
 		return -1;	
 	}
-	return (a->colc*(c - 1));
+	return a->colc*(n - 1) + j;
 }

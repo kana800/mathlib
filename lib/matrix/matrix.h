@@ -34,17 +34,12 @@ matrix* addMatrix(matrix* a,matrix* b);
 matrix* subMatrix(matrix* a,matrix* b);
 matrix* multiplyMatrix(matrix* a, matrix* b);
 //matrix* getInverse(matrix* a);
-//
-//
-//matrix* swapRow_base(matrix* a, int r1, int r2, int inplace);
-//matrix* var_swaprow(swaprow_args in);
 
 matrix* getPermutation(int dim, int r1, int r2);
 
 // helper function
 int getRowIndex(matrix* a, int r);
-int* getRowPtr(matrix* a, int r);
-int getColIndex(matrix* a, int r);
+int getColIndex(matrix* a, int j, int n);
 
 
 #endif // MATRIX_H

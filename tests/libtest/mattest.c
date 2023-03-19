@@ -87,13 +87,23 @@ int main(int argc, char *argv[]){
 		assert(e->matrix[i] == arr_2[i] * 0);
 	}
 
-
-	// test cases for the row indicies
+	// test cases for the row index
 	assert (getRowIndex(m,2) == 3);
 	assert (getRowIndex(m,1) == 0);
 	assert (getRowIndex(m,3) == 6);
 	// this should give us an error
 	assert (getRowIndex(m,4) == -1);
+
+	// test cases for the col index
+	assert (getColIndex(m, 1, 1) == 1);
+	assert (getColIndex(m, 1, 2) == 4);
+	assert (getColIndex(m, 1, 3) == 7);
+	assert (getColIndex(m, 2, 1) == 2);
+	assert (getColIndex(m, 2, 2) == 5);
+	assert (getColIndex(m, 2, 3) == 8);
+	assert (getColIndex(m, 3, 1) == 3);
+	assert (getColIndex(m, 3, 2) == 6);
+	assert (getColIndex(m, 3, 3) == 9);
 
 	// permutation matrices
 	int id_1[] = {1,0,0,0,0,1,0,1,0};
