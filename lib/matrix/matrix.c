@@ -1,391 +1,267 @@
 #include "matrix.h"
 
-static void printElementContainer(
-	elementcontainer* e) {
-	/*summary: prints the element container*/
-    elementcontainer* tempE = e;
-    while (tempE != NULL) {
-        printf("(%d) Data at (%d, %d) : %.2f\n",
-            tempE->e->index,
-            tempE->e->row,
-            tempE->e->col,
-            tempE->e->d);
-        tempE = tempE->next;
-    }
+
+void printmatrix(const matrix* m){
+	/*summary: prints the matrix
+	 *args: const matrix* m -> matrix
+	 *ret: none*/	
+	int* tM = m->matrix;
+	for (int i = 0; i < m->size; i++){
+		printf(" %d ", tM[i]);
+	}
+	printf("shape (%d,%d)\n",
+			m->rowc, m->colc);
 }
 
-matrix* createMatrix(int row, int col, ...) {
-	/*summary: creates a matrix structure in 
-	the heap and return its pointer
-	args:
-		int row -> row count
-		int col -> col count
-		... -> values to be included
-	example:
-		if you want a 2x2 matrix
-			[
-			c1 c2
-		r1	1  2
-		r2	3  -4
-			]
-		createMatrix(2,2, 1,2,3,-4 )
-		- for the insertion of data to the matrix; the values will go
-		from r1,c1 -> r1,c2 -> r2,c1 -> r2,c2
-	ret:
-		matrix* m -> ptr to a matrix object
-	*/
-	// allocation of memory for the matrix datastructure
+
+void freeMatrix(matrix* m){
+	/*summary: free the matrix 
+	 * from the heap
+	 *args:matrix* m -> pointer to to a matrix;
+	 *ret: none*/
+	free(m->matrix);
+	free(m);
+	return;
+}
+
+
+matrix* createIdentityMatrix(int d){
+	/*summary: creates an identity matrix
+	 *args: int dim ->  number of dimensions
+			2 -> 2x2
+			3 -> 3x3
+			4 -> 4x4
+	 *ret: matrix -> Identity Matrix*/
+	int size = d * d;
 	matrix* m = malloc(sizeof(matrix));
-	// initializing data;
-	m->row = row;
-	m->col = col;
-	m->matrixptr = NULL;
-	m->size = row * col;
+	int* arr = calloc(size, sizeof(int));
+	// row count and col count
+	int row = 0;
+	int col = 0;
+	for (int i = 1; i <= d; i++) 
+		arr[((d+1)*i-d) - 1] = 1;
+	m->matrix = arr;
+	m->size = size;
+	m->rowc = d;
+	m->colc = d;
+	return m;
+}
 
-	// row and col count
-	int rc_count = row * col;
-	int row_count = 0;
-	int col_count = 0;
-
-	int section = col_count;
-	int inc_section = col;
-
-
-	// elementcontainer
-	elementcontainer* nxtptr = NULL;
-
+matrix* createMatrix(int row, int col, ...){
+	/*summary: create a matrix with shape of row x col
+	 * and include the data for the matrix provided
+	 *args: int row -> row count
+	 	int col -> col count
+		... -> data for the matrix
+		remember matrix start with 0-index;
+		it is expected by the user to provide
+		correct number of elements
+	 *ret: matrix * -> row x col matrix*/
+	int size = row * col;
+	matrix* m = malloc(sizeof(matrix));
+	int* arr = calloc(size, sizeof(int));
 	va_list ptr;
 	va_start(ptr, col);
-	for (int i = 0; i < rc_count; i++) {
-		float data = (float)va_arg(ptr, int);
-		// creating a new element object
-		element* tempE = malloc(sizeof(element));
-		elementcontainer* tempContainer = malloc(
-			sizeof(elementcontainer));
-
-		// end of the row reached
-		if (col_count == col) {
-			col_count = 0;
-			section = row_count;
-			inc_section--;
-			row_count++;
-		}
-
-		tempE->col = col_count + 1;
-		tempE->row = row_count + 1;
-		tempE->d = data;
-		tempE->index = i;
-
-		// adding data to the element container
-		tempContainer->e = tempE;
-		tempContainer->next = nxtptr;
-		nxtptr = tempContainer;
-
-		col_count++;
-		section += inc_section;
+	for(int i = 0; i < size; i++){
+		arr[i] = va_arg(ptr, int);	
 	}
-	m->matrixptr = nxtptr;
 	va_end(ptr);
+	m->matrix = arr;
+	m->rowc = row;
+	m->colc = col;
+	m->size = size;
 	return m;
-};
+}
 
-
-matrix* createEmptyMatrix(int row, int col) {
-	/*summary: creates an empty matrix
-	args:
-		int row
-		int col
-	ret:
-		matrix ptr
-	*/
+matrix* createEmptyMatrix(int row, int col){
+	/*summary: create an empty matrix with shape 
+	 * of row x col and data will be zero-initialized
+	 *args: int row -> row count
+	 	int col -> col count
+		remember matrix start with 0-index;
+		it is expected by the user to provide
+		correct number of elements
+	 *ret: matrix * -> row x col matrix*/
+	int size = row * col;
 	matrix* m = malloc(sizeof(matrix));
-	m->row = row;
-	m->col = col;
-	m->matrixptr = NULL;
-	m->size = row * col;
+	int* arr = calloc(size, sizeof(int));
+	m->matrix = arr;
+	m->rowc = row;
+	m->colc = col;
+	m->size = size;
 	return m;
 }
 
-void freeMatrix(matrix* m) {
-	/*summary: release the matrix
-	from the heap
-	args:
-		matrix* m -> matrix 
-	*/
-	int tSize = m->size;
-	// releasing the block memory
-	free(m->matrixptr);
-	// releasing the matrix
-	free(m);
-}
+matrix* addMatrix(matrix* a,matrix* b){
+      /*summary: add two matrices together 
+       *args: matrix* a -> matrix #1
+       	matrix* b -> matrix #2
+       *ret: (new matrix) ptr to a matrix*/	
 
-void freeContainer(elementcontainer* e) {
-	/*summary: release the
-	element container from heap
-	args:
-		elementcontainer* e -> element
-	*/
-	elementcontainer* tempS = e;
-	while (e != NULL) {
-		element* tempElement = e->e;
-		elementcontainer* tempE = e;
-
-		e = e->next;
-
-		free(tempElement);
-		free(tempE);
-	}
-
-}
-
-int getSize(matrix* m) {
-	/*summary: return the size of
-	the given matrix
-	args:
-		matrix* m -> matrix
-	ret:
-		int -> size of the matrix
-	*/
-	return m->size;
-}
-
-elementcontainer* getRow(matrix* m, int row) {
-	/*summary: returns row from the given matrix
-	args:
-		matrix* m -> matrix
-		int row -> row number
-	if given row is greater than number of rows in the
-	matrix elementcontainer will be null
-	return:
-		heap allocated elementcontainer with 
-		only the given row;
-	note:
-		use freeElementContainer();
-	*/
-	if (row > m->row) return NULL;
-
-	elementcontainer* tempM = m->matrixptr;
-	elementcontainer* rowptr = NULL;
-	while (tempM != NULL) {
-		if (tempM->e->row == row) {
-			element* tempE = malloc(sizeof(element));
-			elementcontainer* tempRow = 
-				malloc(sizeof(elementcontainer));
-			// copying the values
-			tempE->d = tempM->e->d;
-			tempE->row = tempM->e->row;
-			tempE->col = tempM->e->col;
-			tempE->index = tempM->e->index;
-			// container
-			tempRow->e = tempE;
-			tempRow->next = rowptr;
-			rowptr = tempRow;
-		}
-		tempM = tempM->next;
-	}
-	return rowptr;
-}
-
-elementcontainer* getCol(matrix* m, int col) {
-	/*summary: returns col from the given matrix
-	args:
-		matrix* m -> matrix
-		int col -> col number
-	if given col is greater than number of cols in the
-	matrix elementcontainer will be null
-	return:
-		heap allocated elementcontainer with 
-		only the given col;
-	note:
-		use freeElementContainer();
-	*/
-	if (col > m->col) return NULL;
-
-	elementcontainer* tempM = m->matrixptr;
-	elementcontainer* colptr = NULL;
-	while (tempM != NULL) {
-		if (tempM->e->col == col) {
-			element* tempE = malloc(sizeof(element));
-			elementcontainer* tempRow = 
-				malloc(sizeof(elementcontainer));
-			// copying the values
-			tempE->d = tempM->e->d;
-			tempE->row = tempM->e->row;
-			tempE->col = tempM->e->col;
-			tempE->index = tempM->e->index;
-			// container
-			tempRow->e = tempE;
-			tempRow->next = colptr;
-			colptr = tempRow;
-		}
-		tempM = tempM->next;
-	}
-	return colptr;
-}
-
-float getData(matrix* m, int row, int col) {
-	/*summary: returns data from the given
-	row and col
-	if the row and col is over the size of the matrix
-	function will return the last value of the matrix
-	args:
-		matrix* m -> pointer to the matrix
-		int row -> row
-		int col -> col
-	ret:
-		float -> m->e->d [matrixptr->elementcontainer->data]
-	*/
-
-	// checking if the given row size and col size is 
-	// overbounds
-	if ((row > m->row) || (col > m->col))
-		return m->matrixptr->e->d;
-
-	elementcontainer* tempE = m->matrixptr;
-	while (tempE != NULL) {
-		if ((row == tempE->e->row)
-			&& (col == tempE->e->col)) {
-			return tempE->e->d;
-		}
-		tempE = tempE->next;
-	}
-	return m->matrixptr->e->d;
-}
-
-void addMatrix(matrix* a, matrix* b) {
-	/*summary: add two matrices together
-	args:
-		matrix* a -> matrix one
-		matrix* b -> matrix two
-	addition values of mat a + mat b will be replaced 
-	inplace of mat a
-	ie:
-		MAT A + MAT B = MAT A
-	*/
-
-	// check if the rows and col are 
-	// same size
-	if ((a->row == b->row) 
-		&& (a->col == b->col)) {
-		// looping through the matrices 
-		elementcontainer* tempA = a->matrixptr;
-		elementcontainer* tempB = b->matrixptr;
-		while ((tempA != NULL) || (tempB != NULL)) {
-			tempA->e->d += tempB->e->d;
-			tempA = tempA->next;
-			tempB = tempB->next;
-		}
-	}
-	else {
-		fprintf(stderr, "Incompatible Matrices\n");
-		return;
-	}
-
-}
-
-void subMatrix(matrix* a, matrix* b) {
-	/*summary: substract two matrices together
-	args:
-		matrix* a -> matrix one
-		matrix* b -> matrix two
-	substracted values of mat a - mat b will be replaced 
-	inplace of mat a
-	ie:
-		MAT A - MAT B = MAT A
-	*/
-
-	// check if the rows and col are 
-	// same size
-	if ((a->row == b->row) 
-		&& (a->col == b->col)) {
-		// looping through the matrices 
-		elementcontainer* tempA = a->matrixptr;
-		elementcontainer* tempB = b->matrixptr;
-		while ((tempA != NULL) || (tempB != NULL)) {
-			tempA->e->d -= tempB->e->d;
-			tempA = tempA->next;
-			tempB = tempB->next;
-		}
-	}
-	else {
-		fprintf(stderr, "Incompatible Matrices\n");
-		return;
-	}
-
-}
-
-float multiplyMatrixHelper(
-	elementcontainer* r, elementcontainer* c) {
-	/*summary:HELPER
-	multiply row with a column and provide the
-	summation of the product
-	args:
-		elementcontainer* r -> row
-		elementcontainer* c -> column
-	ret:
-		sum of (r1 x c1) + (r1 x c2) + ... + (r1 x cn)
-	*/
-
-	elementcontainer* tempRow = r;
-	elementcontainer* tempCol = c;
-	float sum = 0;
-	while ((tempRow != NULL) 
-		|| (tempCol != NULL)) {
-		sum += (tempRow->e->d * tempCol->e->d);
-		tempRow = tempRow->next;
-		tempCol = tempCol->next;
-	}
-	return sum;
-}
-
-matrix* multiplyMatrix(matrix* a, matrix* b) {
-	/*summary: multiply two matrices together
-	args:
-		matrix* a -> MAT A
-		matrix* b -> MAT B
-	ret:
-		MAT A * MAT B
-	if matrix multiplication is not compatible the
-	ret would be NULL
-	*/
-
-	// checking if matrices are compatible
-	if (a->col != b->row) {
-		fprintf(stderr, "Incompatible Matrices\n");
+	//is it compatible
+	if ((a->rowc != b->rowc) &&
+		(a->colc != b->colc)){
+		fprintf(stderr, 
+			"Matrices Shape Isn't Compatible\n");
 		return NULL;
 	}
 
-	// create an empty matrix
-	matrix* tempM = createEmptyMatrix(a->row, b->col);
-	elementcontainer* nxtptr = NULL;
-	int index = 0;
-	// looping through the rows 
-	for (int i = 0; i < a->row; i++) {
-		elementcontainer* te = getRow(a, i + 1);
-		for (int j = 0; j < b->col; j++) {
-			elementcontainer* tc = getCol(b, j + 1);
-			float sum = multiplyMatrixHelper(te, tc);
-			element* tempE = malloc(sizeof(element));
-			elementcontainer* tempContainer = malloc(
-				sizeof(elementcontainer));
+	matrix* m = createEmptyMatrix(a->rowc, b->colc);
+	int* A = a->matrix;
+	int* B = b->matrix;
+	int* arr = m->matrix;
+	int size = m->size;
 
-			tempE->col = j + 1;
-			tempE->row = i + 1;
-			tempE->d = sum;
-			tempE->index = index;
-
-			// adding data to the element container
-			tempContainer->e = tempE;
-			tempContainer->next = nxtptr;
-			nxtptr = tempContainer;
-
-			index++;
-			freeContainer(tc);
-		}
-		freeContainer(te);
-	}
+	for (int i = 0; i < size; i++)
+		arr[i] = A[i] + B[i]; 
 	
-	tempM->matrixptr = nxtptr;
+	m->matrix = arr;
+	m->size = size;
+	return m;
+}
 
-	return tempM;
+
+matrix* subMatrix(matrix* a,matrix* b){
+      /*summary: sub two matrices together 
+       *args: matrix* a -> matrix #1
+       	matrix* b -> matrix #2
+       *ret: (new matrix) ptr to a matrix*/	
+
+	//is it compatible
+	if ((a->rowc != b->rowc) &&
+		(a->colc != b->colc)){
+		fprintf(stderr, 
+			"Matrices Shape Isn't Compatible\n");
+		return NULL;
+	}
+
+	matrix* m = createEmptyMatrix(a->rowc, b->colc);
+	int* A = a->matrix;
+	int* B = b->matrix;
+	int* arr = m->matrix;
+	int size = m->size;
+
+	for (int i = 0; i < size; i++)
+		arr[i] = A[i] - B[i]; 
+	
+	m->matrix = arr;
+	m->size = size;
+	return m;
+}
+
+
+matrix* multiplyMatrix(matrix* a, matrix* b){
+	/*summary: multiply two matrices together
+	 *args: matrix* a -> matrix #1
+		matrix* b -> matrix #2
+	 *ret: (new matrix) ptr to a matrix*/
+	// is it compatible
+	if (a->rowc != b->colc){
+		fprintf(stderr, 
+			"Matrices Shape Isn't Compatible\n");
+		return NULL;
+	}
+
+	// size of the new matrix
+	matrix* m = malloc(sizeof(matrix));
+	int size = a->colc * b->rowc;
+	m->rowc = a->colc;
+	m->colc = b->rowc;
+	int* arr = calloc(size, sizeof(int));
+	int* A = a->matrix;
+	int* B = b->matrix;
+	// row dimension and col dimension
+	int a_rd = a->rowc;
+	int b_cd = b->colc;
+	// tracks the row and col of the element
+	int trow = 0;
+	int tcol = 0;
+	for (int p = 0; p < size; p++){
+		if (p % a_rd == 0){
+			// moving to the next row
+			trow += 1;
+			tcol =  0;
+		}
+		int sum = 0;
+		for (int k = 0; k < b->rowc; k++){
+			int a_idx = a_rd*(trow - 1) + k;
+			int b_idx = b_cd*(k) + tcol;
+			int a_val = A[a_idx];
+			int b_val = B[b_idx];
+			sum += a_val * b_val;
+		}
+		arr[p] = sum;
+		// moving to next column
+		tcol += 1;
+	}
+	m->matrix = arr;
+	m->size = size;
+	return m;
+}
+
+
+matrix* getPermutation(int dim, int r1, int r2){
+	/*summary: return permutation Matrix
+	 * identity matrix with swapped rows
+	 * with dimension size;
+	 *args: dim -> dimension of the matrix
+		int r1 -> row number #1
+		int r2 -> row number #2
+		swap r1 -> r2;
+	 * ret: (new matrix)ptr to a identity matrix*/
+	matrix* i = createIdentityMatrix(dim); 
+	int si_r1 = getRowIndex(i,r1);
+	int si_r2 = getRowIndex(i,r2);
+	printf("%d-%d\n", si_r1, si_r2);
+	for (int a = 0; a < i->rowc; a++){
+		int j = i->matrix[si_r1];
+		i->matrix[si_r1] = i->matrix[si_r2];
+		i->matrix[si_r2] = j;
+		si_r1++;
+		si_r2++;
+	}
+	return i;
+}
+
+
+matrix* getInverse(matrix* a){
+	/*summary: return inverse of a matrix a
+	 *args: matrix *a -> matrix that you want
+	 the inverse 
+	 *ret: (new matrix)ptr to a matrix*/
+
+	// checking if the matrix is invertible
+	// obtaining the determinant is not 
+	// supported yet; lesson is in future!	
+
+
+}
+
+int getRowIndex(matrix* a, int r){
+	/*summary: return an starting index of
+	 * appopriate row
+	 *args: matrix* a -> matrix
+	 	int r -> row id
+	 *ret: row number*/
+	if (r > a->rowc){
+		fprintf(stderr,
+			"Row ID is greater than Row count\n");
+		return -1;	
+	}
+	return (a->rowc*(r - 1));
+}
+
+int getColIndex(matrix *a, int j, int n){
+	/*summary: return an starting index of
+	 * appopriate row
+	 *args: matrix* a -> matrix
+	 	int r -> row id
+		int n -> element id
+	 *ret: row number*/
+	if (j > a->colc){
+		fprintf(stderr,
+			"Col ID is greater than Col count\n");
+		return -1;	
+	}
+	return a->colc*(n - 1) + j;
 }

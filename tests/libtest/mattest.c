@@ -2,10 +2,127 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <assert.h>
 
 #include "matrix.h"
 
-
 int main(int argc, char *argv[]){
+
+	// testing creation of matrices
+	// creating an identity matrix
+	matrix* id_3 = createIdentityMatrix(3);
+	matrix* id_2 = createIdentityMatrix(2);
+
+	// creating an empty matrix
+	matrix* empty = createEmptyMatrix(3, 3);
+
+	// creating a 3x3 matrix
+	matrix* m = createMatrix(3,3,1,2,3,4,5,6,7,8,9);
+
+	int arr_3[] = {1,0,0,0,1,0,0,0,1};
+	int arr_2[] = {1,0,0,1};
+	int arr_4[] = {1,2,3,4,5,6,7,8,9};
+
+	// checking matrix size
+	assert(id_3->size == 9);
+	assert(id_3->rowc == 3);
+	assert(id_3->colc == 3);
+
+	assert(id_2->size == 4);
+	assert(id_2->rowc == 2);
+	assert(id_2->colc == 2);
+
+	assert(empty->size == 9);
+	assert(empty->rowc == 3);
+	assert(empty->colc == 3);
+
+	assert(m->size == 9);
+	assert(m->rowc == 3);
+	assert(m->colc == 3);
+
+	// checking data in the matrices
+	for (int i = 0; i < 9; i++){
+		assert(id_3->matrix[i] == arr_3[i]);
+	}
+
+	for (int i = 0; i < 4; i++){
+		assert(id_2->matrix[i] == arr_2[i]);
+	}
+
+	for (int i = 0; i < 9; i++){
+		assert(empty->matrix[i] == 0);
+	}
+
+	for (int i = 0; i < 9; i++){
+		assert(m->matrix[i] == arr_4[i]);
+	}
+
+	// operations 
+	// multiplication
+	matrix* c = multiplyMatrix(id_3, m);
+	assert(c->size == 9);
+	assert(c->rowc == 3);
+	assert(c->colc == 3);
+	for (int i = 0; i < c->size; i++){
+		assert(c->matrix[i] == arr_4[i]);
+	}
+
+	// addition
+	matrix* d = addMatrix(id_2, id_2);
+	assert(d->size == 4);
+	assert(d->rowc == 2);
+	assert(d->colc == 2);
+
+	for (int i = 0; i < 4; i++){
+		assert(d->matrix[i] == arr_2[i] * 2);
+	}
+
+	// substraction
+	matrix* e = subMatrix(id_2, id_2);
+	assert(e->size == 4);
+	assert(e->rowc == 2);
+	assert(e->colc == 2);
+
+	for (int i = 0; i < 4; i++){
+		assert(e->matrix[i] == arr_2[i] * 0);
+	}
+
+	// test cases for the row index
+	assert (getRowIndex(m,2) == 3);
+	assert (getRowIndex(m,1) == 0);
+	assert (getRowIndex(m,3) == 6);
+	// this should give us an error
+	assert (getRowIndex(m,4) == -1);
+
+	// test cases for the col index
+	assert (getColIndex(m, 1, 1) == 1);
+	assert (getColIndex(m, 1, 2) == 4);
+	assert (getColIndex(m, 1, 3) == 7);
+	assert (getColIndex(m, 2, 1) == 2);
+	assert (getColIndex(m, 2, 2) == 5);
+	assert (getColIndex(m, 2, 3) == 8);
+	assert (getColIndex(m, 3, 1) == 3);
+	assert (getColIndex(m, 3, 2) == 6);
+	assert (getColIndex(m, 3, 3) == 9);
+
+	// permutation matrices
+	int id_1[] = {1,0,0,0,0,1,0,1,0};
+	matrix* p = getPermutation(3, 2, 3);
+	for (int i = 0; i < p->size; i++){
+		assert(p->matrix[i] == id_1[i]);
+	}
+	
+	matrix* pm = multiplyMatrix(p,m);
+	printmatrix(pm);
+
+	// freeing the matrices
+	freeMatrix(id_3);
+	freeMatrix(id_2);
+	freeMatrix(m);
+	freeMatrix(c);
+	freeMatrix(d);
+	freeMatrix(e);
+
+
 	return 0;
 }
