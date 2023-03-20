@@ -231,15 +231,10 @@ matrix* getInverse(matrix* a){
 	 *ret: (new matrix)ptr to a matrix*/
 
 	// checking if the matrix is invertible
-	
-}
+	// obtaining the determinant is not 
+	// supported yet; lesson is in future!	
 
-int getDeterminant(matrix* a){
-	/*summary: return the determinant 
-	 * of a matrix
-	 *args: matrix *a -> matrix
-	 *ret: determintant of a matrix*/
-	
+
 }
 
 int getRowIndex(matrix* a, int r){

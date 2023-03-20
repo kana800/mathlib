@@ -114,7 +114,6 @@ m = [1,2,3]
 
 > [Read More About This In Docs]()
 
-
 ### Performing Arithmetic Operations
 
 #### Addition 

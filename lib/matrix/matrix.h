@@ -6,8 +6,6 @@
 #include <errno.h>
 #include <stdlib.h>
 
-#define swapRow(...) var_swaprow((swaprow_args){__VA_ARGS__});
-
 typedef struct __matrix__{
 	int* matrix;
 	int size; // size of the matrix
