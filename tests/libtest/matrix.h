@@ -1,11 +1,23 @@
-#include "matrix.h"
+#ifndef MATRIX_H
+#define MATRIX_H
 
+#include <stdio.h>
+#include <stdarg.h>
+#include <errno.h>
+#include <stdlib.h>
+
+typedef struct __matrix__{
+	int* arr;
+	int size; // size of the matrix
+	int rowc; // row count
+	int colc; // col count
+} matrix;
 
 void printmatrix(const matrix* m){
 	/*summary: prints the matrix
 	 *args: const matrix* m -> matrix
 	 *ret: none*/	
-	int* tM = m->matrix;
+	int* tM = m->arr;
 	for (int i = 0; i < m->size; i++){
 		printf(" %d ", tM[i]);
 	}
@@ -19,7 +31,7 @@ void freeMatrix(matrix* m){
 	 * from the heap
 	 *args:matrix* m -> pointer to to a matrix;
 	 *ret: none*/
-	free(m->matrix);
+	free(m->arr);
 	free(m);
 	return;
 }
@@ -40,7 +52,7 @@ matrix* createIdentityMatrix(int d){
 	int col = 0;
 	for (int i = 1; i <= d; i++) 
 		arr[((d+1)*i-d) - 1] = 1;
-	m->matrix = arr;
+	m->arr = arr;
 	m->size = size;
 	m->rowc = d;
 	m->colc = d;
@@ -66,7 +78,7 @@ matrix* createMatrix(int row, int col, ...){
 		arr[i] = va_arg(ptr, int);	
 	}
 	va_end(ptr);
-	m->matrix = arr;
+	m->arr = arr;
 	m->rowc = row;
 	m->colc = col;
 	m->size = size;
@@ -85,156 +97,11 @@ matrix* createEmptyMatrix(int row, int col){
 	int size = row * col;
 	matrix* m = malloc(sizeof(matrix));
 	int* arr = calloc(size, sizeof(int));
-	m->matrix = arr;
+	m->arr = arr;
 	m->rowc = row;
 	m->colc = col;
 	m->size = size;
 	return m;
-}
-
-matrix* addMatrix(matrix* a,matrix* b){
-      /*summary: add two matrices together 
-       *args: matrix* a -> matrix #1
-       	matrix* b -> matrix #2
-       *ret: (new matrix) ptr to a matrix*/	
-
-	//is it compatible
-	if ((a->rowc != b->rowc) &&
-		(a->colc != b->colc)){
-		fprintf(stderr, 
-			"Matrices Shape Isn't Compatible\n");
-		return NULL;
-	}
-
-	matrix* m = createEmptyMatrix(a->rowc, b->colc);
-	int* A = a->matrix;
-	int* B = b->matrix;
-	int* arr = m->matrix;
-	int size = m->size;
-
-	for (int i = 0; i < size; i++)
-		arr[i] = A[i] + B[i]; 
-	
-	m->matrix = arr;
-	m->size = size;
-	return m;
-}
-
-
-matrix* subMatrix(matrix* a,matrix* b){
-      /*summary: sub two matrices together 
-       *args: matrix* a -> matrix #1
-       	matrix* b -> matrix #2
-       *ret: (new matrix) ptr to a matrix*/	
-
-	//is it compatible
-	if ((a->rowc != b->rowc) &&
-		(a->colc != b->colc)){
-		fprintf(stderr, 
-			"Matrices Shape Isn't Compatible\n");
-		return NULL;
-	}
-
-	matrix* m = createEmptyMatrix(a->rowc, b->colc);
-	int* A = a->matrix;
-	int* B = b->matrix;
-	int* arr = m->matrix;
-	int size = m->size;
-
-	for (int i = 0; i < size; i++)
-		arr[i] = A[i] - B[i]; 
-	
-	m->matrix = arr;
-	m->size = size;
-	return m;
-}
-
-
-matrix* multiplyMatrix(matrix* a, matrix* b){
-	/*summary: multiply two matrices together
-	 *args: matrix* a -> matrix #1
-		matrix* b -> matrix #2
-	 *ret: (new matrix) ptr to a matrix*/
-	// is it compatible
-	if (a->rowc != b->colc){
-		fprintf(stderr, 
-			"Matrices Shape Isn't Compatible\n");
-		return NULL;
-	}
-
-	// size of the new matrix
-	matrix* m = malloc(sizeof(matrix));
-	int size = a->colc * b->rowc;
-	m->rowc = a->colc;
-	m->colc = b->rowc;
-	int* arr = calloc(size, sizeof(int));
-	int* A = a->matrix;
-	int* B = b->matrix;
-	// row dimension and col dimension
-	int a_rd = a->rowc;
-	int b_cd = b->colc;
-	// tracks the row and col of the element
-	int trow = 0;
-	int tcol = 0;
-	for (int p = 0; p < size; p++){
-		if (p % a_rd == 0){
-			// moving to the next row
-			trow += 1;
-			tcol =  0;
-		}
-		int sum = 0;
-		for (int k = 0; k < b->rowc; k++){
-			int a_idx = a_rd*(trow - 1) + k;
-			int b_idx = b_cd*(k) + tcol;
-			int a_val = A[a_idx];
-			int b_val = B[b_idx];
-			sum += a_val * b_val;
-		}
-		arr[p] = sum;
-		// moving to next column
-		tcol += 1;
-	}
-	m->matrix = arr;
-	m->size = size;
-	return m;
-}
-
-
-matrix* getPermutation(int dim, int r1, int r2){
-	/*summary: return permutation Matrix
-	 * identity matrix with swapped rows
-	 * with dimension size;
-	 *args: dim -> dimension of the matrix
-		int r1 -> row number #1
-		int r2 -> row number #2
-		swap r1 -> r2;
-	 * ret: (new matrix)ptr to a identity matrix*/
-	matrix* i = createIdentityMatrix(dim); 
-	int si_r1 = getRowIndex(i,r1);
-	int si_r2 = getRowIndex(i,r2);
-	printf("%d-%d\n", si_r1, si_r2);
-	for (int a = 0; a < i->rowc; a++){
-		int j = i->matrix[si_r1];
-		i->matrix[si_r1] = i->matrix[si_r2];
-		i->matrix[si_r2] = j;
-		si_r1++;
-		si_r2++;
-	}
-	return i;
-}
-
-
-matrix* getInverse(matrix* a){
-	/*summary: return inverse of a matrix a
-	 *args: matrix *a -> matrix that you want
-	 the inverse 
-	 *ret: (new matrix)ptr to a matrix*/
-
-	// checking if the matrix is invertible
-	// obtaining the determinant is not 
-	// supported yet; lesson is in future!	
-
-
 }
 
 int getRowIndex(matrix* a, int r){
@@ -265,3 +132,149 @@ int getColIndex(matrix *a, int j, int n){
 	}
 	return a->colc*(n - 1) + j;
 }
+
+matrix* addMatrix(matrix* a,matrix* b){
+      /*summary: add two matrices together 
+       *args: matrix* a -> matrix #1
+       	matrix* b -> matrix #2
+       *ret: (new matrix) ptr to a matrix*/	
+
+	//is it compatible
+	if ((a->rowc != b->rowc) &&
+		(a->colc != b->colc)){
+		fprintf(stderr, 
+			"Matrices Shape Isn't Compatible\n");
+		return NULL;
+	}
+
+	matrix* m = createEmptyMatrix(a->rowc, b->colc);
+	int* A = a->arr;
+	int* B = b->arr;
+	int* arr = m->arr;
+	int size = m->size;
+
+	for (int i = 0; i < size; i++)
+		arr[i] = A[i] + B[i]; 
+	
+	m->arr = arr;
+	m->size = size;
+	return m;
+}
+
+
+matrix* subMatrix(matrix* a,matrix* b){
+      /*summary: sub two matrices together 
+       *args: matrix* a -> matrix #1
+       	matrix* b -> matrix #2
+       *ret: (new matrix) ptr to a matrix*/	
+
+	//is it compatible
+	if ((a->rowc != b->rowc) &&
+		(a->colc != b->colc)){
+		fprintf(stderr, 
+			"Matrices Shape Isn't Compatible\n");
+		return NULL;
+	}
+
+	matrix* m = createEmptyMatrix(a->rowc, b->colc);
+	int* A = a->arr;
+	int* B = b->arr;
+	int* arr = m->arr;
+	int size = m->size;
+
+	for (int i = 0; i < size; i++)
+		arr[i] = A[i] - B[i]; 
+	
+	m->arr = arr;
+	m->size = size;
+	return m;
+}
+
+
+matrix* multiplyMatrix(matrix* a, matrix* b){
+	/*summary: multiply two matrices together
+	 *args: matrix* a -> matrix #1
+		matrix* b -> matrix #2
+	 *ret: (new matrix) ptr to a matrix*/
+	// is it compatible
+	if (a->rowc != b->colc){
+		fprintf(stderr, 
+			"Matrices Shape Isn't Compatible\n");
+		return NULL;
+	}
+
+	// size of the new matrix
+	matrix* m = malloc(sizeof(matrix));
+	int size = a->colc * b->rowc;
+	m->rowc = a->colc;
+	m->colc = b->rowc;
+	int* arr = calloc(size, sizeof(int));
+	int* A = a->arr;
+	int* B = b->arr;
+	// row dimension and col dimension
+	int a_rd = a->rowc;
+	int b_cd = b->colc;
+	// tracks the row and col of the element
+	int trow = 0;
+	int tcol = 0;
+	for (int p = 0; p < size; p++){
+		if (p % a_rd == 0){
+			// moving to the next row
+			trow += 1;
+			tcol =  0;
+		}
+		int sum = 0;
+		for (int k = 0; k < b->rowc; k++){
+			int a_idx = a_rd*(trow - 1) + k;
+			int b_idx = b_cd*(k) + tcol;
+			int a_val = A[a_idx];
+			int b_val = B[b_idx];
+			sum += a_val * b_val;
+		}
+		arr[p] = sum;
+		// moving to next column
+		tcol += 1;
+	}
+	m->arr = arr;
+	m->size = size;
+	return m;
+}
+
+
+matrix* getPermutation(int dim, int r1, int r2){
+	/*summary: return permutation Matrix
+	 * identity matrix with swapped rows
+	 * with dimension size;
+	 *args: dim -> dimension of the matrix
+		int r1 -> row number #1
+		int r2 -> row number #2
+		swap r1 -> r2;
+	 * ret: (new matrix)ptr to a identity matrix*/
+	matrix* i = createIdentityMatrix(dim); 
+	int si_r1 = getRowIndex(i,r1);
+	int si_r2 = getRowIndex(i,r2);
+	printf("%d-%d\n", si_r1, si_r2);
+	for (int a = 0; a < i->rowc; a++){
+		int j = i->arr[si_r1];
+		i->arr[si_r1] = i->arr[si_r2];
+		i->arr[si_r2] = j;
+		si_r1++;
+		si_r2++;
+	}
+	return i;
+}
+
+
+matrix* getInverse(matrix* a){
+	/*summary: return inverse of a matrix a
+	 *args: matrix *a -> matrix that you want
+	 the inverse 
+	 *ret: (new matrix)ptr to a matrix*/
+
+	// checking if the matrix is invertible
+	// obtaining the determinant is not 
+	// supported yet; lesson is in future!	
+
+}
+
+#endif // MATRIX_H

@@ -42,19 +42,19 @@ int main(int argc, char *argv[]){
 
 	// checking data in the matrices
 	for (int i = 0; i < 9; i++){
-		assert(id_3->matrix[i] == arr_3[i]);
+		assert(id_3->arr[i] == arr_3[i]);
 	}
 
 	for (int i = 0; i < 4; i++){
-		assert(id_2->matrix[i] == arr_2[i]);
+		assert(id_2->arr[i] == arr_2[i]);
 	}
 
 	for (int i = 0; i < 9; i++){
-		assert(empty->matrix[i] == 0);
+		assert(empty->arr[i] == 0);
 	}
 
 	for (int i = 0; i < 9; i++){
-		assert(m->matrix[i] == arr_4[i]);
+		assert(m->arr[i] == arr_4[i]);
 	}
 
 	// operations 
@@ -64,7 +64,7 @@ int main(int argc, char *argv[]){
 	assert(c->rowc == 3);
 	assert(c->colc == 3);
 	for (int i = 0; i < c->size; i++){
-		assert(c->matrix[i] == arr_4[i]);
+		assert(c->arr[i] == arr_4[i]);
 	}
 
 	// addition
@@ -74,7 +74,7 @@ int main(int argc, char *argv[]){
 	assert(d->colc == 2);
 
 	for (int i = 0; i < 4; i++){
-		assert(d->matrix[i] == arr_2[i] * 2);
+		assert(d->arr[i] == arr_2[i] * 2);
 	}
 
 	// substraction
@@ -84,7 +84,7 @@ int main(int argc, char *argv[]){
 	assert(e->colc == 2);
 
 	for (int i = 0; i < 4; i++){
-		assert(e->matrix[i] == arr_2[i] * 0);
+		assert(e->arr[i] == arr_2[i] * 0);
 	}
 
 	// test cases for the row index
@@ -109,7 +109,7 @@ int main(int argc, char *argv[]){
 	int id_1[] = {1,0,0,0,0,1,0,1,0};
 	matrix* p = getPermutation(3, 2, 3);
 	for (int i = 0; i < p->size; i++){
-		assert(p->matrix[i] == id_1[i]);
+		assert(p->arr[i] == id_1[i]);
 	}
 	
 	matrix* pm = multiplyMatrix(p,m);

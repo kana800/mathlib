@@ -36,7 +36,7 @@ coord: lib/coord/coord.h
 
 matrix: lib/matrix/matrix.h
 	mkdir -p $(BUILDDIR)$@
-	gcc -c lib/matrix/matrix.c -o $(BUILDDIR)$@/mat.o
+	gcc -c lib/matrix/matrix.h -o $(BUILDDIR)$@/mat.o
 	ar -rc $(BUILDDIR)$@/libmat.a $(BUILDDIR)$@/mat.o
 	mkdir -p $(PYDIR)$@/
 
@@ -46,8 +46,10 @@ trigtest: trig
 coordtest: coord
 	$(CC) $(LIBTEST)$@.c -lm -lcoord -o $(BUILDDIR)$^/$@ -I lib/$^ -L $(BUILDDIR)$^
 
+#mattest: matrix
+#	$(CC) $(LIBTEST)$@.c -lm -lmat -o $(BUILDDIR)$^/$@ -I lib/$^/$^.h -L $(BUILDDIR)$^
 mattest: matrix
-	$(CC) $(LIBTEST)$@.c -lm -lmat -o $(BUILDDIR)$^/$@ -I lib/$^ -L $(BUILDDIR)$^
+	$(CC) $(LIBTEST)$@.c -o $(BUILDDIR)$^/$@
 
 cleanbuild:
 	rm -r build/*

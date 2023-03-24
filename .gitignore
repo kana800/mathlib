@@ -4,3 +4,6 @@ build/*
 venv/*
 __pycache__
 animations/*/media
+
+
+test/libtest/*.h

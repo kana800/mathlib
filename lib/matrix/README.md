@@ -37,7 +37,7 @@ The `matrix` datastructure holds all the key components to the matrix;
 
 ```c
 typedef struct __matrix__{
-	int* matrix;
+	int* arr;
 	int size; // size of the matrix
 	int rowc; // row count
 	int colc; // col count
