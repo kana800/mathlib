@@ -139,3 +139,33 @@ For multiplication of matrices you can use the following function:
 ```
 multiplyMatrix(matrix* a, matrix* b);
 ```
+
+### Augmented Matrices
+
+Augmented Matrices have a special structure because we are working with `2` matrices;
+
+```c
+typedef struct __augmatrix__ {
+    matrix* a;
+    matrix* b;
+} augmatrix;
+```
+
+To create a augmented matrix you can use the function `createAugmentedMatrix(matrix* a, matrix* b)`;
+
+For example:
+```c
+/*
+A = [1 3 2]
+    [2 0 1]
+    [5 2 2]
+*/
+matrix *a = createMatrix(3,3,1,3,2,2,0,1,5,2,2);
+/*
+B = [4]
+    [3]
+    [1]
+*/
+matrix *b = createMatrix(3,1,4,3,1);
+augmatrix* ab = createAugmentedMatrix(a,b);
+```

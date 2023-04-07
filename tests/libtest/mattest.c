@@ -113,7 +113,15 @@ int main(int argc, char *argv[]){
 	}
 	
 	matrix* pm = multiplyMatrix(p,m);
-	printmatrix(pm);
+
+	printmatrix(m);
+	// testing deepCopyMatrixes
+	matrix* jj = createEmptyMatrix(m->rowc,m->colc); 
+	deepCopyMatrix(m, jj);
+	printmatrix(jj);
+	
+
+
 
 	// freeing the matrices
 	freeMatrix(id_3);

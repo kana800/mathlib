@@ -13,6 +13,12 @@ typedef struct __matrix__{
 	int colc; // col count
 } matrix;
 
+typedef struct __augmatrix__ {
+	/*augmented matrix*/
+	matrix* arr_a; // pointer to matrix a
+	matrix* arr_b; // pointer to matrix b
+} augmatrix;
+
 void printmatrix(const matrix* m){
 	/*summary: prints the matrix
 	 *args: const matrix* m -> matrix
@@ -25,7 +31,6 @@ void printmatrix(const matrix* m){
 			m->rowc, m->colc);
 }
 
-
 void freeMatrix(matrix* m){
 	/*summary: free the matrix 
 	 * from the heap
@@ -35,7 +40,6 @@ void freeMatrix(matrix* m){
 	free(m);
 	return;
 }
-
 
 matrix* createIdentityMatrix(int d){
 	/*summary: creates an identity matrix
@@ -65,9 +69,10 @@ matrix* createMatrix(int row, int col, ...){
 	 *args: int row -> row count
 	 	int col -> col count
 		... -> data for the matrix
-		remember matrix start with 0-index;
-		it is expected by the user to provide
-		correct number of elements
+			!!Remember matrix start with 
+			0-index; it is expected by the 
+			user to provide correct number
+			of elements
 	 *ret: matrix * -> row x col matrix*/
 	int size = row * col;
 	matrix* m = malloc(sizeof(matrix));
@@ -83,6 +88,30 @@ matrix* createMatrix(int row, int col, ...){
 	m->colc = col;
 	m->size = size;
 	return m;
+}
+
+
+void deepCopyMatrix(matrix* a, matrix* b){
+	/*summary: copy the content of 
+	 * matrix a to matrix b
+	 *args: 
+	 	matrix* a -> pointer to 
+			a matrix
+		matrix* b -> pointer to 
+			b matrix
+	 *if matrix b is not empty the content 
+	 will be overwritten
+	*/
+	int size_a = a->size;
+	b->size = a->size;
+	b->rowc = a->rowc;
+	b->colc = a->colc;
+	int* arr = a->arr;
+	int* barr = b->arr;
+	for (int i = 0; i < size_a; i++){
+		arr[i] = barr[i];	
+	}
+	return;
 }
 
 matrix* createEmptyMatrix(int row, int col){
@@ -103,6 +132,24 @@ matrix* createEmptyMatrix(int row, int col){
 	m->size = size;
 	return m;
 }
+
+augmatrix* createAugmentedMatrix(matrix* a, matrix* b){
+	/*summary: create an augmented matrix
+	 * by appending the columns of two given matrices
+	 *args:
+		matrix* a -> matrix 1
+		matrix* b -> matrix 2
+		a = [1 3 2] b=[4]
+		    [2 0 1]   [3]
+		    [5 2 2]   [1]
+		augmented = [1 3 2 |4]
+			    [2 0 1 |3]
+			    [5 2 2 |1]
+	 *ret: matrix * -> pointer to a matrix*/
+	matrix*m = malloc(sizeof(matrix));
+
+}
+
 
 int getRowIndex(matrix* a, int r){
 	/*summary: return an starting index of
@@ -253,7 +300,6 @@ matrix* getPermutation(int dim, int r1, int r2){
 	matrix* i = createIdentityMatrix(dim); 
 	int si_r1 = getRowIndex(i,r1);
 	int si_r2 = getRowIndex(i,r2);
-	printf("%d-%d\n", si_r1, si_r2);
 	for (int a = 0; a < i->rowc; a++){
 		int j = i->arr[si_r1];
 		i->arr[si_r1] = i->arr[si_r2];
