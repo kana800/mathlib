@@ -109,7 +109,7 @@ void deepCopyMatrix(matrix* a, matrix* b){
 	int* arr = a->arr;
 	int* barr = b->arr;
 	for (int i = 0; i < size_a; i++){
-		arr[i] = barr[i];	
+		barr[i] = arr[i];
 	}
 	return;
 }
@@ -146,8 +146,23 @@ augmatrix* createAugmentedMatrix(matrix* a, matrix* b){
 			    [2 0 1 |3]
 			    [5 2 2 |1]
 	 *ret: matrix * -> pointer to a matrix*/
-	matrix*m = malloc(sizeof(matrix));
+	if (a->colc != b->colc){
+		fprintf(stderr, 
+			"Cannot Create An Augmented Matrix");
+		return NULL;
+	}
 
+	matrix* temp_a = 
+		createEmptyMatrix(a->rowc, a->colc);
+	matrix* temp_b = 
+		createEmptyMatrix(b->rowc, b->colc);
+	deepCopyMatrix(a, temp_a);
+	deepCopyMatrix(b, temp_b);
+	
+	augmatrix* m = (augmatrix*)malloc(sizeof(augmatrix));
+	m->arr_a = temp_a;
+	m->arr_b = temp_b;
+	return m;	
 }
 
 

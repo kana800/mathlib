@@ -6,18 +6,46 @@
 
 #include "matrix.h"
 
+
+void compareMatrices(matrix* a, matrix* b){
+	/*summary: compare matrix a with b
+	 *args: matrix * a -> pointer to matrix a
+	 	matrix * b -> pointer to matrix b
+	 ret:none*/
+	//comparing the sizes
+	assert(a->size == b->size);
+	//comparing the rows and columns
+	assert(a->rowc == b->rowc);
+	assert(a->colc == b->colc);
+	//comparing data inside the matrices
+	for (int i = 0; i < a->size; i++){
+		assert(a->arr[i] == b->arr[i]);	
+	}
+	return;
+}
+
+
 int main(int argc, char *argv[]){
 
-	// testing creation of matrices
-	// creating an identity matrix
+	/* testing creation of matrices 
+	 * creating an identity matrix*/
 	matrix* id_3 = createIdentityMatrix(3);
 	matrix* id_2 = createIdentityMatrix(2);
 
-	// creating an empty matrix
+	/*creating an empty matrix*/
 	matrix* empty = createEmptyMatrix(3, 3);
 
-	// creating a 3x3 matrix
+	/*creating a 3x3 matrix */
 	matrix* m = createMatrix(3,3,1,2,3,4,5,6,7,8,9);
+	
+	/*creating an augmented matrix
+	 * augmented matrices are struct is supposed
+	 * to hold two deep copies of the matrices 
+	 * passed to the function;*/
+	augmatrix* aug = createAugmentedMatrix(m, id_3); 
+
+	compareMatrices(m, aug->arr_a);
+	compareMatrices(id_3, aug->arr_b);
 
 	int arr_3[] = {1,0,0,0,1,0,0,0,1};
 	int arr_2[] = {1,0,0,1};
@@ -114,12 +142,13 @@ int main(int argc, char *argv[]){
 	
 	matrix* pm = multiplyMatrix(p,m);
 
-	printmatrix(m);
 	// testing deepCopyMatrixes
 	matrix* jj = createEmptyMatrix(m->rowc,m->colc); 
 	deepCopyMatrix(m, jj);
-	printmatrix(jj);
 	
+	for (int i = 0; i < m->size; i++){
+		assert(m->arr[i] == jj->arr[i]);	
+	}
 
 
 
