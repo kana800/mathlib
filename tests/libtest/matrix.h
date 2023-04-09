@@ -13,16 +13,10 @@ typedef struct __matrix__{
 	int colc; // col count
 } matrix;
 
-typedef struct __augmatrix__ {
-	/*augmented matrix*/
-	matrix* arr_a; // pointer to matrix a
-	matrix* arr_b; // pointer to matrix b
-} augmatrix;
-
 void printmatrix(const matrix* m){
 	/*summary: prints the matrix
 	 *args: const matrix* m -> matrix
-	 *ret: none*/	
+	 *ret: NIL*/	
 	int* tM = m->arr;
 	for (int i = 0; i < m->size; i++){
 		printf(" %d ", tM[i]);
@@ -34,8 +28,9 @@ void printmatrix(const matrix* m){
 void freeMatrix(matrix* m){
 	/*summary: free the matrix 
 	 * from the heap
-	 *args:matrix* m -> pointer to to a matrix;
-	 *ret: none*/
+	 *args: matrix* m -> pointer 
+	 	to to a matrix;
+	 *ret: NIL*/
 	free(m->arr);
 	free(m);
 	return;
@@ -91,7 +86,7 @@ matrix* createMatrix(int row, int col, ...){
 }
 
 
-void deepCopyMatrix(matrix* a, matrix* b){
+void copyMatrix(matrix* a, matrix* b){
 	/*summary: copy the content of 
 	 * matrix a to matrix b
 	 *args: 
@@ -101,7 +96,7 @@ void deepCopyMatrix(matrix* a, matrix* b){
 			b matrix
 	 *if matrix b is not empty the content 
 	 will be overwritten
-	*/
+	 *return: NIL*/
 	int size_a = a->size;
 	b->size = a->size;
 	b->rowc = a->rowc;
@@ -133,60 +128,14 @@ matrix* createEmptyMatrix(int row, int col){
 	return m;
 }
 
-augmatrix* createAugmentedMatrix(matrix* a, matrix* b){
-	/*summary: create an augmented matrix
-	 * by appending the columns of two given matrices
-	 *args:
-		matrix* a -> matrix 1
-		matrix* b -> matrix 2
-		a = [1 3 2] b=[4]
-		    [2 0 1]   [3]
-		    [5 2 2]   [1]
-		augmented = [1 3 2 |4]
-			    [2 0 1 |3]
-			    [5 2 2 |1]
-	 *ret: matrix * -> pointer to a matrix*/
-	if (a->colc != b->colc){
-		fprintf(stderr, 
-			"Cannot Create An Augmented Matrix");
-		return NULL;
-	}
 
-	matrix* temp_a = 
-		createEmptyMatrix(a->rowc, a->colc);
-	matrix* temp_b = 
-		createEmptyMatrix(b->rowc, b->colc);
-	deepCopyMatrix(a, temp_a);
-	deepCopyMatrix(b, temp_b);
-	
-	augmatrix* m = (augmatrix*)malloc(sizeof(augmatrix));
-	m->arr_a = temp_a;
-	m->arr_b = temp_b;
-	return m;	
-}
-
-
-int getRowIndex(matrix* a, int r){
+int getIndex(matrix *a, int j, int n){
 	/*summary: return an starting index of
 	 * appopriate row
 	 *args: matrix* a -> matrix
-	 	int r -> row id
-	 *ret: row number*/
-	if (r > a->rowc){
-		fprintf(stderr,
-			"Row ID is greater than Row count\n");
-		return -1;	
-	}
-	return (a->rowc*(r - 1));
-}
-
-int getColIndex(matrix *a, int j, int n){
-	/*summary: return an starting index of
-	 * appopriate row
-	 *args: matrix* a -> matrix
-	 	int r -> row id
-		int n -> element id
-	 *ret: row number*/
+	 	int j -> col id
+		int n -> row id
+	 *ret: col number*/
 	if (j > a->colc){
 		fprintf(stderr,
 			"Col ID is greater than Col count\n");
@@ -198,7 +147,7 @@ int getColIndex(matrix *a, int j, int n){
 matrix* addMatrix(matrix* a,matrix* b){
       /*summary: add two matrices together 
        *args: matrix* a -> matrix #1
-       	matrix* b -> matrix #2
+       	      matrix* b -> matrix #2
        *ret: (new matrix) ptr to a matrix*/	
 
 	//is it compatible
@@ -227,7 +176,7 @@ matrix* addMatrix(matrix* a,matrix* b){
 matrix* subMatrix(matrix* a,matrix* b){
       /*summary: sub two matrices together 
        *args: matrix* a -> matrix #1
-       	matrix* b -> matrix #2
+	      matrix* b -> matrix #2
        *ret: (new matrix) ptr to a matrix*/	
 
 	//is it compatible
@@ -313,8 +262,8 @@ matrix* getPermutation(int dim, int r1, int r2){
 		swap r1 -> r2;
 	 * ret: (new matrix)ptr to a identity matrix*/
 	matrix* i = createIdentityMatrix(dim); 
-	int si_r1 = getRowIndex(i,r1);
-	int si_r2 = getRowIndex(i,r2);
+	int si_r1 = getIndex(i,0,r1);
+	int si_r2 = getIndex(i,0,r2);
 	for (int a = 0; a < i->rowc; a++){
 		int j = i->arr[si_r1];
 		i->arr[si_r1] = i->arr[si_r2];

@@ -49,7 +49,7 @@ coordtest: coord
 #mattest: matrix
 #	$(CC) $(LIBTEST)$@.c -lm -lmat -o $(BUILDDIR)$^/$@ -I lib/$^/$^.h -L $(BUILDDIR)$^
 mattest: matrix
-	cp -r lib/matrix/matrix.h $(LIBTEST)
+	cp -r lib/matrix/*.h $(LIBTEST)
 	$(CC) $(LIBTEST)$@.c -o $(BUILDDIR)$^/$@
 
 cleanbuild:
