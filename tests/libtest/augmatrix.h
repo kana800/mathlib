@@ -187,7 +187,7 @@ void subRow(augmatrix* a, int r1, int r2, int r3){
 	 	int r1 -> row #1 
 		int r2 -> row #2
 		int r3 -> row #3
-	 *	r3 = r1 + r2;
+	 *	r3 = r1 - r2;
 	 *ret: NIL*/
 
 	matrix* mat_a = a->arr_a;
@@ -208,7 +208,6 @@ void subRow(augmatrix* a, int r1, int r2, int r3){
 	int row_b_r1 = getIndex(mat_b, 0, r1); 
 	int row_b_r2 = getIndex(mat_b, 0, r2); 
 	int row_b_r3 = getIndex(mat_b, 0, r3); 
-
 
 	for (int i = 0; i < mat_a->colc; i++){
 		mat_a->arr[row_a_r3] = 

@@ -47,12 +47,64 @@ int main(int argc, char *argv[]){
 	augmatrix* aug = createAugmentedMatrix(m, n); 
 	compareMatrices(m, aug->arr_a);
 	compareMatrices(n, aug->arr_b);
+	/*
+	 * m = [1 2 3] n = [1  2  3  4  5]
+	 *     [4 5 6]     [6  7  8  9 10]
+	 *     [7 8 9]     [11 12 13 14 15]
+	 * aug = [1 2 3 |  1  2  3  4  5]
+	 * 	 [4 5 6 |  6  7  8  9 10]
+	 * 	 [7 8 9 | 11 12 13 14 15]
+	 */
 
 	//addScalarToRow(aug, 2, 2);
 	addRow(aug, 1, 2, 2);
-	printmatrix(aug->arr_a);
+	int augrow_a_1 = getIndex(aug->arr_a, 0, 1);
+	int augrow_a_2 = getIndex(aug->arr_a, 0, 2);
+	/*
+	 *       r  1 2 3    4  5  6  7  8
+	 * aug = 1 [1 2 3 |  1  2  3  4  5]
+	 * 	 2 [4 5 6 |  6  7  8  9 10]
+	 * 	 3 [7 8 9 | 11 12 13 14 15]
+	 *
+	 * after addRow(aug, 1, 2, 2) 
+	 *       r  1 2 3    4  5  6  7  8
+	 * aug = 1 [1 2 3 |  1   2   3   4  5]
+	 * 	 2 [5 7 9 |  7   9  11  14 15]
+	 * 	 3 [7 8 9 | 11  12  13  14 15]
+	 *
+	 */
+	for (int i = 0; i < aug->arr_a->colc; i++){
+		int element_a = 
+			aug->arr_a->arr[augrow_a_2];
+		assert(element_a  == m->arr[augrow_a_1] + 
+				m->arr[augrow_a_2]);
+		augrow_a_2++;
+		augrow_a_1++;
+	}
 	subRow(aug, 1, 2, 2);
-	printmatrix(aug->arr_b);
+	/*
+	 * after subRow(aug, 1, 2, 2) 
+	 *       r  1 2 3    4  5  6  7  8
+	 * aug = 1 [1 2 3   |   1   2   3   4  5]
+	 * 	 2 [8 10 12 |  12  14  16  18 20]
+	 * 	 3 [7 8 9   |  11  12  13  14 15]
+	 *
+	 */
+	int augrow_a_3 = getIndex(aug->arr_a, 0, 1);
+	int augrow_a_4 = getIndex(aug->arr_a, 0, 2);
+
+	for (int i = 0; i < aug->arr_a->colc; i++){
+		int element_a = 
+			aug->arr_a->arr[augrow_a_4];
+		int element_b = 
+			aug->arr_a->arr[augrow_a_3];
+		printf("%d %d %d\n",element_a, element_b, m->arr[augrow_a_3]);
+		//assert(element_a  == m->arr[augrow_a_3] - 
+		//		element_b);
+		augrow_a_3++;
+		augrow_a_4++;
+	}
+	//printmatrix(aug->arr_b);
 
 	freeAugmentedMatrix(aug);
 
@@ -164,6 +216,8 @@ int main(int argc, char *argv[]){
 	freeMatrix(c);
 	freeMatrix(d);
 	freeMatrix(e);
+	freeMatrix(pm);
+	freeMatrix(jj);
 
 
 	return 0;

@@ -187,7 +187,7 @@ void subRow(augmatrix* a, int r1, int r2, int r3){
 	 	int r1 -> row #1 
 		int r2 -> row #2
 		int r3 -> row #3
-	 *	r3 = r1 + r2;
+	 *	r3 = r1 - r2;
 	 *ret: NIL*/
 
 	matrix* mat_a = a->arr_a;

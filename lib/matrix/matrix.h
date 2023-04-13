@@ -18,10 +18,15 @@ void printmatrix(const matrix* m){
 	 *args: const matrix* m -> matrix
 	 *ret: NIL*/	
 	int* tM = m->arr;
+	int colcount = m->colc;
+	fprintf(stdout,"--");
 	for (int i = 0; i < m->size; i++){
-		printf(" %d ", tM[i]);
+		if ((i+1) % m->colc == 1){
+			fprintf(stdout,"\n");
+		}
+		fprintf(stdout," %d ", tM[i]);
 	}
-	printf("shape (%d,%d)\n",
+	fprintf(stdout,"\nshape (%d,%d)\n--\n",
 			m->rowc, m->colc);
 }
 
