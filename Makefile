@@ -46,11 +46,9 @@ trigtest: trig
 coordtest: coord
 	$(CC) $(LIBTEST)$@.c -lm -lcoord -o $(BUILDDIR)$^/$@ -I lib/$^ -L $(BUILDDIR)$^
 
-#mattest: matrix
-#	$(CC) $(LIBTEST)$@.c -lm -lmat -o $(BUILDDIR)$^/$@ -I lib/$^/$^.h -L $(BUILDDIR)$^
 mattest: matrix
-	cp -r lib/matrix/*.h $(LIBTEST)
-	$(CC) $(LIBTEST)$@.c -o $(BUILDDIR)$^/$@
+	cp -r lib/matrix/*.h $(LIBTEST)matrices/
+	$(CC) $(LIBTEST)matrices/$@.c -o $(BUILDDIR)$^/$@
 
 cleanbuild:
 	rm -r build/*
