@@ -66,7 +66,7 @@ void multiplyByScalar(augmatrix* a, int s){
 	for (int i = 0; i < mat_a->size ; i++){
 		mat_a->arr[i] *= s; 
 	}
-	for (int i = 0; i < mat_a->size ; i++){
+	for (int i = 0; i < mat_b->size ; i++){
 		mat_b->arr[i] *= s; 
 	}
 }
