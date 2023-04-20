@@ -134,19 +134,30 @@ matrix* createEmptyMatrix(int row, int col){
 }
 
 
-int getIndex(matrix *a, int j, int n){
+int getIndex(matrix *a, int n, int j){
 	/*summary: return an starting index of
 	 * appopriate row
 	 *args: matrix* a -> matrix
 	 	int j -> col id
 		int n -> row id
-	 *ret: col number*/
+	 *       r  1 2 3    
+	 * aug = 1 [3 4 5]
+	 * 	 2 [16 20]
+	 * 	 3 [14 16]
+	 *note: row and col starts with 1 
+	 *ret: index in the array*/
 	if (j > a->colc){
 		fprintf(stderr,
 			"Col ID is greater than Col count\n");
 		return -1;	
 	}
-	return a->colc*(n - 1) + j;
+	int i = a->colc*(n - 1) + (j - 1);
+	if (i < 0){ 
+		fprintf(stderr, 
+			"Row Or Column Value Is Invalid\n");
+		return -1;
+	};
+	return i;
 }
 
 matrix* addMatrix(matrix* a,matrix* b){
@@ -290,6 +301,37 @@ matrix* getInverse(matrix* a){
 	// obtaining the determinant is not 
 	// supported yet; lesson is in future!	
 
+}
+
+matrix* getLowerTriangularMatrix(matrix* a){
+	/*summary: return a lower 
+	 * triangular matrix 
+	 *args: matrix * a -> pointer to a 
+	 	matrix
+	 *ret: (new matrix)ptr to a 
+	 	lower triangular matrix*/
+	
+	/*checking if matrix is a square*/
+	if (a->colc != a->rowc){
+		fprintf(stderr, 
+			"Cannot Obtain \
+			Lower Triangular Matrix;\
+			Matrix Isnt Square\n");
+		return NULL;
+	}
+	matrix* ltm = 
+		createEmptyMatrix(a->rowc, a->colc);
+
+	/*row count and column count starts with zero*/
+	int rowcount = 1;
+	int colcount = 0;
+	int index = 0;
+	for (int i = 0; i < a->rowc; i++){
+		for (int j = 0; j < rowcount; j++){
+			index = getIndex(a, i, j);
+			printf("index %d \n", index);
+		}
+	}
 }
 
 #endif // MATRIX_H

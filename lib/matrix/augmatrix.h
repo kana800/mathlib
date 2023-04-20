@@ -12,7 +12,8 @@ typedef struct __augmatrix__ {
 void freeAugmentedMatrix(augmatrix* m){
 	/*summary: free the augmented matrix 
 	 * from the heap
-	 *args:augmatrix* m -> pointer to to a matrix;
+	 *args: augmatrix* m -> 
+	 	pointer to to a matrix;
 	 *ret: none*/
 	matrix* a = m->arr_a;
 	matrix* b = m->arr_b;
@@ -86,8 +87,8 @@ void addScalarToRow(augmatrix* a, int row, int s){
 		return;
 	}
 	
-	int row_a = getIndex(mat_a,0,row);
-	int row_b = getIndex(mat_b,0,row);
+	int row_a = getIndex(mat_a,row, 1);
+	int row_b = getIndex(mat_b,row, 1);
 
 	for (int i = 0; i < mat_a->colc; i++){
 		mat_a->arr[row_a] += s; 
@@ -116,8 +117,8 @@ void subScalarFromRow(augmatrix* a, int row, int s){
 		return;
 	}
 	
-	int row_a = getIndex(mat_a,0,row);
-	int row_b = getIndex(mat_b,0,row);
+	int row_a = getIndex(mat_a,row, 1);
+	int row_b = getIndex(mat_b,row, 1);
 
 	for (int i = 0; i < mat_a->colc; i++){
 		mat_a->arr[row_a] -= s; 
@@ -151,13 +152,13 @@ void addRow(augmatrix* a, int r1, int r2, int r3){
 	}
 
 	// get the starting indexes of all the rows
-	int row_a_r1 = getIndex(mat_a, 0, r1); 
-	int row_a_r2 = getIndex(mat_a, 0, r2); 
-	int row_a_r3 = getIndex(mat_a, 0, r3); 
+	int row_a_r1 = getIndex(mat_a, r1, 1); 
+	int row_a_r2 = getIndex(mat_a, r2, 1); 
+	int row_a_r3 = getIndex(mat_a, r3, 1); 
 	
-	int row_b_r1 = getIndex(mat_b, 0, r1); 
-	int row_b_r2 = getIndex(mat_b, 0, r2); 
-	int row_b_r3 = getIndex(mat_b, 0, r3); 
+	int row_b_r1 = getIndex(mat_b, r1, 1); 
+	int row_b_r2 = getIndex(mat_b, r2, 1); 
+	int row_b_r3 = getIndex(mat_b, r3, 1); 
 
 
 	for (int i = 0; i < mat_a->colc; i++){
@@ -201,13 +202,13 @@ void subRow(augmatrix* a, int r1, int r2, int r3){
 	}
 
 	// get the starting indexes of all the rows
-	int row_a_r1 = getIndex(mat_a, 0, r1); 
-	int row_a_r2 = getIndex(mat_a, 0, r2); 
-	int row_a_r3 = getIndex(mat_a, 0, r3); 
+	int row_a_r1 = getIndex(mat_a, r1, 1); 
+	int row_a_r2 = getIndex(mat_a, r2, 1); 
+	int row_a_r3 = getIndex(mat_a, r3, 1); 
 	
-	int row_b_r1 = getIndex(mat_b, 0, r1); 
-	int row_b_r2 = getIndex(mat_b, 0, r2); 
-	int row_b_r3 = getIndex(mat_b, 0, r3); 
+	int row_b_r1 = getIndex(mat_b, r1, 1); 
+	int row_b_r2 = getIndex(mat_b, r2, 1); 
+	int row_b_r3 = getIndex(mat_b, r3, 1); 
 
 	for (int i = 0; i < mat_a->colc; i++){
 		mat_a->arr[row_a_r3] = 
