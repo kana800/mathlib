@@ -134,30 +134,19 @@ matrix* createEmptyMatrix(int row, int col){
 }
 
 
-int getIndex(matrix *a, int n, int j){
+int getIndex(matrix *a, int j, int n){
 	/*summary: return an starting index of
 	 * appopriate row
 	 *args: matrix* a -> matrix
 	 	int j -> col id
 		int n -> row id
-	 *       r  1 2 3    
-	 * aug = 1 [3 4 5]
-	 * 	 2 [16 20]
-	 * 	 3 [14 16]
-	 *note: row and col starts with 1 
-	 *ret: index in the array*/
+	 *ret: col number*/
 	if (j > a->colc){
 		fprintf(stderr,
 			"Col ID is greater than Col count\n");
 		return -1;	
 	}
-	int i = a->colc*(n - 1) + (j - 1);
-	if (i < 0){ 
-		fprintf(stderr, 
-			"Row Or Column Value Is Invalid\n");
-		return -1;
-	};
-	return i;
+	return a->colc*(n - 1) + j;
 }
 
 matrix* addMatrix(matrix* a,matrix* b){
@@ -301,66 +290,6 @@ matrix* getInverse(matrix* a){
 	// obtaining the determinant is not 
 	// supported yet; lesson is in future!	
 
-}
-
-matrix* getLowerTriangularMatrix(matrix* a){
-	/*summary: return a lower 
-	 * triangular matrix 
-	 *args: matrix * a -> pointer to a 
-	 	matrix
-	 *ret: (new matrix)ptr to a 
-	 	lower triangular matrix*/
-	
-	/*checking if matrix is a square*/
-	if (a->colc != a->rowc){
-		fprintf(stderr, 
-			"Cannot Obtain \
-			Lower Triangular Matrix;\
-			Matrix Isnt Square\n");
-		return NULL;
-	}
-	matrix* ltm = 
-		createEmptyMatrix(a->rowc, a->colc);
-
-	/*row count and column count starts with zero*/
-	int colcount = 1;
-	int index = 0;
-	for (int i = 0; i < a->rowc; i++){
-		for (int j = 0; j < colcount; j++){
-			index = getIndex(a, i + 1, j + 1);
-			ltm->arr[index] = a->arr[index];
-		}
-		colcount++;
-	}
-	return ltm;
-}
-
-matrix* getUpperTriangularMatrix(matrix* a){
-	/*summary: return a upper triangular 
-	 *args: matrix * a -> pointer to a 
-	 	matrix
-	 *ret: (new matrix)ptr to a 
-	 	lower triangular matrix*/
-	
-	/*checking if matrix is a square*/
-	if (a->colc != a->rowc){
-		fprintf(stderr, 
-			"Cannot Obtain \
-			Upper Triangular Matrix;\
-			Matrix Isnt Square\n");
-		return NULL;
-	}
-	matrix* utm = 
-		createEmptyMatrix(a->rowc, a->colc);
-	/*row count and column count starts with zero*/
-	int index = 0;
-	for (int i = 1; i <= a->rowc; i++){
-		for (int j = i; j <= a->colc; j++){
-			index = getIndex(a, i, j);
-			utm->arr[index] = a->arr[index];
-		}
-	}
-	return utm;
 }
 
 #endif // MATRIX_H

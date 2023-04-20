@@ -27,19 +27,25 @@ void compareMatrices(matrix* a, matrix* b){
 
 
 int main(int argc, char *argv[]){
-
 	/* testing creation of matrices 
 	 * creating an identity matrix*/
 	//matrix* id_3 = createIdentityMatrix(3);
 	//matrix* id_2 = createIdentityMatrix(2);
 
-	///*creating an empty matrix*/
+	/*creating an empty matrix*/
 	//matrix* empty = createEmptyMatrix(3, 3);
 
 	/*creating a 3x3 matrix */
 	matrix* m = createMatrix(3,3,1,2,3,4,5,6,7,8,9);
-	matrix* n = createMatrix(3,5,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15);
+	matrix* n = createMatrix(3,5,1,2,3,4,5,6,7,8,9,\
+			10,11,12,13,14,15);
+	matrix* o = createEmptyMatrix(10, 10);
 	
+	/*populating the matrix o*/
+	for (int i = 0; i < o->size; i++){
+		o->arr[i] = i;
+	}
+
 	/*creating an augmented matrix
 	 * augmented matrices are struct is supposed
 	 * to hold two deep copies of the matrices 
@@ -57,8 +63,8 @@ int main(int argc, char *argv[]){
 	 */
 
 	addRow(aug, 1, 2, 2);
-	int augrow_a_1 = getIndex(aug->arr_a, 0, 1);
-	int augrow_a_2 = getIndex(aug->arr_a, 0, 2);
+	int augrow_a_1 = getIndex(aug->arr_a, 1, 1);
+	int augrow_a_2 = getIndex(aug->arr_a, 2, 1);
 	/*
 	 *       r  1 2 3    4  5  6  7  8
 	 * aug = 1 [1 2 3 |  1  2  3  4  5]
@@ -92,8 +98,8 @@ int main(int argc, char *argv[]){
 	 * 	 3 [7 8 9   |  11  12  13  14 15]
 	 *
 	 */
-	int augrow_a_3 = getIndex(aug->arr_a, 0, 2);
-	int augrow_a_4 = getIndex(aug->arr_b, 0, 2);
+	int augrow_a_3 = getIndex(aug->arr_a, 2, 1);
+	int augrow_a_4 = getIndex(aug->arr_b, 2, 1);
 
 	for (int i = 0; i < aug->arr_a->colc; i++){
 		int element_a = 
@@ -129,7 +135,6 @@ int main(int argc, char *argv[]){
 	for (int i = 0; i < aug->arr_b->size; i++){
 		assert(aug->arr_b->arr[i] % 2 == 0);
 	}
-
 	/*
 	 *addScalarToRow(aug, 1, 2)
 	 * before addScalarToRow
@@ -143,10 +148,90 @@ int main(int argc, char *argv[]){
 	 * 	 2 [16 20 24 |  24  28  32  36  40]
 	 * 	 3 [14 16 18 |  22  24  26  28  30]
 	 */
+	addScalarToRow(aug, 1, 2);
+	for (int i = 0; i < aug->arr_a->colc; i++){
+		int augrow_a_5 = getIndex(
+				aug->arr_a, 1, i + 1);
+		assert(aug->arr_a->arr[augrow_a_5] 
+				== (m->arr[augrow_a_5]*2)+ 2 );
+	}
+
+	for (int i = 0; i < aug->arr_b->colc; i++){
+		int augrow_a_5 = getIndex(
+				aug->arr_b, 1, i + 1);
+		assert(aug->arr_b->arr[augrow_a_5] 
+				== (n->arr[augrow_a_5]*2) + 2 );
+	}
+	/*
+	 *subScalarToRow(aug, 1, 2)
+	 * before addScalarToRow
+	 *       r  1 2 3        4   5   6   7  8  
+	 * aug = 1 [3 4 5    |   6   7   8   9  11]
+	 * 	 2 [16 20 24 |  24  28  32  36  40]
+	 * 	 3 [14 16 18 |  22  24  26  28  30]
+	 * after addScalarToRow
+	 *       r  1 2 3        4   5   6   7  8  
+	 * aug = 1 [2 4 6    |   2   4   6   8  10]
+	 * 	 2 [16 20 24 |  24  28  32  36  40]
+	 * 	 3 [14 16 18 |  22  24  26  28  30]
+	 */
+	subScalarFromRow(aug, 1, 2);
+	for (int i = 0; i < aug->arr_a->colc; i++){
+		int augrow_a_5 = getIndex(
+				aug->arr_a, 1, i + 1);
+		assert(aug->arr_a->arr[augrow_a_5] 
+				== (m->arr[augrow_a_5]*2));
+	}
+	for (int i = 0; i < aug->arr_b->colc; i++){
+		int augrow_a_5 = getIndex(
+				aug->arr_b, 1, i + 1);
+		assert(aug->arr_b->arr[augrow_a_5] 
+				== (n->arr[augrow_a_5]*2));
+	}
 
 	freeAugmentedMatrix(aug);
+
+	/*get the lower triangular matrix of m
+	 *	m =   [1 2 3] 
+	 *	      [4 5 6] 
+	 *	      [7 8 9]
+	 *
+	 * 	ltm = [1 0 0]
+	 * 	      [4 5 0]
+	 * 	      [7 8 9]*/
+	matrix* exp_ltm = createMatrix(3,3,1,0,0,4,5,0,7,8,9); 
+	matrix* ltm = getLowerTriangularMatrix(m);
+
+	for (int i = 0; i < exp_ltm->size; i++){
+		assert(exp_ltm->arr[i] == ltm->arr[i]);
+	}
+
+	/*get the lower triangular matrix of m
+	 *	m =   [1 2 3] 
+	 *	      [4 5 6] 
+	 *	      [7 8 9]
+	 *
+	 * 	ltm = [1 2 3]
+	 * 	      [0 5 6]
+	 * 	      [0 0 9]*/
+	matrix* exp_utm = createMatrix(3,3,1,2,3,0,5,6,0,0,9); 
+	matrix* utm = getUpperTriangularMatrix(m);
+	for (int i = 0; i < exp_utm->size; i++){
+		assert(exp_utm->arr[i] == utm->arr[i]);
+	}
+
+	matrix* utm_o = getUpperTriangularMatrix(o);
+	printmatrix(utm_o);
+	matrix* ltm_o = getLowerTriangularMatrix(o);
+	printmatrix(ltm_o);
+
 	freeMatrix(m);
 	freeMatrix(n);
+	freeMatrix(exp_ltm);
+	freeMatrix(exp_utm);
+	freeMatrix(ltm);
+	freeMatrix(utm);
+
 	//int arr_3[] = {1,0,0,0,1,0,0,0,1};
 	//int arr_2[] = {1,0,0,1};
 	//int arr_4[] = {1,2,3,4,5,6,7,8,9};
@@ -257,7 +342,6 @@ int main(int argc, char *argv[]){
 	//freeMatrix(e);
 	//freeMatrix(pm);
 	//freeMatrix(jj);
-
 
 	return 0;
 }

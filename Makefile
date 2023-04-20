@@ -50,5 +50,7 @@ mattest: matrix
 	cp -r lib/matrix/*.h $(LIBTEST)matrices/
 	$(CC) $(LIBTEST)matrices/$@.c -o $(BUILDDIR)$^/$@
 
+linalgtest: linalg
+
 cleanbuild:
 	rm -r build/*

@@ -1,6 +1,14 @@
 > The main attempt of this module is to make algorithms for solving mathematical equations; The content here isnt perfect if there are any errors or bugs or optimization possibilities please let me know I am more than happy to hear about them.
 
-I will eventually make a nice documentation for this whole project but for now its going to be this! :)
+### Map-Of-Content
+
+- [documentation](https://github.com/kana800/mathlib/wiki)
+
+|library|latest version|description|tests|
+|-------|--------------|-----------|-----|
+|Gaussian Elimination|1.0|[Is an algorithm for solving systems of linear equations](https://en.wikipedia.org/wiki/Gaussian_elimination)|`testdir`|
+
+
 
 ### References
 
