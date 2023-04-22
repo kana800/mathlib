@@ -16,15 +16,7 @@
 `mathlib` project is collection of small math scripts; I wrote them to mainly solidify my understanding on certain topics.
 
 There will be some notes from courses and youtube series that I followed to 
-grasp certain topics, you can find them in my [`garden`](https://kannna.xyz/garden/) section.
-
-### Library
-
-You can checkout the `library` branch if you want to just use the library;
-
-```bash
-git submodule add -b lib https://github.com/kana800/mathlib.git
-```
+grasp certain topics, you can find them in my [`garden`](https://kannna.xyz/knowledge) section.
 
 ### MakeFile
 

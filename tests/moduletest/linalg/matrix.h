@@ -16,7 +16,7 @@ typedef struct __matrix__{
 void printmatrix(const matrix* m){
 	/*summary: prints the matrix
 	 *args: const matrix* m -> matrix
-	 *ret: NIL*/	
+	 *ret: NIL*/
 	if (m == NULL) return;
 	int* tM = m->arr;
 	int colcount = m->colc;
@@ -29,7 +29,6 @@ void printmatrix(const matrix* m){
 	}
 	fprintf(stdout,"\nshape (%d,%d)\n--\n",
 			m->rowc, m->colc);
-	return;
 }
 
 void freeMatrix(matrix* m){
@@ -234,9 +233,9 @@ matrix* multiplyMatrix(matrix* a, matrix* b){
 
 	// size of the new matrix
 	matrix* m = malloc(sizeof(matrix));
-	int size = a->rowc * b->colc;
-	m->rowc = a->rowc;
-	m->colc = b->colc;
+	int size = a->colc * b->rowc;
+	m->rowc = a->colc;
+	m->colc = b->rowc;
 	int* arr = calloc(size, sizeof(int));
 	int* A = a->arr;
 	int* B = b->arr;
@@ -253,7 +252,7 @@ matrix* multiplyMatrix(matrix* a, matrix* b){
 			tcol =  0;
 		}
 		int sum = 0;
-		for (int k = 0; k < b->colc; k++){
+		for (int k = 0; k < b->rowc; k++){
 			int a_idx = a_rd*(trow - 1) + k;
 			int b_idx = b_cd*(k) + tcol;
 			int a_val = A[a_idx];
@@ -280,8 +279,8 @@ matrix* getPermutation(int dim, int r1, int r2){
 		swap r1 -> r2;
 	 * ret: (new matrix)ptr to a identity matrix*/
 	matrix* i = createIdentityMatrix(dim); 
-	int si_r1 = getIndex(i,r1,0);
-	int si_r2 = getIndex(i,r2,0);
+	int si_r1 = getIndex(i,r1,1);
+	int si_r2 = getIndex(i,r2,1);
 	for (int a = 0; a < i->rowc; a++){
 		int j = i->arr[si_r1];
 		i->arr[si_r1] = i->arr[si_r2];

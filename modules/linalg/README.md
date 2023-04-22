@@ -2,16 +2,15 @@
 
 ### Map-Of-Content
 
-- [documentation](https://github.com/kana800/mathlib/wiki)
-
 |library|latest version|description|tests|
 |-------|--------------|-----------|-----|
-|Gaussian Elimination|1.0|[Is an algorithm for solving systems of linear equations](https://en.wikipedia.org/wiki/Gaussian_elimination)|`testdir`|
+|Gaussian Elimination|1.0|[Is an algorithm for solving systems of linear equations](https://en.wikipedia.org/wiki/Gaussian_elimination)|[testdir](https://github.com/kana800/mathlib/tree/main/tests/moduletest)|
 
 
 
 ### References
 
+- [Documentation](https://github.com/kana800/mathlib/wiki)
 - [Matlab's Linear Algebra](https://www.mathworks.com/help/matlab/linear-algebra.html?s_tid=CRUX_lftnav)
 - [MIT Linear Algebra Course](https://ocw.mit.edu/courses/18-06sc-linear-algebra-fall-2011)
 - [My Notes on Linear Algebra](https://kannna.xyz/garden/courses/linearalgebra/linearalgebramoc)

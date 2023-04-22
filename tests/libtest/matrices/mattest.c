@@ -232,6 +232,16 @@ int main(int argc, char *argv[]){
 	freeMatrix(ltm);
 	freeMatrix(utm);
 
+	/*testing permutations*/
+	matrix* q = createMatrix(4,3,1,2,3,4,5,6,7,8,9,10,11,12); 
+	matrix* r = createMatrix(4,3,5,6,7,8,1,2,3,4,9,10,11,12); 
+	matrix* p = getPermutation(4, 1, 1);
+	printmatrix(q);
+	printmatrix(p);
+	matrix* s = multiplyMatrix(p, q);
+	printmatrix(s);
+
+
 	//int arr_3[] = {1,0,0,0,1,0,0,0,1};
 	//int arr_2[] = {1,0,0,1};
 	//int arr_4[] = {1,2,3,4,5,6,7,8,9};

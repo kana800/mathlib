@@ -11,13 +11,11 @@ COORDFILES := lib/coord/coord.c
 MATRIXFILES := lib/matrix/matrix.c
 
 LIBTEST := tests/libtest/
+MODULETEST := tests/moduletest/
 
 trig: lib/trig/trig.h
 	mkdir -p $(BUILDDIR)$@
 	gcc -c $(TRIGFILES) -o $(BUILDDIR)$@/trig.o
-	# building dynamic library for pylib
-	# gcc -shared -o $(BUILDDIR)$@/triglib.so $(BUILDDIR)$@/trig.o 
-	# building a static library for test cases
 	ar -rc $(BUILDDIR)$@/libtrig.a $(BUILDDIR)$@/trig.o
 	# copying the triglib to the respective building
 	#mkdir -p $(PYDIR)$@/
@@ -26,19 +24,9 @@ trig: lib/trig/trig.h
 coord: lib/coord/coord.h
 	mkdir -p $(BUILDDIR)$@
 	gcc -c $(COORDFILES) -o $(BUILDDIR)$@/coord.o
-	# building dynamic library for pylib
-	#gcc -shared -o $(BUILDDIR)$@/coordlib.so $(BUILDDIR)$@/coord.o
-	# building a static library for test cases
 	ar -rc $(BUILDDIR)$@/libcoord.a $(BUILDDIR)$@/coord.o $(BUILDDIR)trig/trig.o
-	# copying the coordlib to the respective building
 	mkdir -p $(PYDIR)$@/
 	cp $(BUILDDIR)$@/coordlib.so $(PYDIR)$@/
-
-matrix: lib/matrix/matrix.h
-	mkdir -p $(BUILDDIR)$@
-	gcc -c lib/matrix/matrix.h -o $(BUILDDIR)$@/mat.o
-	ar -rc $(BUILDDIR)$@/libmat.a $(BUILDDIR)$@/mat.o
-	mkdir -p $(PYDIR)$@/
 
 trigtest: trig
 	$(CC) $(LIBTEST)$@.c -lm -ltrig -o $(BUILDDIR)$^/$@ -I lib/$^ -L $(BUILDDIR)$^
@@ -46,11 +34,21 @@ trigtest: trig
 coordtest: coord
 	$(CC) $(LIBTEST)$@.c -lm -lcoord -o $(BUILDDIR)$^/$@ -I lib/$^ -L $(BUILDDIR)$^
 
-mattest: matrix
+matrix: lib/matrix/matrix.h
+	mkdir -p $(BUILDDIR)$@
+	gcc -c lib/matrix/matrix.h -o $(BUILDDIR)$@/mat.o
+	ar -rc $(BUILDDIR)$@/libmat.a $(BUILDDIR)$@/mat.o
+	mkdir -p $(PYDIR)$@/
+
+mattest: matrix 
 	cp -r lib/matrix/*.h $(LIBTEST)matrices/
 	$(CC) $(LIBTEST)matrices/$@.c -o $(BUILDDIR)$^/$@
 
-linalgtest: linalg
+gausstest: matrix modules/linalg/gaussjordan.h
+	cp -r lib/matrix/*.h $(MODULETEST)linalg/
+	cp -r modules/linalg/gaussjordan.h $(MODULETEST)linalg/
+	mkdir -p $(BUILDDIR)linalg/
+	$(CC) $(MODULETEST)linalg/$@.c -o $(BUILDDIR)linalg/$@
 
 cleanbuild:
 	rm -r build/*
