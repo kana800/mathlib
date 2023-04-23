@@ -270,7 +270,7 @@ matrix* multiplyMatrix(matrix* a, matrix* b){
 }
 
 
-matrix* getPermutation(int dim, int r1, int r2){
+matrix* getPermutationMatrix(int dim, int r1, int r2){
 	/*summary: return permutation Matrix
 	 * identity matrix with swapped rows
 	 * with dimension size;
@@ -280,8 +280,8 @@ matrix* getPermutation(int dim, int r1, int r2){
 		swap r1 -> r2;
 	 * ret: (new matrix)ptr to a identity matrix*/
 	matrix* i = createIdentityMatrix(dim); 
-	int si_r1 = getIndex(i,r1,0);
-	int si_r2 = getIndex(i,r2,0);
+	int si_r1 = getIndex(i,r1,1);
+	int si_r2 = getIndex(i,r2,1);
 	for (int a = 0; a < i->rowc; a++){
 		int j = i->arr[si_r1];
 		i->arr[si_r1] = i->arr[si_r2];
@@ -290,6 +290,26 @@ matrix* getPermutation(int dim, int r1, int r2){
 		si_r2++;
 	}
 	return i;
+}
+
+
+void swapRows(matrix* a, int r1, int r2){
+	/*summary: swap rows in the matrix 
+	 *args: matrix* a-> ptr to a matrix
+		int r1 -> row number #1
+		int r2 -> row number #2
+		swap r1 -> r2;
+	 * ret: matrix * a*/ 
+	int si_r1 = getIndex(a, r1, 1);
+	int si_r2 = getIndex(a, r2, 1);
+	for (int i = 0; i < a->colc; i++){
+		 int temp = a->arr[si_r1]; 
+		 a->arr[si_r1] = a->arr[si_r2];
+		 a->arr[si_r2] = temp;
+		 si_r1++;
+		 si_r2++;
+	}
+	return;
 }
 
 

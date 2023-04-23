@@ -10,11 +10,15 @@
 
 #include "matrix.h"
 #include "augmatrix.h"
+#include <stdbool.h>
+
 
 int findPivotPoint(augmatrix* a, int piv){
 	/*summary: find the optimal 
 	 * pivot point in an augmented matrix
 	 * in the provided pivot position;
+	 * rows will be swapped inplace if 
+	 * needed
 	 *args: augmatrix* a -> pointer to a 
 	 	augmented matrix 
 		int pivot -> pivot position
@@ -32,13 +36,28 @@ int findPivotPoint(augmatrix* a, int piv){
 		return -1;
 	}
 
-	for (int i = piv; i <= a->arr_a->rowc; i++) {	
-		int index = getIndex(a->arr_a, i, piv);
+	int i, index;
+	bool foundPivot = false;
+	for (i = piv; i <= a->arr_a->rowc; i++) {	
+		index = getIndex(a->arr_a, i, piv);
+		printf("i: %d piv %d %d %d\n",i,piv, index, a->arr_a->arr[index]);
 		// pivot cannot be zero; we need to keep
 		// traversing till we find the pivot
 		if (a->arr_a->arr[index] != 0){
-			return index;
+			foundPivot = true;
+			break;
 		} 
+	}
+	// whole column is zero
+	if (!foundPivot) return -1;
+
+	/*if the row and column values arent equal 
+	 * then we need to some permutations and 
+	 * switch the rows accordingly*/
+	if (piv != i){
+		swapRows(a->arr_a, i, piv);
+		swapRows(a->arr_b, i, piv);
+		return piv;
 	}
 	return -1;
 }
