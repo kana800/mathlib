@@ -43,6 +43,8 @@ matrix: lib/matrix/matrix.h
 mattest: matrix 
 	cp -r lib/matrix/*.h $(LIBTEST)matrices/
 	$(CC) $(LIBTEST)matrices/$@.c -o $(BUILDDIR)$^/$@
+	# cleaning the directories
+	rm -r $(LIBTEST)matrices/*.h
 
 gausstest: matrix modules/linalg/gaussjordan.h
 	cp -r lib/matrix/*.h $(MODULETEST)linalg/

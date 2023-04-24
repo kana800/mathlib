@@ -12,7 +12,7 @@ void compareMatrices(matrix* a, matrix* b){
 	/*summary: compare matrix a with b
 	 *args: matrix * a -> pointer to matrix a
 	 	matrix * b -> pointer to matrix b
-	 ret:none*/
+	 *ret:NIL*/
 	//comparing the sizes
 	assert(a->size == b->size);
 	//comparing the rows and columns
@@ -25,16 +25,218 @@ void compareMatrices(matrix* a, matrix* b){
 	return;
 }
 
+void compareMatricesWithArr(matrix* a, int* arr,int size){
+	/*summary: compare matrix a's arr with arr 
+	 *args: matrix * a -> pointer to matrix a
+	 	int* arr -> int pointer
+		int size -> size of the array
+	 *ret: NIL*/
+	for (int i = 0; i < size; i++){
+		assert(a->arr[i] == arr[i]);	
+	}
+	return;
+}
+
 
 int main(int argc, char *argv[]){
+	/*matrix.h*/
+	
 	/* testing creation of matrices 
-	 * creating an identity matrix*/
-	//matrix* id_3 = createIdentityMatrix(3);
-	//matrix* id_2 = createIdentityMatrix(2);
+	 * creating an identity matrix
+	 * id_3 = [1 0 0]
+	 *        [0 1 0]
+	 *        [0 0 1]*/
+	matrix* id_3 = createIdentityMatrix(3);
+	/* id_2 = [1 0]
+	 *        [0 1]*/
+	matrix* id_2 = createIdentityMatrix(2);
+
+	int id_local_3[9] = {1,0,0,0,1,0,0,0,1};  
+	compareMatricesWithArr(id_3, id_local_3, 9);
+
+	int id_local_2[4] = {1,0,0,1};  
+	compareMatricesWithArr(id_2, id_local_2, 4);
+
+	freeMatrix(id_3);
+	freeMatrix(id_2);
 
 	/*creating an empty matrix*/
-	//matrix* empty = createEmptyMatrix(3, 3);
+	matrix* e_3 = createEmptyMatrix(3, 3);
+	int id_empty_3[9] = {0,0,0,0,0,0,0,0,0};
+	compareMatricesWithArr(e_3, id_empty_3, 9);
 
+	/*testing matrix operations
+	 *addition and substraction from 
+	 *whole matrix*/
+	
+	/* before addScalarToRow(e_3, 2);  
+	 * e_3 = [0 0 0]
+	 *       [0 0 0]
+	 *       [0 0 0]
+	 * after 
+	 * e_3 = [2 2 2]
+	 *       [2 2 2]
+	 *       [2 2 2]*/
+	int id_empty_4[9] = {2,2,2,2,2,2,2,2,2};
+	addScalarToMatrix(e_3, 2);
+	compareMatricesWithArr(e_3, id_empty_4, 9);
+
+	/* before subScalarToRow(e_3, 1);  
+	 * e_3 = [2 2 2]
+	 *       [2 2 2]
+	 *       [2 2 2]
+	 * after
+	 * e_3 = [1 1 1]
+	 *       [1 1 1]
+	 *       [1 1 1]*/
+	subScalarFromMatrix(e_3, 1);
+	int id_empty_5[9] = {1,1,1,1,1,1,1,1,1};
+	compareMatricesWithArr(e_3, id_empty_5, 9);
+
+	/*testing addition, substraction and 
+	 * multiplication of two matrices*/
+
+	/* a = [1 2 3]
+	 *     [4 5 6]
+	 *     [7 8 9]*/
+	matrix* a = createMatrix(3,3,1,2,3,4,5,6,7,8,9);
+	assert(a->size == 9);
+	assert(a->rowc == 3);
+	assert(a->colc == 3);
+
+	/* before addMatrix(a, e_3) 
+	 * a = [1 2 3] e_3 = [1 1 1]
+	 *     [4 5 6]       [1 1 1]
+	 *     [7 8 9]       [1 1 1]
+	 * after
+	 * b = [2 3  4] 
+	 *     [5 6  7] 
+	 *     [8 9 10]*/
+	matrix* b = addMatrix(a, e_3);
+	assert(b->size == 9);
+	assert(b->rowc == 3);
+	assert(b->colc == 3);
+	int b_arr[9] = {2,3,4,5,6,7,8,9,10};
+	compareMatricesWithArr(b, b_arr, 9);
+
+	/* before subMatrix(b, a) 
+	 * a = [1 2 3] b = [2 3  4]
+	 *     [4 5 6]     [5 6  7]
+	 *     [7 8 9]     [8 9 10]
+	 * after
+	 * c = [1 1 1] 
+	 *     [1 1 1] 
+	 *     [1 1 1]*/
+	matrix* c = subMatrix(b, a);
+	int c_arr[9] = {1,1,1,1,1,1,1,1,1};
+	compareMatricesWithArr(c, c_arr, 9);
+
+	/* before multiplyMatrix(a, c) 
+	 * a = [1 2 3] b =  [2 3  4]
+	 *     [4 5 6]      [5 6  7]
+	 *     [7 8 9]      [8 9 10]
+	 * after
+	 * d = [ 6  6  6] 
+	 *     [15 15 15] 
+	 *     [24 24 24]*/
+	matrix* d = multiplyMatrix(a, c);
+	int d_arr[9] = {6,6,6,15,15,15,24,24,24};
+	compareMatricesWithArr(d, d_arr, 9);
+
+	/*testing row operations*/
+	/* before multiplyRow(b, 1, 2) 
+	 * 	 1 2 3
+	 * b = 1[2 3 4]
+	 *     2[5 6 7]
+	 *     3[8 9 10]
+	 * after
+	 * 	 1 2 3
+	 * b = 1[4 6 8]
+	 *     2[5 6 7]
+	 *     3[8 9 10]*/
+	multiplyRow(b, 1, 2);
+	int b_mult_r1[3] = {4,6,8}; 
+	int b_idx;
+	for (int i = 1; i <= b->colc; i++){
+		b_idx = getIndex(b, 1, i);
+		int e = b->arr[b_idx];
+		assert(e == b_mult_r1[i - 1]);
+	}
+	/* before divideRow(b, 1, 2) 
+	 * 	 1 2 3
+	 * b = 1[4 6 8]
+	 *     2[5 6 7]
+	 *     3[8 9 10]
+	 * after
+	 * 	 1 2 3
+	 * b = 1[2 3 4]
+	 *     2[5 6 7]
+	 *     3[8 9 10]*/
+	divideRow(b, 1, 2);
+	int b_mult_r2[3] = {2,3,4}; 
+	int b_idx_2;
+	for (int i = 1; i <= b->colc; i++){
+		b_idx_2 = getIndex(b, 1, i);
+		int e = b->arr[b_idx_2];
+		assert(e == b_mult_r2[i - 1]);
+	}
+
+
+
+
+	///* test cases for the row index */
+	//// assert (getRowIndex(m,4) == -1);
+
+	//// test cases for the col index
+	//assert (getIndex(m, 1, 1) == 1);
+	//assert (getIndex(m, 1, 2) == 4);
+	//assert (getIndex(m, 1, 3) == 7);
+	//assert (getIndex(m, 2, 1) == 2);
+	//assert (getIndex(m, 2, 2) == 5);
+	//assert (getIndex(m, 2, 3) == 8);
+	//assert (getIndex(m, 3, 1) == 3);
+	//assert (getIndex(m, 3, 2) == 6);
+	//assert (getIndex(m, 3, 3) == 9);
+
+	//// permutation matrices
+	//int id_1[] = {1,0,0,0,0,1,0,1,0};
+	//matrix* p = getPermutation(3, 2, 3);
+	//for (int i = 0; i < p->size; i++){
+	//	assert(p->arr[i] == id_1[i]);
+	//}
+	//
+	//matrix* pm = multiplyMatrix(p,m);
+
+	//// testing deepCopyMatrixes
+	//matrix* jj = createEmptyMatrix(m->rowc,m->colc); 
+	//copyMatrix(m, jj);
+	//
+	//for (int i = 0; i < m->size; i++){
+	//	assert(m->arr[i] == jj->arr[i]);	
+	//}
+	matrix* q = createMatrix(3,3,1,2,3,4,5,6,7,8,9); 
+	matrix* r = createMatrix(4,3,1,2,3,4,5,6,7,8,9,10,11,12); 
+	matrix* p = getPermutationMatrix(3, 1, 2);
+	swapRows(r, 1, 2);
+	//printmatrix(r);
+	//printmatrix(p);
+	//matrix* s = multiplyMatrix(p, q);
+	//printmatrix(s);
+	multiplyRow(q, 2, 2);
+	divideRow(q, 2, 2);
+
+	//// freeing the matrices
+	//freeMatrix(id_3);
+	//freeMatrix(id_2);
+	//freeMatrix(m);
+	//freeMatrix(c);
+	//freeMatrix(d);
+	//freeMatrix(e);
+	//freeMatrix(pm);
+
+	//freeMatrix(jj);
+
+	/*augmatrix.h*/
 	/*creating a 3x3 matrix */
 	matrix* m = createMatrix(3,3,1,2,3,4,5,6,7,8,9);
 	matrix* n = createMatrix(3,5,1,2,3,4,5,6,7,8,9,\
@@ -62,7 +264,7 @@ int main(int argc, char *argv[]){
 	 * 	 [7 8 9 | 11 12 13 14 15]
 	 */
 
-	addRow(aug, 1, 2, 2);
+	aug_addRow(aug, 1, 2, 2);
 	int augrow_a_1 = getIndex(aug->arr_a, 1, 1);
 	int augrow_a_2 = getIndex(aug->arr_a, 2, 1);
 	/*
@@ -87,7 +289,7 @@ int main(int argc, char *argv[]){
 		augrow_a_1++;
 	}
 
-	subRow(aug, 1, 2, 2);
+	aug_subRow(aug, 1, 2, 2);
 	int arr_a_ans[] = {-4,-5,-6};
 	int arr_b_ans[] = {-6,-7,-8,-9,-10};
 	/*
@@ -128,7 +330,7 @@ int main(int argc, char *argv[]){
 	 * 	 2 [16 20 24 |  24  28  32  36  40]
 	 * 	 3 [14 16 18 |  22  24  26  28  30]
 	 */
-	multiplyByScalar(aug, 2);
+	aug_multiplyByScalar(aug, 2);
 	for (int i = 0; i < aug->arr_a->size; i++){
 		assert(aug->arr_a->arr[i] % 2 == 0);
 	}
@@ -148,7 +350,7 @@ int main(int argc, char *argv[]){
 	 * 	 2 [16 20 24 |  24  28  32  36  40]
 	 * 	 3 [14 16 18 |  22  24  26  28  30]
 	 */
-	addScalarToRow(aug, 1, 2);
+	aug_addScalarToRow(aug, 1, 2);
 	for (int i = 0; i < aug->arr_a->colc; i++){
 		int augrow_a_5 = getIndex(
 				aug->arr_a, 1, i + 1);
@@ -175,7 +377,7 @@ int main(int argc, char *argv[]){
 	 * 	 2 [16 20 24 |  24  28  32  36  40]
 	 * 	 3 [14 16 18 |  22  24  26  28  30]
 	 */
-	subScalarFromRow(aug, 1, 2);
+	aug_subScalarFromRow(aug, 1, 2);
 	for (int i = 0; i < aug->arr_a->colc; i++){
 		int augrow_a_5 = getIndex(
 				aug->arr_a, 1, i + 1);
@@ -221,138 +423,15 @@ int main(int argc, char *argv[]){
 	}
 
 	matrix* utm_o = getUpperTriangularMatrix(o);
-	printmatrix(utm_o);
 	matrix* ltm_o = getLowerTriangularMatrix(o);
-	printmatrix(ltm_o);
 
+	/*freeing up all the matrices*/
 	freeMatrix(m);
 	freeMatrix(n);
 	freeMatrix(exp_ltm);
 	freeMatrix(exp_utm);
 	freeMatrix(ltm);
 	freeMatrix(utm);
-
-	/*testing permutations*/
-	matrix* q = createMatrix(3,3,1,2,3,4,5,6,7,8,9); 
-	matrix* r = createMatrix(4,3,1,2,3,4,5,6,7,8,9,10,11,12); 
-	matrix* p = getPermutationMatrix(3, 1, 2);
-	swapRows(r, 1, 2);
-	printmatrix(r);
-	//printmatrix(p);
-	//matrix* s = multiplyMatrix(p, q);
-	//printmatrix(s);
-
-
-	//int arr_3[] = {1,0,0,0,1,0,0,0,1};
-	//int arr_2[] = {1,0,0,1};
-	//int arr_4[] = {1,2,3,4,5,6,7,8,9};
-
-	///*checking matrix size*/
-	//assert(id_3->size == 9);
-	//assert(id_3->rowc == 3);
-	//assert(id_3->colc == 3);
-
-	//assert(id_2->size == 4);
-	//assert(id_2->rowc == 2);
-	//assert(id_2->colc == 2);
-
-	//assert(empty->size == 9);
-	//assert(empty->rowc == 3);
-	//assert(empty->colc == 3);
-
-	//assert(m->size == 9);
-	//assert(m->rowc == 3);
-	//assert(m->colc == 3);
-
-	//// checking data in the matrices
-	//for (int i = 0; i < 9; i++){
-	//	assert(id_3->arr[i] == arr_3[i]);
-	//}
-
-	//for (int i = 0; i < 4; i++){
-	//	assert(id_2->arr[i] == arr_2[i]);
-	//}
-
-	//for (int i = 0; i < 9; i++){
-	//	assert(empty->arr[i] == 0);
-	//}
-
-	//for (int i = 0; i < 9; i++){
-	//	assert(m->arr[i] == arr_4[i]);
-	//}
-
-	///* matrix operations*/
-	///* multiplication*/
-	//matrix* c = multiplyMatrix(id_3, m);
-	//assert(c->size == 9);
-	//assert(c->rowc == 3);
-	//assert(c->colc == 3);
-	//for (int i = 0; i < c->size; i++){
-	//	assert(c->arr[i] == arr_4[i]);
-	//}
-
-	///* addition */
-	//matrix* d = addMatrix(id_2, id_2);
-	//assert(d->size == 4);
-	//assert(d->rowc == 2);
-	//assert(d->colc == 2);
-
-	//for (int i = 0; i < 4; i++){
-	//	assert(d->arr[i] == arr_2[i] * 2);
-	//}
-
-	///* substraction */
-	//matrix* e = subMatrix(id_2, id_2);
-	//assert(e->size == 4);
-	//assert(e->rowc == 2);
-	//assert(e->colc == 2);
-
-	//for (int i = 0; i < 4; i++){
-	//	assert(e->arr[i] == arr_2[i] * 0);
-	//}
-
-	///* test cases for the row index */
-	//// assert (getRowIndex(m,4) == -1);
-
-	//// test cases for the col index
-	//assert (getIndex(m, 1, 1) == 1);
-	//assert (getIndex(m, 1, 2) == 4);
-	//assert (getIndex(m, 1, 3) == 7);
-	//assert (getIndex(m, 2, 1) == 2);
-	//assert (getIndex(m, 2, 2) == 5);
-	//assert (getIndex(m, 2, 3) == 8);
-	//assert (getIndex(m, 3, 1) == 3);
-	//assert (getIndex(m, 3, 2) == 6);
-	//assert (getIndex(m, 3, 3) == 9);
-
-	//// permutation matrices
-	//int id_1[] = {1,0,0,0,0,1,0,1,0};
-	//matrix* p = getPermutation(3, 2, 3);
-	//for (int i = 0; i < p->size; i++){
-	//	assert(p->arr[i] == id_1[i]);
-	//}
-	//
-	//matrix* pm = multiplyMatrix(p,m);
-
-	//// testing deepCopyMatrixes
-	//matrix* jj = createEmptyMatrix(m->rowc,m->colc); 
-	//copyMatrix(m, jj);
-	//
-	//for (int i = 0; i < m->size; i++){
-	//	assert(m->arr[i] == jj->arr[i]);	
-	//}
-
-
-
-	//// freeing the matrices
-	//freeMatrix(id_3);
-	//freeMatrix(id_2);
-	//freeMatrix(m);
-	//freeMatrix(c);
-	//freeMatrix(d);
-	//freeMatrix(e);
-	//freeMatrix(pm);
-	//freeMatrix(jj);
 
 	return 0;
 }

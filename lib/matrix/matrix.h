@@ -299,10 +299,42 @@ void multiplyRow(matrix* a, int row, int s){
 	 	int row -> row of matrix 
 		int s -> scalar value 
 	 *ret: NIL*/
+	if (row >= a->rowc){
+		fprintf(stderr, 
+			"Given Row Is Greater\
+			Than Actual Row");
+		return;
+	}
+	// grabbing the start index
+	int sidx;
+	for (int i = 1; i <= a->colc; i++){
+		sidx = getIndex(a, row, i);
+		a->arr[sidx] *= s; 
+	}
 };
 
 
-void multiplyCol(matrix* a, int col, int s){
+void divideRow(matrix* a, int row, int s){
+	/*summary: divide row in a matrix
+	 *args: matrix* a -> pointer to matrix 
+	 	int row -> row of matrix 
+		int s -> scalar value 
+	 *ret: NIL*/
+	if (row >= a->rowc){
+		fprintf(stderr, 
+			"Given Row Is Greater\
+			Than Actual Row");
+		return;
+	}
+	// grabbing the start index
+	int sidx = getIndex(a, row, 1);
+	for (int i = 1; i <= a->rowc; i++, sidx++){
+		a->arr[sidx] /= s; 
+	}
+}
+
+
+void multiplyColumn(matrix* a, int col, int s){
 	/*summary: simple col multiplication
 	 *args: matrix* a -> pointer to matrix 
 	 	int col -> col of matrix 
@@ -310,6 +342,30 @@ void multiplyCol(matrix* a, int col, int s){
 	 *ret: NIL*/
 };
 
+
+void addScalarToMatrix(matrix* a, int s){
+	/*summary: [inplace-addition] add 
+	 * a scalar value to the whole matrix
+	 *args: matrix* a -> pointer to matrix 
+		int s -> scalar value 
+	 *ret: NIL*/
+	for (int i = 0; i < a->size; i++){
+		a->arr[i] += s;
+	}
+	return;
+}
+
+void subScalarFromMatrix(matrix* a, int s){
+	/*summary: [inplace-addition] substract 
+	 * a scalar value to the whole matrix
+	 *args: matrix* a -> pointer to matrix 
+		int s -> scalar value 
+	 *ret: NIL*/
+	for (int i = 0; i < a->size; i++){
+		a->arr[i] -= s;
+	}
+	return;
+}
 
 void swapRows(matrix* a, int r1, int r2){
 	/*summary: swap rows in the matrix 
