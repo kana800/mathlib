@@ -181,60 +181,44 @@ int main(int argc, char *argv[]){
 		assert(e == b_mult_r2[i - 1]);
 	}
 
+	/*test cases for getIndex*/
+	assert (getIndex(b, 1, 1) == 0);
+	assert (getIndex(b, 1, 2) == 1);
+	assert (getIndex(b, 1, 3) == 2);
+	assert (getIndex(b, 2, 1) == 3);
+	assert (getIndex(b, 2, 2) == 4);
+	assert (getIndex(b, 2, 3) == 5);
+	assert (getIndex(b, 3, 1) == 6);
+	assert (getIndex(b, 3, 2) == 7);
+	assert (getIndex(b, 3, 3) == 8);
 
+	/* testing deepCopyMatrixes*/
+	matrix* acopy = createEmptyMatrix(a->rowc, a->colc); 
+	copyMatrix(a, acopy);
+	compareMatrices(a, acopy);
 
-
-	///* test cases for the row index */
-	//// assert (getRowIndex(m,4) == -1);
-
-	//// test cases for the col index
-	//assert (getIndex(m, 1, 1) == 1);
-	//assert (getIndex(m, 1, 2) == 4);
-	//assert (getIndex(m, 1, 3) == 7);
-	//assert (getIndex(m, 2, 1) == 2);
-	//assert (getIndex(m, 2, 2) == 5);
-	//assert (getIndex(m, 2, 3) == 8);
-	//assert (getIndex(m, 3, 1) == 3);
-	//assert (getIndex(m, 3, 2) == 6);
-	//assert (getIndex(m, 3, 3) == 9);
-
-	//// permutation matrices
-	//int id_1[] = {1,0,0,0,0,1,0,1,0};
-	//matrix* p = getPermutation(3, 2, 3);
-	//for (int i = 0; i < p->size; i++){
-	//	assert(p->arr[i] == id_1[i]);
-	//}
-	//
-	//matrix* pm = multiplyMatrix(p,m);
-
-	//// testing deepCopyMatrixes
-	//matrix* jj = createEmptyMatrix(m->rowc,m->colc); 
-	//copyMatrix(m, jj);
-	//
-	//for (int i = 0; i < m->size; i++){
-	//	assert(m->arr[i] == jj->arr[i]);	
-	//}
+	/*permutation matrices*/
+	int id_1[] = {1,0,0,0,0,1,0,1,0};
+	matrix* l = getPermutationMatrix(3, 2, 3);
+	compareMatricesWithArr(l, id_1, 9);
 	matrix* q = createMatrix(3,3,1,2,3,4,5,6,7,8,9); 
 	matrix* r = createMatrix(4,3,1,2,3,4,5,6,7,8,9,10,11,12); 
 	matrix* p = getPermutationMatrix(3, 1, 2);
 	swapRows(r, 1, 2);
-	//printmatrix(r);
-	//printmatrix(p);
-	//matrix* s = multiplyMatrix(p, q);
-	//printmatrix(s);
 	multiplyRow(q, 2, 2);
 	divideRow(q, 2, 2);
 
-	//// freeing the matrices
-	//freeMatrix(id_3);
-	//freeMatrix(id_2);
-	//freeMatrix(m);
-	//freeMatrix(c);
-	//freeMatrix(d);
-	//freeMatrix(e);
-	//freeMatrix(pm);
-
-	//freeMatrix(jj);
+	/*freeing the matrices*/
+	freeMatrix(a);
+	freeMatrix(b);
+	freeMatrix(c);
+	freeMatrix(d);
+	freeMatrix(e_3);
+	freeMatrix(p);
+	freeMatrix(q);
+	freeMatrix(r);
+	freeMatrix(l);
+	freeMatrix(acopy);
 
 	/*augmatrix.h*/
 	/*creating a 3x3 matrix */
@@ -428,10 +412,13 @@ int main(int argc, char *argv[]){
 	/*freeing up all the matrices*/
 	freeMatrix(m);
 	freeMatrix(n);
+	freeMatrix(o);
 	freeMatrix(exp_ltm);
 	freeMatrix(exp_utm);
 	freeMatrix(ltm);
 	freeMatrix(utm);
+	freeMatrix(ltm_o);
+	freeMatrix(utm_o);
 
 	return 0;
 }
