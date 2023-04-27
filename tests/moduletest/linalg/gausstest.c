@@ -19,6 +19,9 @@ int main(int argc, char *argv[]){
 	printmatrix(aug_2->arr_a);
 	printmatrix(aug_2->arr_b);
 
+	performRowReduction(aug_2, 1);
+	printf("after\n");
+	printmatrix(aug_2->arr_a);
 
 	freeAugmentedMatrix(aug_1);
 	freeAugmentedMatrix(aug_2);

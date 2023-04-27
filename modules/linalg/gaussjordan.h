@@ -11,9 +11,14 @@
 #include "matrix.h"
 #include "augmatrix.h"
 #include <stdbool.h>
+#include <stdio.h>
 
+typedef struct __pivot__ {
+	int row;
+	int col;
+} pivot;
 
-int findPivotPoint(augmatrix* a, int piv){
+pivot findPivotPoint(augmatrix* a, int piv){
 	/*summary: find the optimal 
 	 * pivot point in an augmented matrix
 	 * in the provided pivot position;
@@ -28,7 +33,7 @@ int findPivotPoint(augmatrix* a, int piv){
 	 * m = [1 2 3]
 	 *     [4 5 6]
 	 *     [7 8 9]
-	 *ret: int -> index of the row*/
+	 *ret: pivot -> pivot; row and column*/
 	if (piv > a->arr_a->colc){
 		fprintf(stderr, 
 			"Given Pivot Is Greater \
@@ -56,16 +61,19 @@ int findPivotPoint(augmatrix* a, int piv){
 	if (piv != i){
 		swapRows(a->arr_a, i, piv);
 		swapRows(a->arr_b, i, piv);
-		return piv;
 	}
-	return -1;
+	return piv;
 }
 
-void performRowReduction(augmatrix* a, int piv){
+
+void performRowReduction(
+		augmatrix* a, int r , int c, int piv){
 	/*summary: performs row reduction to
 	 * each row in the matrix to get the 
 	 * zero in the pivot columns 
 	 *args: augmatrix*a -> pointer to aug matrix 
+	 	int r -> row number of the element
+		int c -> col number of the element
 	 	int piv -> pivot column 
 	 *example: 
 	 *piv-> 1 2 3  piv = 1
@@ -85,21 +93,14 @@ void performRowReduction(augmatrix* a, int piv){
 			Than Column in Matrix");
 		return;
 	}
-	int i,index;
-	int pivotvalue = getIndex(a->arr_a, piv, piv);
-	for (i = piv; i <= a->arr_a->rowc; i++) {	
-		index = getIndex(a->arr_a, i, piv);
-		int indexvalue = a->arr_a->arr[index];
-		if (indexvalue){
-			// finding the multiplier 
-			// if needed make sure pivot 
-			// is always one
-			int m = indexvalue / i; 
-			multiplyByScalar(a, m);
-		}
+	int i,index, divider;
+	int pivotvalue = getIndex(a->arr_a, r, c);
+	// checking if the pivot value is 1;
+	divider = a->arr_a->arr[pivotvalue];
+	for (int i = r; i >= a->arr_a->rowc; i++){
+	
 	}
 
 
 }
-
 #endif // !GAUSS_H

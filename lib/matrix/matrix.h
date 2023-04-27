@@ -162,6 +162,28 @@ int getIndex(matrix *a, int n, int j){
 	return i;
 }
 
+int getRow(matrix* a, int idx){
+	/*summary: return the row; given 
+	 * the index value 
+	 *args: matrix* a -> pointer to
+	 	matrix 
+		int idx -> index of the 
+		matrix 
+	 *ret: row number*/
+}
+
+
+int getCol(matrix* a, int idx){
+	/*summary: return the col; given 
+	 * the index value 
+	 *args: matrix* a -> pointer to
+	 	matrix 
+		int idx -> index of the 
+		matrix 
+	 *ret: col number*/
+}
+
+
 matrix* addMatrix(matrix* a,matrix* b){
       /*summary: add two matrices together 
        *args: matrix* a -> matrix #1

@@ -56,7 +56,7 @@ augmatrix* createAugmentedMatrix(matrix* a, matrix* b){
 	return m;	
 }
 
-void multiplyByScalar(augmatrix* a, int s){
+void aug_multiplyByScalar(augmatrix* a, int s){
 	/*summary: inplace multiply augmented
 	 * matrix with a scalar value;
 	 *args: augmatrix *a -> augmented matrix 
@@ -73,7 +73,7 @@ void multiplyByScalar(augmatrix* a, int s){
 }
 
 
-void addScalarToRow(augmatrix* a, int row, int s){
+void aug_addScalarToRow(augmatrix* a, int row, int s){
 	/*summary: add a scalar to a given row;
 	 *args: augmatrix *a -> augmented matrix 
 	 	int row -> row count
@@ -103,7 +103,7 @@ void addScalarToRow(augmatrix* a, int row, int s){
 	return;
 }
 
-void subScalarFromRow(augmatrix* a, int row, int s){
+void aug_subScalarFromRow(augmatrix* a, int row, int s){
 	/*summary: substract a scalar from a given row;
 	 *args: augmatrix *a -> augmented matrix 
 	 	int row -> row count
@@ -132,7 +132,7 @@ void subScalarFromRow(augmatrix* a, int row, int s){
 	return;
 }
 
-void addRow(augmatrix* a, int r1, int r2, int r3){
+void aug_addRow(augmatrix* a, int r1, int r2, int r3){
 	/*summary: add two rows together
 	 *args: augmatrix* a -> augmented matrix 
 	 	int r1 -> row #1 
@@ -182,7 +182,7 @@ void addRow(augmatrix* a, int r1, int r2, int r3){
 	return;
 }
 
-void subRow(augmatrix* a, int r1, int r2, int r3){
+void aug_subRow(augmatrix* a, int r1, int r2, int r3){
 	/*summary: add two rows together
 	 *args: augmatrix* a -> augmented matrix 
 	 	int r1 -> row #1 
