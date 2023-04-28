@@ -162,16 +162,6 @@ int getIndex(matrix *a, int n, int j){
 	return i;
 }
 
-int getRow(matrix* a, int idx){
-	/*summary: return the row; given 
-	 * the index value 
-	 *args: matrix* a -> pointer to
-	 	matrix 
-		int idx -> index of the 
-		matrix 
-	 *ret: row number*/
-}
-
 
 int getCol(matrix* a, int idx){
 	/*summary: return the col; given 
@@ -181,6 +171,22 @@ int getCol(matrix* a, int idx){
 		int idx -> index of the 
 		matrix 
 	 *ret: col number*/
+	int col = (idx + 1) % a->colc;
+	return (col == 0) ? a->colc : col;
+}
+
+
+int getRow(matrix* a, int idx){
+	/*summary: return the row; given 
+	 * the index value 
+	 *args: matrix* a -> pointer to
+	 	matrix 
+		int idx -> index of the 
+		matrix 
+	 *ret: row number*/
+	int col = getCol(a, idx);
+	int cnst = a->colc - (col - 1);
+	return (idx + cnst) / a->colc;
 }
 
 
