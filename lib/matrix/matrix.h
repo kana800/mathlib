@@ -171,7 +171,7 @@ int getCol(matrix* a, int idx){
 		int idx -> index of the 
 		matrix 
 	 *ret: col number*/
-	int col = (idx + 1) % a->colc;
+	int col = (idx) % a->colc;
 	return (col == 0) ? a->colc : col;
 }
 

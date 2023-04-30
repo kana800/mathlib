@@ -51,6 +51,8 @@ gausstest: matrix modules/linalg/gaussjordan.h
 	cp -r modules/linalg/gaussjordan.h $(MODULETEST)linalg/
 	mkdir -p $(BUILDDIR)linalg/
 	$(CC) $(MODULETEST)linalg/$@.c -o $(BUILDDIR)linalg/$@
+	# cleaning the directories
+	rm -r $(MODULETEST)linalg/*.h
 
 cleanbuild:
 	rm -r build/*

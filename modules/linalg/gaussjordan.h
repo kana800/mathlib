@@ -13,12 +13,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-typedef struct __pivot__ {
-	int row;
-	int col;
-} pivot;
 
-pivot findPivotPoint(augmatrix* a, int piv){
+int findPivotPoint(augmatrix* a, int piv){
 	/*summary: find the optimal 
 	 * pivot point in an augmented matrix
 	 * in the provided pivot position;
@@ -33,7 +29,7 @@ pivot findPivotPoint(augmatrix* a, int piv){
 	 * m = [1 2 3]
 	 *     [4 5 6]
 	 *     [7 8 9]
-	 *ret: pivot -> pivot; row and column*/
+	 *ret: int -> index;*/
 	if (piv > a->arr_a->colc){
 		fprintf(stderr, 
 			"Given Pivot Is Greater \
@@ -93,14 +89,35 @@ void performRowReduction(
 			Than Column in Matrix");
 		return;
 	}
-	int i,index, divider;
+	int i, index, pivot;
 	int pivotvalue = getIndex(a->arr_a, r, c);
-	// checking if the pivot value is 1;
-	divider = a->arr_a->arr[pivotvalue];
-	for (int i = r; i >= a->arr_a->rowc; i++){
-	
+	pivot = a->arr_a->arr[pivotvalue];
+	for (int i = r + 1; i <= a->arr_a->rowc; i++){
+		int idx = getIndex(a->arr_a, i, piv);
+		int pd = a->arr_a->arr[idx];		
+		if (pd == 0) continue;
+		int multiplier = pd / pivot;
+		for (int j = piv; j <= a->arr_a->colc; j++){
+			int e_r1 = getIndex(a->arr_a, r, j);
+			int e_r2 = getIndex(a->arr_a, i, j);
+			int element_r1 = a->arr_a->arr[e_r1];		
+			int element_r2 = a->arr_a->arr[e_r2];
+			a->arr_a->arr[e_r2] = 
+				element_r2 - (element_r1 * multiplier);
+		}
 	}
+	return;
+}
 
+
+void performGaussianElimination(augmatrix* a){
+	/*summary: apply gaussian elimination to an
+	 * augmented matrix [inplace] 
+	 *args: augmatrix *a -> pointer to aug matrix
+	 *ret: NIL*/ 
 
 }
+
+
+
 #endif // !GAUSS_H
