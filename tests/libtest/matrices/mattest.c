@@ -143,6 +143,8 @@ int main(int argc, char *argv[]){
 	int d_arr[9] = {6,6,6,15,15,15,24,24,24};
 	compareMatricesWithArr(d, d_arr, 9);
 
+	matrix* e = createMatrix(3,3,0,2,1,3,8,1,0,4,1);
+
 	/*testing row operations*/
 	/* before multiplyRow(b, 1, 2) 
 	 * 	 1 2 3
@@ -193,27 +195,46 @@ int main(int argc, char *argv[]){
 	assert (getIndex(b, 3, 3) == 8);
 
 	/*test cases for getCol*/
-	assert (getCol(b, 0) == 1);
-	assert (getCol(b, 1) == 2);
-	assert (getCol(b, 2) == 3);
-	assert (getCol(b, 3) == 1);
-	assert (getCol(b, 4) == 2);
-	assert (getCol(b, 5) == 3);
-	assert (getCol(b, 6) == 1);
-	assert (getCol(b, 7) == 2);
-	assert (getCol(b, 8) == 3);
+	//assert (getCol(b, 0) == 1);
+	//assert (getCol(b, 1) == 2);
+	//assert (getCol(b, 2) == 3);
+	//assert (getCol(b, 3) == 1);
+	//assert (getCol(b, 4) == 2);
+	//assert (getCol(b, 5) == 3);
+	//assert (getCol(b, 6) == 1);
+	//assert (getCol(b, 7) == 2);
+	//assert (getCol(b, 8) == 3);
+
+	assert (getCol(e, 0) == 1);
+	assert (getCol(e, 1) == 2);
+	assert (getCol(e, 2) == 3);
+	assert (getCol(e, 3) == 1);
+	assert (getCol(e, 4) == 2);
+	assert (getCol(e, 5) == 3);
+	assert (getCol(e, 6) == 1);
+	assert (getCol(e, 7) == 2);
+	assert (getCol(e, 8) == 3);
 
 	/*test cases for getRow*/
-	assert (getRow(b, 0) == 1);
-	assert (getRow(b, 1) == 1);
-	assert (getRow(b, 2) == 1);
-	assert (getRow(b, 3) == 2);
-	assert (getRow(b, 4) == 2);
-	assert (getRow(b, 5) == 2);
-	assert (getRow(b, 6) == 3);
-	assert (getRow(b, 7) == 3);
-	assert (getRow(b, 8) == 3);
+	//assert (getRow(b, 0) == 1);
+	//assert (getRow(b, 1) == 1);
+	//assert (getRow(b, 2) == 1);
+	//assert (getRow(b, 3) == 2);
+	//assert (getRow(b, 4) == 2);
+	//assert (getRow(b, 5) == 2);
+	//assert (getRow(b, 6) == 3);
+	//assert (getRow(b, 7) == 3);
+	//assert (getRow(b, 8) == 3);
 
+	assert (getRow(e, 0) == 1);
+	assert (getRow(e, 1) == 1);
+	assert (getRow(e, 2) == 1);
+	assert (getRow(e, 3) == 2);
+	assert (getRow(e, 4) == 2);
+	assert (getRow(e, 5) == 2);
+	assert (getRow(e, 6) == 3);
+	assert (getRow(e, 7) == 3);
+	assert (getRow(e, 8) == 3);
 
 	/* testing deepCopyMatrixes*/
 	matrix* acopy = createEmptyMatrix(a->rowc, a->colc); 

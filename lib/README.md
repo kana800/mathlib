@@ -8,4 +8,9 @@
 - [matrices](matrix/README.md)
 - [trigonometry](trig/README.md)
 
+
+|Library|Description|Version|
+|-------|-----------|-------|
+|[`matrices`](matrix/README.md)||`v1.0`|
+
 ---

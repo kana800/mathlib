@@ -92,7 +92,6 @@ matrix* createMatrix(int row, int col, ...){
 	return m;
 }
 
-
 void copyMatrix(matrix* a, matrix* b){
 	/*summary: copy the content of 
 	 * matrix a to matrix b
@@ -171,7 +170,7 @@ int getCol(matrix* a, int idx){
 		int idx -> index of the 
 		matrix 
 	 *ret: col number*/
-	int col = (idx) % a->colc;
+	int col = (idx + 1) % a->colc;
 	return (col == 0) ? a->colc : col;
 }
 
@@ -186,6 +185,7 @@ int getRow(matrix* a, int idx){
 	 *ret: row number*/
 	int col = getCol(a, idx);
 	int cnst = a->colc - (col - 1);
+	int ans = (idx + cnst) / a->colc;
 	return (idx + cnst) / a->colc;
 }
 

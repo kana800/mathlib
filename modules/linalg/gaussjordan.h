@@ -37,28 +37,33 @@ int findPivotPoint(augmatrix* a, int piv){
 		return -1;
 	}
 
-	int i, index;
+	int r, index;
 	bool foundPivot = false;
-	for (i = piv; i <= a->arr_a->rowc; i++) {	
-		index = getIndex(a->arr_a, i, piv);
+	for (r = piv; r <= a->arr_a->rowc; r++) {	
+		index = getIndex(a->arr_a, r, piv);
 		// pivot cannot be zero; we need to keep
 		// traversing till we find the pivot
 		if (a->arr_a->arr[index] != 0){
 			foundPivot = true;
 			break;
-		} 
+		}  
 	}
 	// whole column is zero
 	if (!foundPivot) return -1;
 
-	/*if the row and column values arent equal 
-	 * then we need to some permutations and 
-	 * switch the rows accordingly*/
-	if (piv != i){
-		swapRows(a->arr_a, i, piv);
-		swapRows(a->arr_b, i, piv);
+	/*negative value*/
+	if (a->arr_a->arr[index] < 0)
+		a->arr_a->arr[index] *= -1;
+
+	/*if pivot doesn't exist in the 
+	 * passed*/
+	if (piv != r) {
+		swapRows(a->arr_a, r, piv);
+		swapRows(a->arr_b, r, piv);
+		// pivot is replaced; so the index
+		index = getIndex(a->arr_a, piv, piv);
 	}
-	return piv;
+	return index;
 }
 
 

@@ -1,11 +1,11 @@
 ### Animations
 
 This directory contains all the code for the animation shown in the documentation. 
-[`manim` library](https://github.com/3b1b/manim) is used to make these animations;
+The [`manim` library](https://github.com/3b1b/manim) is used to make these animations;
 
 ---
 
-### Table Of Content
+### Map-Of-Content
 
 - [trigonometry animation](triganim/)
 
