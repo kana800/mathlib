@@ -180,6 +180,7 @@ int main(int argc, char *argv[]){
 			getCol(aug_4->arr_a, aug_4_piv_2), 2);
 	printmatrix(aug_4->arr_a);
 	compareMatricesWithArr(aug_4->arr_a, aug_4_piv_2_arr, 12);
+	printmatrix(aug_4->arr_b);
 
 
 	//freeAugmentedMatrix(aug_1);

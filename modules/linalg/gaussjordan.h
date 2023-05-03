@@ -93,13 +93,20 @@ void performRowReduction(
 			"Given Pivot Is Greater \
 			Than Column in Matrix");
 		return;
+	} else if (a->arr_b->colc != 1){
+		fprintf(stderr, 
+			"In Ax=b; b contains \
+			multiple columns");
+		return;
 	}
+
 	int i, index, pivot;
 	int pivotvalue = getIndex(a->arr_a, r, c);
 	pivot = a->arr_a->arr[pivotvalue];
 	for (int i = r + 1; i <= a->arr_a->rowc; i++){
-		int idx = getIndex(a->arr_a, i, piv);
-		int pd = a->arr_a->arr[idx];		
+		int arra_idx = getIndex(a->arr_a, i, piv);
+		int arrb_idx = getIndex(a->arr_b, i, 1); 
+		int pd = a->arr_a->arr[arra_idx];		
 		if (pd == 0) continue;
 		int multiplier = pd / pivot;
 		for (int j = piv; j <= a->arr_a->colc; j++){
@@ -110,6 +117,13 @@ void performRowReduction(
 			a->arr_a->arr[e_r2] = 
 				element_r2 - (element_r1 * multiplier);
 		}
+		int b_r1 = getIndex(a->arr_b, r, 1);
+		int b_r2 = getIndex(a->arr_b, r, 1);
+		int b_element_r1 = a->arr_a->arr[b_r1];		
+		int b_element_r2 = a->arr_a->arr[b_r2];
+		a->arr_b->arr[b_r2] = 
+			b_element_r2 - (b_element_r1 * multiplier);
+
 	}
 	return;
 }
