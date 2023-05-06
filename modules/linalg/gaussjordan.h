@@ -118,7 +118,7 @@ void performRowReduction(
 				element_r2 - (element_r1 * multiplier);
 		}
 		int b_r1 = getIndex(a->arr_b, r, 1);
-		int b_r2 = getIndex(a->arr_b, r, 1);
+		int b_r2 = getIndex(a->arr_b, i, 1);
 		int b_element_r1 = a->arr_a->arr[b_r1];		
 		int b_element_r2 = a->arr_a->arr[b_r2];
 		a->arr_b->arr[b_r2] = 
