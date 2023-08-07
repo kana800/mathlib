@@ -4,7 +4,6 @@ CC=gcc
 BUILDDIR := build/
 # animation directory
 ANIMDIR := animations/
-PYDIR := pylib/
 
 TRIGFILES := lib/trig/trig.c
 COORDFILES := lib/coord/coord.c
@@ -17,7 +16,6 @@ matrix: lib/matrix/matrix.h
 	mkdir -p $(BUILDDIR)$@
 	gcc -c lib/matrix/matrix.h -o $(BUILDDIR)$@/mat.o
 	ar -rc $(BUILDDIR)$@/libmat.a $(BUILDDIR)$@/mat.o
-	mkdir -p $(PYDIR)$@/
 
 mattest: matrix 
 	cp -r lib/matrix/*.h $(LIBTEST)matrices/
