@@ -182,7 +182,7 @@ void aug_addRow(augmatrix* a, int r1, int r2, int r3){
 	return;
 }
 
-void aug_subRow(augmatrix* a, int r1, int r2, int r3){
+void aug_subRow(augmatrix* a, int r1, int r2, int r3) {
 	/*summary: add two rows together
 	 *args: augmatrix* a -> augmented matrix 
 	 	int r1 -> row #1 

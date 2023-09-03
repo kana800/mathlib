@@ -6,14 +6,22 @@
 #include <errno.h>
 #include <stdlib.h>
 
-typedef struct __matrix__{
-	int* arr;
+#ifdef __AVX__
+  #include <immintrin.h>
+#else
+  #warning AVX is not available. Code will not compile!
+#endif
+
+typedef struct __matrix__
+{
+	int* arr; // contains data of the matrix
 	int size; // size of the matrix
 	int rowc; // row count
 	int colc; // col count
 } matrix;
 
-void printmatrix(const matrix* m){
+void printmatrix(const matrix* m)
+{
 	/*summary: prints the matrix
 	 *args: const matrix* m -> matrix
 	 *ret: NIL*/	
@@ -32,7 +40,8 @@ void printmatrix(const matrix* m){
 	return;
 }
 
-void freeMatrix(matrix* m){
+void freeMatrix(matrix* m)
+{
 	/*summary: free the matrix 
 	 * from the heap
 	 *args: matrix* m -> pointer 
@@ -43,12 +52,13 @@ void freeMatrix(matrix* m){
 	return;
 }
 
-matrix* createIdentityMatrix(int d){
+matrix* createIdentityMatrix(int d)
+{
 	/*summary: creates an identity matrix
 	 *args: int dim ->  number of dimensions
-			2 -> 2x2
-			3 -> 3x3
-			4 -> 4x4
+	 *		2 -> 2x2
+	 *		3 -> 3x3
+	 *		4 -> 4x4
 	 *ret: matrix -> Identity Matrix*/
 	int size = d * d;
 	matrix* m = malloc(sizeof(matrix));
@@ -56,8 +66,7 @@ matrix* createIdentityMatrix(int d){
 	// row count and col count
 	int row = 0;
 	int col = 0;
-	for (int i = 1; i <= d; i++) 
-		arr[((d+1)*i-d) - 1] = 1;
+	for (int i = 1; i <= d; i++) arr[((d+1)*i-d) - 1] = 1;
 	m->arr = arr;
 	m->size = size;
 	m->rowc = d;
@@ -65,23 +74,27 @@ matrix* createIdentityMatrix(int d){
 	return m;
 }
 
-matrix* createMatrix(int row, int col, ...){
+matrix* createMatrix(int row, int col, ...)
+{
 	/*summary: create a matrix with shape of row x col
 	 * and include the data for the matrix provided
 	 *args: int row -> row count
-	 	int col -> col count
-		... -> data for the matrix
-			!!Remember matrix start with 
-			0-index; it is expected by the 
-			user to provide correct number
-			of elements
+	 * 	int col -> col count
+	 *	    ... -> data for the matrix
+	 *note: Remember matrix start with 
+	 *		0-index; it is expected by the 
+	 *		user to provide correct number
+	 *		of elements
 	 *ret: matrix * -> row x col matrix*/
+
 	int size = row * col;
 	matrix* m = malloc(sizeof(matrix));
 	int* arr = calloc(size, sizeof(int));
 	va_list ptr;
 	va_start(ptr, col);
-	for(int i = 0; i < size; i++){
+
+	for(int i = 0; i < size; i++)
+	{
 		arr[i] = va_arg(ptr, int);	
 	}
 	va_end(ptr);
@@ -92,16 +105,17 @@ matrix* createMatrix(int row, int col, ...){
 	return m;
 }
 
-void copyMatrix(matrix* a, matrix* b){
+void copyMatrix(matrix* a, matrix* b)
+{
 	/*summary: copy the content of 
 	 * matrix a to matrix b
 	 *args: 
-	 	matrix* a -> pointer to 
-			a matrix
-		matrix* b -> pointer to 
-			b matrix
-	 *if matrix b is not empty the content 
-	 will be overwritten
+	 * 	matrix* a -> pointer to 
+	 *		a matrix
+	 *	matrix* b -> pointer to 
+	 *		b matrix
+	 *note: if matrix b is not empty the content 
+	 *will be overwritten
 	 *return: NIL*/
 	int size_a = a->size;
 	b->size = a->size;
@@ -109,20 +123,22 @@ void copyMatrix(matrix* a, matrix* b){
 	b->colc = a->colc;
 	int* arr = a->arr;
 	int* barr = b->arr;
-	for (int i = 0; i < size_a; i++){
+	for (int i = 0; i < size_a; i++)
+	{
 		barr[i] = arr[i];
 	}
 	return;
 }
 
-matrix* createEmptyMatrix(int row, int col){
+matrix* createEmptyMatrix(int row, int col)
+{
 	/*summary: create an empty matrix with shape 
 	 * of row x col and data will be zero-initialized
 	 *args: int row -> row count
-	 	int col -> col count
-		remember matrix start with 0-index;
-		it is expected by the user to provide
-		correct number of elements
+	 * 	int col -> col count
+	 *note: remember matrix start with 0-index;
+	 *	it is expected by the user to provide
+	 *	correct number of elements
 	 *ret: matrix * -> row x col matrix*/
 	int size = row * col;
 	matrix* m = malloc(sizeof(matrix));
@@ -135,12 +151,13 @@ matrix* createEmptyMatrix(int row, int col){
 }
 
 
-int getIndex(matrix *a, int n, int j){
+int getIndex(matrix *a, int n, int j)
+{
 	/*summary: return an starting index of
 	 * appopriate row
 	 *args: matrix* a -> matrix
-	 	int j -> col id
-		int n -> row id
+	 * 	int j -> col id
+	 *	int n -> row id
 	 *       r  1 2 3    
 	 * aug = 1 [3 4 5]
 	 * 	 2 [16 20]
@@ -198,9 +215,10 @@ matrix* addMatrix(matrix* a,matrix* b){
 
 	//is it compatible
 	if ((a->rowc != b->rowc) &&
-		(a->colc != b->colc)){
+		(a->colc != b->colc))
+	{
 		fprintf(stderr, 
-			"Matrices Shape Isn't Compatible\n");
+				"Matrices Shape Isn't Compatible\n");
 		return NULL;
 	}
 
@@ -216,6 +234,33 @@ matrix* addMatrix(matrix* a,matrix* b){
 	m->arr = arr;
 	m->size = size;
 	return m;
+}
+
+
+matrix* addNew(matrix* a,matrix* b)
+{
+	//is it compatible
+	if ((a->rowc != b->rowc) &&
+		(a->colc != b->colc))
+	{
+		fprintf(stderr, 
+				"Matrices Shape Isn't Compatible\n");
+		return NULL;
+	}
+
+	matrix* m = createEmptyMatrix(a->rowc, b->colc);
+	int* A = a->arr;
+	int* B = b->arr;
+	int* arr = m->arr;
+	int size = m->size;
+
+	for (int i = 0; i < size; i++)
+		arr[i] = A[i] + B[i]; 
+	
+	m->arr = arr;
+	m->size = size;
+	return m;
+	return NULL;
 }
 
 
