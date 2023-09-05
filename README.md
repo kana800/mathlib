@@ -14,15 +14,6 @@
 
 `mathlib` project is collection of small math scripts; I wrote them to mainly solidify my understanding on certain topics.
 
-There will be some notes from courses and youtube series that I followed to 
-grasp certain topics, you can find them in my [`garden`](https://kannna.xyz/knowledge) section.
-
-### MakeFile
-
-<p style="text-align: center" align="center">
-  <img src=".images/makefile.png" alt="makefile image">
-</p>
-
 ### References
 
 - [Numerical Recipes](http://numerical.recipes/book/book.html)

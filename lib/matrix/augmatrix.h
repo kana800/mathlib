@@ -3,17 +3,19 @@
 
 #include "matrix.h"
 
-typedef struct __augmatrix__ {
+typedef struct __augmatrix__ 
+{
 	/*augmented matrix*/
 	matrix* arr_a; // pointer to matrix a
 	matrix* arr_b; // pointer to matrix b
 } augmatrix;
 
-void freeAugmentedMatrix(augmatrix* m){
+void freeAugmentedMatrix(augmatrix* m)
+{
 	/*summary: free the augmented matrix 
 	 * from the heap
 	 *args: augmatrix* m -> 
-	 	pointer to to a matrix;
+	 * 	pointer to to a matrix;
 	 *ret: none*/
 	matrix* a = m->arr_a;
 	matrix* b = m->arr_b;
@@ -24,20 +26,22 @@ void freeAugmentedMatrix(augmatrix* m){
 	return;
 }
 
-augmatrix* createAugmentedMatrix(matrix* a, matrix* b){
+augmatrix* createAugmentedMatrix(matrix* a, matrix* b)
+{
 	/*summary: create an augmented matrix
 	 * by appending the columns of two given matrices
 	 *args:
-		matrix* a -> matrix 1
-		matrix* b -> matrix 2
-		a = [1 3 2] b=[4]
-		    [2 0 1]   [3]
-		    [5 2 2]   [1]
-		augmented = [1 3 2 |4]
-			    [2 0 1 |3]
-			    [5 2 2 |1]
+	 *	matrix* a -> matrix 1
+	 *	matrix* b -> matrix 2
+	 *	a = [1 3 2] b=[4]
+	 *	    [2 0 1]   [3]
+	 *	    [5 2 2]   [1]
+	 *	augmented = [1 3 2 |4]
+	 *		    [2 0 1 |3]
+	 *		    [5 2 2 |1]
 	 *ret: matrix * -> pointer to a matrix*/
-	if (a->rowc != b->rowc){
+	if (a->rowc != b->rowc)
+	{
 		fprintf(stderr, 
 			"Cannot Create An Augmented Matrix");
 		return NULL;
@@ -60,7 +64,7 @@ void aug_multiplyByScalar(augmatrix* a, int s){
 	/*summary: inplace multiply augmented
 	 * matrix with a scalar value;
 	 *args: augmatrix *a -> augmented matrix 
-	 	int s -> scalar value
+	 * 	int s -> scalar value
 	 *return: NIL*/
 	matrix* mat_a = a->arr_a;
 	matrix* mat_b = a->arr_b;
@@ -76,13 +80,14 @@ void aug_multiplyByScalar(augmatrix* a, int s){
 void aug_addScalarToRow(augmatrix* a, int row, int s){
 	/*summary: add a scalar to a given row;
 	 *args: augmatrix *a -> augmented matrix 
-	 	int row -> row count
-	 	int s -> scalar value
+	 *	int row -> row count
+	 *	int s -> scalar value
 	 *return: NIL*/
 	matrix* mat_a = a->arr_a;
 	matrix* mat_b = a->arr_b;
 
-	if (row > mat_a->rowc){
+	if (row > mat_a->rowc)
+	{
 		fprintf(stderr,"Row Count is High\n");
 		return;
 	}
@@ -90,12 +95,14 @@ void aug_addScalarToRow(augmatrix* a, int row, int s){
 	int row_a = getIndex(mat_a,row, 1);
 	int row_b = getIndex(mat_b,row, 1);
 
-	for (int i = 0; i < mat_a->colc; i++){
+	for (int i = 0; i < mat_a->colc; i++)
+	{
 		mat_a->arr[row_a] += s; 
 		row_a += 1;
 	}
 
-	for (int i = 0; i < mat_b->colc; i++){
+	for (int i = 0; i < mat_b->colc; i++)
+	{
 		mat_b->arr[row_b] += s; 
 		row_b += 1;
 	}
@@ -112,7 +119,8 @@ void aug_subScalarFromRow(augmatrix* a, int row, int s){
 	matrix* mat_a = a->arr_a;
 	matrix* mat_b = a->arr_b;
 
-	if (row > mat_a->rowc){
+	if (row > mat_a->rowc)
+	{
 		fprintf(stderr,"Row Count is High\n");
 		return;
 	}
@@ -120,24 +128,27 @@ void aug_subScalarFromRow(augmatrix* a, int row, int s){
 	int row_a = getIndex(mat_a,row, 1);
 	int row_b = getIndex(mat_b,row, 1);
 
-	for (int i = 0; i < mat_a->colc; i++){
+	for (int i = 0; i < mat_a->colc; i++)
+	{
 		mat_a->arr[row_a] -= s; 
 		row_a += 1;
 	}
 
-	for (int i = 0; i < mat_b->colc; i++){
+	for (int i = 0; i < mat_b->colc; i++)
+	{
 		mat_b->arr[row_b] -= s; 
 		row_b += 1;
 	}
 	return;
 }
 
-void aug_addRow(augmatrix* a, int r1, int r2, int r3){
+void aug_addRow(augmatrix* a, int r1, int r2, int r3)
+{
 	/*summary: add two rows together
 	 *args: augmatrix* a -> augmented matrix 
-	 	int r1 -> row #1 
-		int r2 -> row #2
-		int r3 -> row #3
+	 * 	int r1 -> row #1 
+	 *	int r2 -> row #2
+	 *	int r3 -> row #3
 	 *	r3 = r1 + r2;
 	 *ret: NIL*/
 
@@ -146,7 +157,8 @@ void aug_addRow(augmatrix* a, int r1, int r2, int r3){
 
 	if ((r1 > mat_a->rowc) ||
 		(r2 > mat_a->rowc) ||
-		(r3 > mat_a->rowc)){
+		(r3 > mat_a->rowc))
+	{
 		fprintf(stderr, "Row Count is High\n");
 		return;
 	}
@@ -161,7 +173,8 @@ void aug_addRow(augmatrix* a, int r1, int r2, int r3){
 	int row_b_r3 = getIndex(mat_b, r3, 1); 
 
 
-	for (int i = 0; i < mat_a->colc; i++){
+	for (int i = 0; i < mat_a->colc; i++)
+	{
 		mat_a->arr[row_a_r3] = 
 			mat_a->arr[row_a_r1] + 
 			mat_a->arr[row_a_r2]; 
@@ -170,7 +183,8 @@ void aug_addRow(augmatrix* a, int r1, int r2, int r3){
 		row_a_r3 += 1; 
 	}
 
-	for (int i = 0; i < mat_b->colc; i++){
+	for (int i = 0; i < mat_b->colc; i++)
+	{
 		mat_b->arr[row_b_r3] = 
 			mat_b->arr[row_b_r1] + 
 			mat_b->arr[row_b_r2]; 
@@ -182,12 +196,13 @@ void aug_addRow(augmatrix* a, int r1, int r2, int r3){
 	return;
 }
 
-void aug_subRow(augmatrix* a, int r1, int r2, int r3) {
+void aug_subRow(augmatrix* a, int r1, int r2, int r3) 
+{
 	/*summary: add two rows together
 	 *args: augmatrix* a -> augmented matrix 
-	 	int r1 -> row #1 
-		int r2 -> row #2
-		int r3 -> row #3
+	 * 	int r1 -> row #1 
+	 *	int r2 -> row #2
+	 *	int r3 -> row #3
 	 *	r3 = r1 - r2;
 	 *ret: NIL*/
 
@@ -196,7 +211,8 @@ void aug_subRow(augmatrix* a, int r1, int r2, int r3) {
 
 	if ((r1 > mat_a->rowc) ||
 		(r2 > mat_a->rowc) ||
-		(r3 > mat_a->rowc)){
+		(r3 > mat_a->rowc))
+	{
 		fprintf(stderr, "Row Count is High\n");
 		return;
 	}
@@ -210,7 +226,8 @@ void aug_subRow(augmatrix* a, int r1, int r2, int r3) {
 	int row_b_r2 = getIndex(mat_b, r2, 1); 
 	int row_b_r3 = getIndex(mat_b, r3, 1); 
 
-	for (int i = 0; i < mat_a->colc; i++){
+	for (int i = 0; i < mat_a->colc; i++)
+	{
 		mat_a->arr[row_a_r3] = 
 			mat_a->arr[row_a_r1] - 
 			mat_a->arr[row_a_r2]; 
@@ -219,7 +236,8 @@ void aug_subRow(augmatrix* a, int r1, int r2, int r3) {
 		row_a_r3 += 1; 
 	}
 
-	for (int i = 0; i < mat_b->colc; i++){
+	for (int i = 0; i < mat_b->colc; i++)
+	{
 		mat_b->arr[row_b_r3] = 
 			mat_b->arr[row_b_r1] - 
 			mat_b->arr[row_b_r2]; 

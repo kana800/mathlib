@@ -3,9 +3,10 @@
 #include <stdio.h>
 
 #include "gaussjordan.h"
-#include "matrix.h"
+#include "../../../lib/matrix/matrix.h"
 
-void compareMatrices(matrix* a, matrix* b){
+void compareMatrices(matrix* a, matrix* b)
+{
 	/*summary: compare matrix a with b
 	 *args: matrix * a -> pointer to matrix a
 	 	matrix * b -> pointer to matrix b
@@ -34,7 +35,8 @@ void compareMatricesWithArr(matrix* a, int* arr,int size){
 	return;
 }
 
-int main(int argc, char *argv[]){
+int main(int argc, char *argv[])
+{
 	/*gaussjordan.h*/
 
 	/* creating matrices 
@@ -182,8 +184,13 @@ int main(int argc, char *argv[]){
 	 *        [0 3 0 1| 1]
 	 *        [0 3 0 2| 5]*/
 	int aug_4_piv_2_arr[] = {0,2,5,6,0,3,0,1,0,0,0,1};
+	printmatrix(aug_4->arr_a);
+	printmatrix(aug_4->arr_b);
 	performGaussianElimination(aug_4);
 	compareMatricesWithArr(aug_4->arr_a, aug_4_piv_2_arr, 12);
+	printmatrix(aug_4->arr_a);
+	printmatrix(aug_4->arr_b);
+	
 
 	freeAugmentedMatrix(aug_1);
 	freeAugmentedMatrix(aug_2);

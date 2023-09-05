@@ -228,8 +228,16 @@ matrix* addMatrix(matrix* a,matrix* b){
 	int* arr = m->arr;
 	int size = m->size;
 
-	for (int i = 0; i < size; i++)
-		arr[i] = A[i] + B[i]; 
+//	for (int i = 0; i < size; i++)
+//		arr[i] = A[i] + B[i]; 
+//
+//	avx can only have 256 bits register;
+//	ints -> 4 bytes -> 32 bits
+//	register can only hold (256/32) = 8 ints
+//	given two matrices 3 x 10
+//	[1  2  3  4  5  6  7  8  | 9  10]
+//	[11 12 13 14 15 16 17 18 | 19 20]
+//	[21 22 23 24 25 26 27 28 | 29 30]
 	
 	m->arr = arr;
 	m->size = size;

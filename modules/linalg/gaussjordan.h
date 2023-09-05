@@ -67,8 +67,9 @@ int findPivotPoint(augmatrix* a, int piv){
 }
 
 
-void performRowReduction(
-		augmatrix* a, int r , int c, int piv){
+void performRowReduction(augmatrix* a, int r , 
+		int c, int piv)
+{
 	/*summary: performs row reduction to
 	 * each row in the matrix to get the 
 	 * zero in the pivot columns 
@@ -88,7 +89,8 @@ void performRowReduction(
 	 *     [0  6  6] -> r3 - r1
 	 *ret: NIL*/
 
-	if (piv > a->arr_a->colc){
+	if (piv > a->arr_a->colc)
+	{
 		fprintf(stderr, 
 			"Given Pivot Is Greater \
 			Than Column in Matrix");
@@ -125,13 +127,15 @@ void performRowReduction(
 }
 
 
-void performGaussianElimination(augmatrix* a){
+void performGaussianElimination(augmatrix* a)
+{
 	/*summary: apply gaussian elimination to an
 	 * augmented matrix [inplace] 
 	 *args: augmatrix *a -> pointer to aug matrix
 	 *ret: NIL*/ 
 	
-	for (int i = 1; i <= a->arr_a->colc; i++){
+	for (int i = 1; i <= a->arr_a->colc; i++)
+	{
 		int piv = findPivotPoint(a, i);
 		if (piv == -1) continue;
 		int row = getRow(a->arr_a, piv);

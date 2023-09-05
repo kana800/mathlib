@@ -7,7 +7,6 @@
 |Gaussian Elimination|1.0|[Is an algorithm for solving systems of linear equations](https://en.wikipedia.org/wiki/Gaussian_elimination)|[testdir](https://github.com/kana800/mathlib/tree/main/tests/moduletest)|
 
 
-
 ### References
 
 - [Documentation](https://github.com/kana800/mathlib/wiki)

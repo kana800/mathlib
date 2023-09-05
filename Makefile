@@ -12,14 +12,10 @@ MATRIXFILES := lib/matrix/matrix.c
 LIBTEST := tests/libtest/
 MODULETEST := tests/moduletest/
 
-matrix: lib/matrix/matrix.h
-	mkdir -p $(BUILDDIR)$@
-	gcc -c lib/matrix/matrix.h -o $(BUILDDIR)$@/mat.o
-	ar -rc $(BUILDDIR)$@/libmat.a $(BUILDDIR)$@/mat.o
-
-mattest: matrix 
+mattest:  
+	# copying the header-only library
 	cp -r lib/matrix/*.h $(LIBTEST)matrices/
-	$(CC) $(LIBTEST)matrices/$@.c -o $(BUILDDIR)$^/$@
+	$(CC) -mavx $(LIBTEST)matrices/$@.c -o $(BUILDDIR)$^/$@
 	# cleaning the directories
 	rm -r $(LIBTEST)matrices/*.h
 
