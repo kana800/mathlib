@@ -9,9 +9,10 @@
 #ifdef __AVX__
   #include <immintrin.h>
 #else
-  #warning AVX is not available. Code will not compile!
+  #warning AVX IS NOT AVAILABLE. CANNOT COMPILE!
 #endif
 
+// matrix structure
 typedef struct __matrix__
 {
 	int* arr; // contains data of the matrix
@@ -20,46 +21,70 @@ typedef struct __matrix__
 	int colc; // col count
 } matrix;
 
+// augmented matrix
+typedef struct __augmatrix__ 
+{
+	matrix* arr_a; // pointer to matrix a
+	matrix* arr_b; // pointer to matrix b
+} augmatrix;
+
+
+// summary: prints the matrix
+// args: const matrix* m -> matrix
 void printmatrix(const matrix* m)
 {
-	/*summary: prints the matrix
-	 *args: const matrix* m -> matrix
-	 *ret: NIL*/	
 	if (m == NULL) return;
 	int* tM = m->arr;
 	int colcount = m->colc;
-	fprintf(stdout,"--");
-	for (int i = 0; i < m->size; i++){
-		if ((i+1) % m->colc == 1){
+	fprintf(stdout,"---");
+	for (int i = 0; i < m->size; i++)
+	{
+		if ((i+1) % m->colc == 1)
+		{
 			fprintf(stdout,"\n");
 		}
 		fprintf(stdout," %d ", tM[i]);
 	}
-	fprintf(stdout,"\nshape (%d,%d)\n--\n",
+	fprintf(stdout,
+			"\nshape (%d,%d)\n--\n",
 			m->rowc, m->colc);
 	return;
 }
 
+// summary: free the matrix 
+//  from the heap
+// args: matrix* m -> pointer 
+//   to to a matrix;
 void freeMatrix(matrix* m)
 {
-	/*summary: free the matrix 
-	 * from the heap
-	 *args: matrix* m -> pointer 
-	 	to to a matrix;
-	 *ret: NIL*/
 	free(m->arr);
 	free(m);
 	return;
 }
 
+// summary: free the augmented matrix 
+//   from the heap
+// args: augmatrix* m -> 
+//   	pointer to to a matrix;
+void freeAugmentedMatrix(augmatrix* m)
+{
+	matrix* a = m->arr_a;
+	matrix* b = m->arr_b;
+
+	free(m);
+	freeMatrix(a);
+	freeMatrix(b);
+	return;
+}
+
+// summary: creates an identity matrix
+// args: int dim ->  number of dimensions
+// 		2 -> 2x2
+// 		3 -> 3x3
+// 		4 -> 4x4
+// ret: matrix -> Identity Matrix
 matrix* createIdentityMatrix(int d)
 {
-	/*summary: creates an identity matrix
-	 *args: int dim ->  number of dimensions
-	 *		2 -> 2x2
-	 *		3 -> 3x3
-	 *		4 -> 4x4
-	 *ret: matrix -> Identity Matrix*/
 	int size = d * d;
 	matrix* m = malloc(sizeof(matrix));
 	int* arr = calloc(size, sizeof(int));
@@ -74,22 +99,22 @@ matrix* createIdentityMatrix(int d)
 	return m;
 }
 
+// summary: create a matrix with shape of row x col
+//  and include the data for the matrix provided
+// args: int row -> row count
+//  	int col -> col count
+// 	    ... -> data for the matrix
+// note: Remember matrix start with 
+// 		0-index; it is expected by the 
+// 		user to provide correct number
+// 		of elements
+// ret: matrix * -> row x col matrix
 matrix* createMatrix(int row, int col, ...)
 {
-	/*summary: create a matrix with shape of row x col
-	 * and include the data for the matrix provided
-	 *args: int row -> row count
-	 * 	int col -> col count
-	 *	    ... -> data for the matrix
-	 *note: Remember matrix start with 
-	 *		0-index; it is expected by the 
-	 *		user to provide correct number
-	 *		of elements
-	 *ret: matrix * -> row x col matrix*/
-
 	int size = row * col;
 	matrix* m = malloc(sizeof(matrix));
 	int* arr = calloc(size, sizeof(int));
+	
 	va_list ptr;
 	va_start(ptr, col);
 
@@ -97,7 +122,9 @@ matrix* createMatrix(int row, int col, ...)
 	{
 		arr[i] = va_arg(ptr, int);	
 	}
+
 	va_end(ptr);
+	
 	m->arr = arr;
 	m->rowc = row;
 	m->colc = col;
@@ -105,18 +132,19 @@ matrix* createMatrix(int row, int col, ...)
 	return m;
 }
 
+// TODO THIS IS NOT A DEEP COPY 
+// THIS IS SHALLOW COPY FIX THIS
+// summary: copy the content of 
+//   matrix a to matrix b
+// args: 
+//  	matrix* a -> pointer to 
+// 		a matrix
+// 	matrix* b -> pointer to 
+// 		b matrix
+// note: if matrix b is not empty the content 
+// 	will be overwritten
 void copyMatrix(matrix* a, matrix* b)
 {
-	/*summary: copy the content of 
-	 * matrix a to matrix b
-	 *args: 
-	 * 	matrix* a -> pointer to 
-	 *		a matrix
-	 *	matrix* b -> pointer to 
-	 *		b matrix
-	 *note: if matrix b is not empty the content 
-	 *will be overwritten
-	 *return: NIL*/
 	int size_a = a->size;
 	b->size = a->size;
 	b->rowc = a->rowc;
@@ -130,16 +158,16 @@ void copyMatrix(matrix* a, matrix* b)
 	return;
 }
 
+// summary: create an empty matrix with shape 
+//  of row x col and data will be zero-initialized
+// args: int row -> row count
+//  	int col -> col count
+// note: remember matrix start with 0-index;
+// 	it is expected by the user to provide
+// 	correct number of elements
+// ret: matrix * -> row x col matrix
 matrix* createEmptyMatrix(int row, int col)
 {
-	/*summary: create an empty matrix with shape 
-	 * of row x col and data will be zero-initialized
-	 *args: int row -> row count
-	 * 	int col -> col count
-	 *note: remember matrix start with 0-index;
-	 *	it is expected by the user to provide
-	 *	correct number of elements
-	 *ret: matrix * -> row x col matrix*/
 	int size = row * col;
 	matrix* m = malloc(sizeof(matrix));
 	int* arr = calloc(size, sizeof(int));
@@ -150,20 +178,19 @@ matrix* createEmptyMatrix(int row, int col)
 	return m;
 }
 
-
+// summary: return an starting index of
+//  appopriate row
+// args: matrix* a -> matrix
+//  	int j -> col id
+// 	int n -> row id
+//        r  1 2 3    
+//  aug = 1 [3 4 5]
+//  	 2 [16 20]
+//  	 3 [14 16]
+// note: row and col starts with 1 
+// ret: index in the array
 int getIndex(matrix *a, int n, int j)
 {
-	/*summary: return an starting index of
-	 * appopriate row
-	 *args: matrix* a -> matrix
-	 * 	int j -> col id
-	 *	int n -> row id
-	 *       r  1 2 3    
-	 * aug = 1 [3 4 5]
-	 * 	 2 [16 20]
-	 * 	 3 [14 16]
-	 *note: row and col starts with 1 
-	 *ret: index in the array*/
 	if (j > a->colc){
 		fprintf(stderr,
 			"Col ID is greater than Col count\n");
@@ -178,28 +205,250 @@ int getIndex(matrix *a, int n, int j)
 	return i;
 }
 
+// summary: create an augmented matrix
+//  by appending the columns of two given matrices
+// args:
+// 	matrix* a -> matrix 1
+// 	matrix* b -> matrix 2
+// 	a = [1 3 2] b=[4]
+// 	    [2 0 1]   [3]
+// 	    [5 2 2]   [1]
+// 	augmented = [1 3 2 |4]
+// 		    [2 0 1 |3]
+// 		    [5 2 2 |1]
+// ret: matrix * -> pointer to a matrix
+augmatrix* createAugmentedMatrix(matrix* a, matrix* b)
+{
+	if (a->rowc != b->rowc)
+	{
+		fprintf(stderr, 
+			"Cannot Create An Augmented Matrix");
+		return NULL;
+	}
 
-int getCol(matrix* a, int idx){
-	/*summary: return the col; given 
-	 * the index value 
-	 *args: matrix* a -> pointer to
-	 	matrix 
-		int idx -> index of the 
-		matrix 
-	 *ret: col number*/
+	matrix* temp_a = 
+		createEmptyMatrix(a->rowc, a->colc);
+	matrix* temp_b = 
+		createEmptyMatrix(b->rowc, b->colc);
+	copyMatrix(a, temp_a);
+	copyMatrix(b, temp_b);
+	
+	augmatrix* m = (augmatrix*)malloc(sizeof(augmatrix));
+	m->arr_a = temp_a;
+	m->arr_b = temp_b;
+	return m;	
+}
+
+// summary: inplace multiply augmented
+//  matrix with a scalar value;
+// args: augmatrix *a -> augmented matrix 
+//  	int s -> scalar value
+void aug_multiplyByScalar(augmatrix* a, int s)
+{
+	matrix* mat_a = a->arr_a;
+	matrix* mat_b = a->arr_b;
+	for (int i = 0; i < mat_a->size ; i++)
+	{
+		mat_a->arr[i] *= s; 
+	}
+	for (int i = 0; i < mat_b->size ; i++)
+	{
+		mat_b->arr[i] *= s; 
+	}
+}
+
+
+// summary: add a scalar to a given row;
+// args: augmatrix *a -> augmented matrix 
+// 	int row -> row count
+// 	int s -> scalar value
+void aug_addScalarToRow(augmatrix* a, int row, int s)
+{
+	matrix* mat_a = a->arr_a;
+	matrix* mat_b = a->arr_b;
+
+	if (row > mat_a->rowc)
+	{
+		fprintf(stderr,"Row Count is High\n");
+		return;
+	}
+	
+	int row_a = getIndex(mat_a,row, 1);
+	int row_b = getIndex(mat_b,row, 1);
+
+	for (int i = 0; i < mat_a->colc; i++)
+	{
+		mat_a->arr[row_a] += s; 
+		row_a += 1;
+	}
+
+	for (int i = 0; i < mat_b->colc; i++)
+	{
+		mat_b->arr[row_b] += s; 
+		row_b += 1;
+	}
+
+	return;
+}
+
+// summary: substract a scalar from a given row;
+// args: augmatrix *a -> augmented matrix 
+// 	int row -> row count
+// 	int s -> scalar value
+void aug_subScalarFromRow(augmatrix* a, int row, int s)
+{
+	matrix* mat_a = a->arr_a;
+	matrix* mat_b = a->arr_b;
+
+	if (row > mat_a->rowc)
+	{
+		fprintf(stderr,"Row Count is High\n");
+		return;
+	}
+	
+	int row_a = getIndex(mat_a,row, 1);
+	int row_b = getIndex(mat_b,row, 1);
+
+	for (int i = 0; i < mat_a->colc; i++)
+	{
+		mat_a->arr[row_a] -= s; 
+		row_a += 1;
+	}
+
+	for (int i = 0; i < mat_b->colc; i++)
+	{
+		mat_b->arr[row_b] -= s; 
+		row_b += 1;
+	}
+	return;
+}
+
+// summary: add two rows together
+// args: augmatrix* a -> augmented matrix 
+//  	int r1 -> row #1 
+// 	int r2 -> row #2
+// 	int r3 -> row #3
+// 	r3 = r1 + r2;
+void aug_addRow(augmatrix* a, int r1, int r2, int r3)
+{
+	matrix* mat_a = a->arr_a;
+	matrix* mat_b = a->arr_b;
+
+	if ((r1 > mat_a->rowc) ||
+		(r2 > mat_a->rowc) ||
+		(r3 > mat_a->rowc))
+	{
+		fprintf(stderr, "Row Count is High\n");
+		return;
+	}
+
+	// get the starting indexes of all the rows
+	int row_a_r1 = getIndex(mat_a, r1, 1); 
+	int row_a_r2 = getIndex(mat_a, r2, 1); 
+	int row_a_r3 = getIndex(mat_a, r3, 1); 
+	
+	int row_b_r1 = getIndex(mat_b, r1, 1); 
+	int row_b_r2 = getIndex(mat_b, r2, 1); 
+	int row_b_r3 = getIndex(mat_b, r3, 1); 
+
+
+	for (int i = 0; i < mat_a->colc; i++)
+	{
+		mat_a->arr[row_a_r3] = 
+			mat_a->arr[row_a_r1] + 
+			mat_a->arr[row_a_r2]; 
+		row_a_r1 += 1; 
+		row_a_r2 += 1; 
+		row_a_r3 += 1; 
+	}
+
+	for (int i = 0; i < mat_b->colc; i++)
+	{
+		mat_b->arr[row_b_r3] = 
+			mat_b->arr[row_b_r1] + 
+			mat_b->arr[row_b_r2]; 
+		row_b_r1 += 1; 
+		row_b_r2 += 1; 
+		row_b_r3 += 1; 
+	}
+
+	return;
+}
+
+// summary: add two rows together
+// args: augmatrix* a -> augmented matrix 
+//  	int r1 -> row #1 
+// 	int r2 -> row #2
+// 	int r3 -> row #3
+// 	r3 = r1 - r2;
+void aug_subRow(augmatrix* a, int r1, int r2, int r3) 
+{
+	matrix* mat_a = a->arr_a;
+	matrix* mat_b = a->arr_b;
+
+	if ((r1 > mat_a->rowc) ||
+		(r2 > mat_a->rowc) ||
+		(r3 > mat_a->rowc))
+	{
+		fprintf(stderr, "Row Count is High\n");
+		return;
+	}
+
+	// get the starting indexes of all the rows
+	int row_a_r1 = getIndex(mat_a, r1, 1); 
+	int row_a_r2 = getIndex(mat_a, r2, 1); 
+	int row_a_r3 = getIndex(mat_a, r3, 1); 
+	
+	int row_b_r1 = getIndex(mat_b, r1, 1); 
+	int row_b_r2 = getIndex(mat_b, r2, 1); 
+	int row_b_r3 = getIndex(mat_b, r3, 1); 
+
+	for (int i = 0; i < mat_a->colc; i++)
+	{
+		mat_a->arr[row_a_r3] = 
+			mat_a->arr[row_a_r1] - 
+			mat_a->arr[row_a_r2]; 
+		row_a_r1 += 1; 
+		row_a_r2 += 1; 
+		row_a_r3 += 1; 
+	}
+
+	for (int i = 0; i < mat_b->colc; i++)
+	{
+		mat_b->arr[row_b_r3] = 
+			mat_b->arr[row_b_r1] - 
+			mat_b->arr[row_b_r2]; 
+		row_b_r1 += 1; 
+		row_b_r2 += 1; 
+		row_b_r3 += 1; 
+	}
+
+	return;
+}
+
+// summary: return the col; given 
+//  the index value 
+// args: matrix* a -> pointer to
+//   matrix 
+//   int idx -> index of the 
+//   matrix 
+// ret: col number
+int getCol(matrix* a, int idx)
+{
 	int col = (idx + 1) % a->colc;
 	return (col == 0) ? a->colc : col;
 }
 
 
-int getRow(matrix* a, int idx){
-	/*summary: return the row; given 
-	 * the index value 
-	 *args: matrix* a -> pointer to
-	 	matrix 
-		int idx -> index of the 
-		matrix 
-	 *ret: row number*/
+// summary: return the row; given 
+//  the index value 
+// args: matrix* a -> pointer to
+//   matrix 
+//   int idx -> index of the 
+//   matrix 
+// ret: row number
+int getRow(matrix* a, int idx)
+{
 	int col = getCol(a, idx);
 	int cnst = a->colc - (col - 1);
 	int ans = (idx + cnst) / a->colc;
@@ -207,45 +456,11 @@ int getRow(matrix* a, int idx){
 }
 
 
-matrix* addMatrix(matrix* a,matrix* b){
-      /*summary: add two matrices together 
-       *args: matrix* a -> matrix #1
-       	      matrix* b -> matrix #2
-       *ret: (new matrix) ptr to a matrix*/	
-
-	//is it compatible
-	if ((a->rowc != b->rowc) &&
-		(a->colc != b->colc))
-	{
-		fprintf(stderr, 
-				"Matrices Shape Isn't Compatible\n");
-		return NULL;
-	}
-
-	matrix* m = createEmptyMatrix(a->rowc, b->colc);
-	int* A = a->arr;
-	int* B = b->arr;
-	int* arr = m->arr;
-	int size = m->size;
-
-//	for (int i = 0; i < size; i++)
-//		arr[i] = A[i] + B[i]; 
-//
-//	avx can only have 256 bits register;
-//	ints -> 4 bytes -> 32 bits
-//	register can only hold (256/32) = 8 ints
-//	given two matrices 3 x 10
-//	[1  2  3  4  5  6  7  8  | 9  10]
-//	[11 12 13 14 15 16 17 18 | 19 20]
-//	[21 22 23 24 25 26 27 28 | 29 30]
-	
-	m->arr = arr;
-	m->size = size;
-	return m;
-}
-
-
-matrix* addNew(matrix* a,matrix* b)
+// summary: add two matrices together 
+// args: matrix* a -> matrix #1
+//      matrix* b -> matrix #2
+// ret: (new matrix) ptr to a matrix	
+matrix* addMatrix(matrix* a,matrix* b)
 {
 	//is it compatible
 	if ((a->rowc != b->rowc) &&
@@ -264,11 +479,18 @@ matrix* addNew(matrix* a,matrix* b)
 
 	for (int i = 0; i < size; i++)
 		arr[i] = A[i] + B[i]; 
+//
+//	avx can only have 256 bits register;
+//	ints -> 4 bytes -> 32 bits
+//	register can only hold (256/32) = 8 ints
+//	given two matrices 3 x 10
+//	[1  2  3  4  5  6  7  8  | 9  10]
+//	[11 12 13 14 15 16 17 18 | 19 20]
+//	[21 22 23 24 25 26 27 28 | 29 30]
 	
 	m->arr = arr;
 	m->size = size;
 	return m;
-	return NULL;
 }
 
 
@@ -512,13 +734,13 @@ matrix* getLowerTriangularMatrix(matrix* a){
 	return ltm;
 }
 
-matrix* getUpperTriangularMatrix(matrix* a){
-	/*summary: return a upper triangular 
-	 *args: matrix * a -> pointer to a 
-	 	matrix
-	 *ret: (new matrix)ptr to a 
-	 	lower triangular matrix*/
-	
+// summary: return a upper triangular 
+// args: matrix * a -> pointer to a 
+//   matrix
+// ret: (new matrix)ptr to a 
+//	lower triangular matrix
+matrix* getUpperTriangularMatrix(matrix* a)
+{
 	/*checking if matrix is a square*/
 	if (a->colc != a->rowc){
 		fprintf(stderr, 
