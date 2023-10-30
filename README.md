@@ -12,7 +12,6 @@
 - [Documentation](docs) : contains documentation for the project
 - [External](external): External Libraries
 - [Libraries](lib): contains all the Libraries
-- [Modules](modules) : contains all the modules
 - [Tests](tests): test cases for all the code 
 
 ### References

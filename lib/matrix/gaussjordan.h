@@ -14,17 +14,16 @@
 #include <stdio.h>
 
 
-int findPivotPoint(augmatrix* a, int piv)
-{
+int findPivotPoint(augmatrix* a, int piv){
 	/*summary: find the optimal 
 	 * pivot point in an augmented matrix
 	 * in the provided pivot position;
 	 * rows will be swapped inplace if 
 	 * needed
 	 *args: augmatrix* a -> pointer to a 
-	 *	augmented matrix 
-	 *   int pivot -> pivot position
-	 *   	** starts with 1
+	 	augmented matrix 
+		int pivot -> pivot position
+			** starts with 1
 	 *example:
 	 *piv-> 1 2 3
 	 * m = [1 2 3]
@@ -52,12 +51,12 @@ int findPivotPoint(augmatrix* a, int piv)
 	// whole column is zero
 	if (!foundPivot) return -1;
 
-	// negative value
+	/*negative value*/
 	if (a->arr_a->arr[index] < 0)
 		a->arr_a->arr[index] *= -1;
 
-	//if pivot doesn't exist in the 
-	// passed
+	/*if pivot doesn't exist in the 
+	 * passed*/
 	if (piv != r) {
 		swapRows(a->arr_a, r, piv);
 		swapRows(a->arr_b, r, piv);
@@ -75,9 +74,9 @@ void performRowReduction(augmatrix* a, int r ,
 	 * each row in the matrix to get the 
 	 * zero in the pivot columns 
 	 *args: augmatrix*a -> pointer to aug matrix 
-	 *	int r -> row number of the element
-	 *   int c -> col number of the element
-	 *	int piv -> pivot column 
+	 	int r -> row number of the element
+		int c -> col number of the element
+	 	int piv -> pivot column 
 	 *example: 
 	 *piv-> 1 2 3  piv = 1
 	 * m = [1 2 3]

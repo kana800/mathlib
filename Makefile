@@ -1,23 +1,22 @@
 CC=gcc
 
 # general build directory
-BUILDDIR := build/
+BUILDDIR := build
 # animation directory
-ANIMDIR := animations/
+ANIMDIR := animations
+# test directory
+TESTDIR := tests
 
 TRIGFILES := lib/trig/trig.c
 COORDFILES := lib/coord/coord.c
 MATRIXFILES := lib/matrix/matrix.c
 
-LIBTEST := tests/libtest/
-MODULETEST := tests/moduletest/
-
 mattest:  
 	# copying the header-only library
-	cp -r lib/matrix/*.h $(LIBTEST)matrices/
-	$(CC) -mavx $(LIBTEST)matrices/$@.c -o $(BUILDDIR)$^/$@
+	cp -r lib/matrix/*.h $(TESTDIR)/matrices/
+	$(CC) -mavx $(TESTDIR)/matrices/$@.c -o $(BUILDDIR)$^/$@
 	# cleaning the directories
-	rm -r $(LIBTEST)matrices/*.h
+	rm -r $(TESTDIR)/matrices/*.h
 
 gausstest: matrix modules/linalg/gaussjordan.h
 	cp -r lib/matrix/*.h $(MODULETEST)linalg/
