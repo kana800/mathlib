@@ -477,29 +477,34 @@ matrix* addMatrix(matrix* a,matrix* b)
 	int* arr = m->arr;
 	int size = m->size;
 
-	for (int i = 0; i < size; i++)
-		arr[i] = A[i] + B[i]; 
-//
-//	avx can only have 256 bits register;
-//	ints -> 4 bytes -> 32 bits
-//	register can only hold (256/32) = 8 ints
-//	given two matrices 3 x 10
-//	[1  2  3  4  5  6  7  8  | 9  10]
-//	[11 12 13 14 15 16 17 18 | 19 20]
-//	[21 22 23 24 25 26 27 28 | 29 30]
-	
+	int remaining = size % 8;
+	int loopend = size - remaining;
+
+	for(int i = 0; i < loopend; i += 8)
+	{
+		__m256i arr_a = _mm256_loadu_si256((__m256i*)&A[i]);
+		__m256i arr_b = _mm256_loadu_si256((__m256i*)&B[i]);
+		__m256i result = _mm256_add_epi32(arr_a, arr_b);
+		_mm256_storeu_si256((__m256i*)&arr[i], result);
+	}
+
+	for (int i = loopend; i < size; i++)
+	{
+		arr[i] = A[i] + B[i];
+	}
+
 	m->arr = arr;
 	m->size = size;
 	return m;
 }
 
 
-matrix* subMatrix(matrix* a,matrix* b){
-      /*summary: sub two matrices together 
-       *args: matrix* a -> matrix #1
-	      matrix* b -> matrix #2
-       *ret: (new matrix) ptr to a matrix*/	
-
+// summary: sub two matrices together 
+// args: matrix* a -> matrix #1
+// 		matrix* b -> matrix #2
+// ret: (new matrix) ptr to a matrix*/	
+matrix* subMatrix(matrix* a,matrix* b)
+{
 	//is it compatible
 	if ((a->rowc != b->rowc) &&
 		(a->colc != b->colc)){
@@ -514,8 +519,21 @@ matrix* subMatrix(matrix* a,matrix* b){
 	int* arr = m->arr;
 	int size = m->size;
 
-	for (int i = 0; i < size; i++)
-		arr[i] = A[i] - B[i]; 
+	int remaining = size % 8;
+	int loopend = size - remaining;
+
+	for(int i = 0; i < loopend; i += 8)
+	{
+		__m256i arr_a = _mm256_loadu_si256((__m256i*)&A[i]);
+		__m256i arr_b = _mm256_loadu_si256((__m256i*)&B[i]);
+		__m256i result = _mm256_sub_epi32(arr_a, arr_b);
+		_mm256_storeu_si256((__m256i*)&arr[i], result);
+	}
+
+	for (int i = loopend; i < size; i++)
+	{
+		arr[i] = A[i] - B[i];
+	}
 	
 	m->arr = arr;
 	m->size = size;
@@ -523,11 +541,12 @@ matrix* subMatrix(matrix* a,matrix* b){
 }
 
 
-matrix* multiplyMatrix(matrix* a, matrix* b){
-	/*summary: multiply two matrices together
-	 *args: matrix* a -> matrix #1
-		matrix* b -> matrix #2
-	 *ret: (new matrix) ptr to a matrix*/
+// summary: multiply two matrices together
+// args: matrix* a -> matrix #1
+//   	matrix* b -> matrix #2
+// ret: (new matrix) ptr to a matrix*/
+matrix* multiplyMatrix(matrix* a, matrix* b)
+{
 	// is it compatible
 	if (a->colc != b->rowc){
 		fprintf(stderr, 
@@ -549,7 +568,9 @@ matrix* multiplyMatrix(matrix* a, matrix* b){
 	// tracks the row and col of the element
 	int trow = 0;
 	int tcol = 0;
-	for (int p = 0; p < size; p++){
+
+	for (int p = 0; p < size; p++)
+	{
 		if (p % a_rd == 0){
 			// moving to the next row
 			trow += 1;

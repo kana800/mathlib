@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <time.h>
 #include <assert.h>
-
 #include "matrix.h"
 
 #define MATRIXCOMPARISONWITHARR(matrix, array, size) \
@@ -35,7 +34,7 @@ void compareMatricesWithArr(matrix* a, int* arr, int size, int line)
 	for (int i = 0; i < size; i++)
 	{
 		if (a->arr[i] != arr[i])
-			fprintf(stderr, "error@line%d %d!=%d\n", line , a->arr[i], arr[i]);
+			fprintf(stderr, "\033[0;31m Error@Line::%d \033[0m %d!=%d\n", line , a->arr[i], arr[i]);
 	}
 	return;
 }

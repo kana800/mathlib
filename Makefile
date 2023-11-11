@@ -12,7 +12,7 @@ MATRIXFILES := lib/matrix/matrix.c
 mattest:  
 	# copying the header-only library
 	cp -r lib/matrix/*.h $(TESTDIR)/matrices/
-	$(CC) -mavx $(TESTDIR)/matrices/$@.c -o $(BUILDDIR)$^/$@
+	$(CC) -mavx2 $(TESTDIR)/matrices/$@.c -o $(BUILDDIR)$^/$@
 	# cleaning the directories
 	rm -r $(TESTDIR)/matrices/*.h
 
