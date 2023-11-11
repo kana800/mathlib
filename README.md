@@ -1,14 +1,15 @@
 <h3 align="center">Math Library</h3>
 
-### What is `mathlib`? 
-
-`mathlib` project is collection of small math scripts; I wrote them to mainly solidify my understanding on certain topics.
-
----
+`mathlib` is a _mathmatics_ library that I developed to improve on _math knowledge_. 
+The library only contains *header-only* files, The library consist of the following 
+categories: 
+- Elementary Math
+- Linear Algebra
+- Fourier Analysis and Differential Equations
+- Interpolation
 
 ### Map Of Content
 
-- [Animations](animations): contains animations for documentation
 - [Documentation](docs) : contains documentation for the project
 - [External](external): External Libraries
 - [Libraries](lib): contains all the Libraries
@@ -17,3 +18,4 @@
 ### References
 
 - [Numerical Recipes](http://numerical.recipes/book/book.html)
+- [MathWorks's Documentation](https://in.mathworks.com/help/matlab/linear-algebra.html)

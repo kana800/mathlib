@@ -7,8 +7,6 @@ ANIMDIR := animations
 # test directory
 TESTDIR := tests
 
-TRIGFILES := lib/trig/trig.c
-COORDFILES := lib/coord/coord.c
 MATRIXFILES := lib/matrix/matrix.c
 
 mattest:  

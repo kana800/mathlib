@@ -382,8 +382,8 @@ int main(int argc, char *argv[]){
 	// after addScalarToRow
 	//       r  1 2 3        4   5   6   7  8  
 	// aug = 1 [3 4 5    |   6   7   8   9  11]
-	// 	 	 2 [16 20 24 |  24  28  32  36  40]
-	// 	 	 3 [14 16 18 |  22  24  26  28  30]
+	// 		 2 [16 20 24 |  24  28  32  36  40]
+	// 		 3 [14 16 18 |  22  24  26  28  30]
 	aug_addScalarToRow(aug, 1, 2);
 	for (int i = 0; i < aug->arr_a->colc; i++)
 	{
@@ -401,7 +401,6 @@ int main(int argc, char *argv[]){
 				== (n->arr[augrow_a_5]*2) + 2 );
 	}
 
-	//
 	// subScalarToRow(aug, 1, 2)
 	// before addScalarToRow
 	//       r  1 2 3        4   5   6   7  8  
@@ -411,8 +410,8 @@ int main(int argc, char *argv[]){
 	// after addScalarToRow
 	//       r  1 2 3        4   5   6   7  8  
 	// aug = 1 [2 4 6    |   2   4   6   8  10]
-	// 	 	 2 [16 20 24 |  24  28  32  36  40]
-	// 	 	 3 [14 16 18 |  22  24  26  28  30]
+	// 		 2 [16 20 24 |  24  28  32  36  40]
+	// 		 3 [14 16 18 |  22  24  26  28  30]
 	aug_subScalarFromRow(aug, 1, 2);
 	for (int i = 0; i < aug->arr_a->colc; i++)
 	{
