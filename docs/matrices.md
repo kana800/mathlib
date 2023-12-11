@@ -1,3 +1,31 @@
+<h3 align="center">matrices</h3>
+
+### Map-Of-Content
+
+- [Introduction](#introduction)
+- [Creation Of Matrix]()
+    - [Identity Matrix]()
+    - [Empty Matrix]()
+- [Accessing Values From A Matrix]()
+- [Performing Arithmetic Operations]()
+    - [Addition]()
+    - [Substraction]()
+    - [Multiplication]()
+- [Obtaining Inverses]()
+
+### Introduction
+
+The `matrix` datastructure holds all the key components to the matrix;
+
+```c
+typedef struct __matrix__{
+	int* arr;
+	int size; // size of the matrix
+	int rowc; // row count
+	int colc; // col count
+} matrix;
+```
+
 ### Representation
 
 "How am I going to represent the matrix in code?" Lets take the *Identity Matrix* below as an example:
@@ -85,32 +113,6 @@ $$
 $$
 
 `getCol` and `getRow` will allow us to get the row or the col value that is represented by the index;
-
----
-
-- [Introduction](#introduction)
-- [Creation Of Matrix]()
-    - [Identity Matrix]()
-    - [Empty Matrix]()
-- [Accessing Values From A Matrix]()
-- [Performing Arithmetic Operations]()
-    - [Addition]()
-    - [Substraction]()
-    - [Multiplication]()
-- [Obtaining Inverses]()
-
-### Introduction
-
-The `matrix` datastructure holds all the key components to the matrix;
-
-```c
-typedef struct __matrix__{
-	int* arr;
-	int size; // size of the matrix
-	int rowc; // row count
-	int colc; // col count
-} matrix;
-```
 
 ### Creation Of Matrix
 

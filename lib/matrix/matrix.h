@@ -13,8 +13,7 @@
 #endif
 
 // matrix structure
-typedef struct __matrix__
-{
+typedef struct __matrix__ {
 	int* arr; // contains data of the matrix
 	int size; // size of the matrix
 	int rowc; // row count
@@ -22,17 +21,13 @@ typedef struct __matrix__
 } matrix;
 
 // augmented matrix
-typedef struct __augmatrix__ 
-{
+typedef struct __augmatrix__ {
 	matrix* arr_a; // pointer to matrix a
 	matrix* arr_b; // pointer to matrix b
 } augmatrix;
 
 
-// summary: prints the matrix
-// args: const matrix* m -> matrix
-void printmatrix(const matrix* m)
-{
+void printmatrix(const matrix* m) {
 	if (m == NULL) return;
 	int* tM = m->arr;
 	int colcount = m->colc;
@@ -46,28 +41,18 @@ void printmatrix(const matrix* m)
 		fprintf(stdout," %d ", tM[i]);
 	}
 	fprintf(stdout,
-			"\nshape (%d,%d)\n--\n",
-			m->rowc, m->colc);
+		"\nshape (%d,%d)\n--\n",
+		m->rowc, m->colc);
 	return;
 }
 
-// summary: free the matrix 
-//  from the heap
-// args: matrix* m -> pointer 
-//   to to a matrix;
-void freeMatrix(matrix* m)
-{
+void freeMatrix(matrix* m) {
 	free(m->arr);
 	free(m);
 	return;
 }
 
-// summary: free the augmented matrix 
-//   from the heap
-// args: augmatrix* m -> 
-//   	pointer to to a matrix;
-void freeAugmentedMatrix(augmatrix* m)
-{
+void freeAugmentedMatrix(augmatrix* m) {
 	matrix* a = m->arr_a;
 	matrix* b = m->arr_b;
 
@@ -82,16 +67,19 @@ void freeAugmentedMatrix(augmatrix* m)
 // 		2 -> 2x2
 // 		3 -> 3x3
 // 		4 -> 4x4
+// 		[ 1 0 0 ]
+// 		[ 0 1 0 ]
+// 		[ 0 0 1 ]
 // ret: matrix -> Identity Matrix
-matrix* createIdentityMatrix(int d)
-{
+matrix* createIdentityMatrix(int d) {
 	int size = d * d;
 	matrix* m = malloc(sizeof(matrix));
 	int* arr = calloc(size, sizeof(int));
 	// row count and col count
 	int row = 0;
 	int col = 0;
-	for (int i = 1; i <= d; i++) arr[((d+1)*i-d) - 1] = 1;
+	for (int i = 1; i <= d; i++) 
+		arr[((d+1)*i-d) - 1] = 1;
 	m->arr = arr;
 	m->size = size;
 	m->rowc = d;
@@ -166,8 +154,7 @@ void copyMatrix(matrix* a, matrix* b)
 // 	it is expected by the user to provide
 // 	correct number of elements
 // ret: matrix * -> row x col matrix
-matrix* createEmptyMatrix(int row, int col)
-{
+matrix* createEmptyMatrix(int row, int col) {
 	int size = row * col;
 	matrix* m = malloc(sizeof(matrix));
 	int* arr = calloc(size, sizeof(int));
@@ -185,12 +172,11 @@ matrix* createEmptyMatrix(int row, int col)
 // 	int n -> row id
 //        r  1 2 3    
 //  aug = 1 [3 4 5]
-//  	 2 [16 20]
-//  	 3 [14 16]
+//  	  2 [16 20]
+//  	  3 [14 16]
 // note: row and col starts with 1 
 // ret: index in the array
-int getIndex(matrix *a, int n, int j)
-{
+int getIndex(matrix *a, int n, int j) {
 	if (j > a->colc){
 		fprintf(stderr,
 			"Col ID is greater than Col count\n");
@@ -214,8 +200,8 @@ int getIndex(matrix *a, int n, int j)
 // 	    [2 0 1]   [3]
 // 	    [5 2 2]   [1]
 // 	augmented = [1 3 2 |4]
-// 		    [2 0 1 |3]
-// 		    [5 2 2 |1]
+// 		    	[2 0 1 |3]
+// 		    	[5 2 2 |1]
 // ret: matrix * -> pointer to a matrix
 augmatrix* createAugmentedMatrix(matrix* a, matrix* b)
 {
@@ -712,11 +698,6 @@ void swapRows(matrix* a, int r1, int r2){
 
 
 matrix* getInverse(matrix* a){
-	/*summary: return inverse of a matrix a
-	 *args: matrix *a -> matrix that you want
-	 the inverse 
-	 *ret: (new matrix)ptr to a matrix*/
-
 	// checking if the matrix is invertible
 	// obtaining the determinant is not 
 	// supported yet; lesson is in future!	
@@ -781,6 +762,11 @@ matrix* getUpperTriangularMatrix(matrix* a)
 		}
 	}
 	return utm;
+}
+
+void transposematrix(matrix* m)
+{
+
 }
 
 #endif // MATRIX_H
