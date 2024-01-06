@@ -46,19 +46,19 @@ void printmatrix(const matrix* m) {
 	return;
 }
 
-void freeMatrix(matrix* m) {
+void freematrix(matrix* m) {
 	free(m->arr);
 	free(m);
 	return;
 }
 
-void freeAugmentedMatrix(augmatrix* m) {
+void freeaugmentedmatrix(augmatrix* m) {
 	matrix* a = m->arr_a;
 	matrix* b = m->arr_b;
 
 	free(m);
-	freeMatrix(a);
-	freeMatrix(b);
+	freematrix(a);
+	freematrix(b);
 	return;
 }
 
@@ -71,7 +71,7 @@ void freeAugmentedMatrix(augmatrix* m) {
 // 		[ 0 1 0 ]
 // 		[ 0 0 1 ]
 // ret: matrix -> Identity Matrix
-matrix* createIdentityMatrix(int d) {
+matrix* createidentitymatrix(int d) {
 	int size = d * d;
 	matrix* m = malloc(sizeof(matrix));
 	int* arr = calloc(size, sizeof(int));
@@ -97,7 +97,7 @@ matrix* createIdentityMatrix(int d) {
 // 		user to provide correct number
 // 		of elements
 // ret: matrix * -> row x col matrix
-matrix* createMatrix(int row, int col, ...)
+matrix* creatematrix(int row, int col, ...)
 {
 	int size = row * col;
 	matrix* m = malloc(sizeof(matrix));
@@ -131,7 +131,7 @@ matrix* createMatrix(int row, int col, ...)
 // 		b matrix
 // note: if matrix b is not empty the content 
 // 	will be overwritten
-void copyMatrix(matrix* a, matrix* b)
+void copymatrix(matrix* a, matrix* b)
 {
 	int size_a = a->size;
 	b->size = a->size;
@@ -154,7 +154,7 @@ void copyMatrix(matrix* a, matrix* b)
 // 	it is expected by the user to provide
 // 	correct number of elements
 // ret: matrix * -> row x col matrix
-matrix* createEmptyMatrix(int row, int col) {
+matrix* createemptymatrix(int row, int col) {
 	int size = row * col;
 	matrix* m = malloc(sizeof(matrix));
 	int* arr = calloc(size, sizeof(int));
@@ -176,7 +176,7 @@ matrix* createEmptyMatrix(int row, int col) {
 //  	  3 [14 16]
 // note: row and col starts with 1 
 // ret: index in the array
-int getIndex(matrix *a, int n, int j) {
+int getindex(matrix *a, int n, int j) {
 	if (j > a->colc){
 		fprintf(stderr,
 			"Col ID is greater than Col count\n");
@@ -203,7 +203,7 @@ int getIndex(matrix *a, int n, int j) {
 // 		    	[2 0 1 |3]
 // 		    	[5 2 2 |1]
 // ret: matrix * -> pointer to a matrix
-augmatrix* createAugmentedMatrix(matrix* a, matrix* b)
+augmatrix* createaugmentedmatrix(matrix* a, matrix* b)
 {
 	if (a->rowc != b->rowc)
 	{
@@ -213,11 +213,11 @@ augmatrix* createAugmentedMatrix(matrix* a, matrix* b)
 	}
 
 	matrix* temp_a = 
-		createEmptyMatrix(a->rowc, a->colc);
+		createemptymatrix(a->rowc, a->colc);
 	matrix* temp_b = 
-		createEmptyMatrix(b->rowc, b->colc);
-	copyMatrix(a, temp_a);
-	copyMatrix(b, temp_b);
+		createemptymatrix(b->rowc, b->colc);
+	copymatrix(a, temp_a);
+	copymatrix(b, temp_b);
 	
 	augmatrix* m = (augmatrix*)malloc(sizeof(augmatrix));
 	m->arr_a = temp_a;
@@ -229,7 +229,7 @@ augmatrix* createAugmentedMatrix(matrix* a, matrix* b)
 //  matrix with a scalar value;
 // args: augmatrix *a -> augmented matrix 
 //  	int s -> scalar value
-void aug_multiplyByScalar(augmatrix* a, int s)
+void aug_multiplybyscalar(augmatrix* a, int s)
 {
 	matrix* mat_a = a->arr_a;
 	matrix* mat_b = a->arr_b;
@@ -248,19 +248,19 @@ void aug_multiplyByScalar(augmatrix* a, int s)
 // args: augmatrix *a -> augmented matrix 
 // 	int row -> row count
 // 	int s -> scalar value
-void aug_addScalarToRow(augmatrix* a, int row, int s)
+void aug_addscalartorow(augmatrix* a, int row, int s)
 {
 	matrix* mat_a = a->arr_a;
 	matrix* mat_b = a->arr_b;
 
 	if (row > mat_a->rowc)
 	{
-		fprintf(stderr,"Row Count is High\n");
+		fprintf(stderr,"row count is high\n");
 		return;
 	}
 	
-	int row_a = getIndex(mat_a,row, 1);
-	int row_b = getIndex(mat_b,row, 1);
+	int row_a = getindex(mat_a,row, 1);
+	int row_b = getindex(mat_b,row, 1);
 
 	for (int i = 0; i < mat_a->colc; i++)
 	{
@@ -281,19 +281,19 @@ void aug_addScalarToRow(augmatrix* a, int row, int s)
 // args: augmatrix *a -> augmented matrix 
 // 	int row -> row count
 // 	int s -> scalar value
-void aug_subScalarFromRow(augmatrix* a, int row, int s)
+void aug_subscalarfromrow(augmatrix* a, int row, int s)
 {
 	matrix* mat_a = a->arr_a;
 	matrix* mat_b = a->arr_b;
 
 	if (row > mat_a->rowc)
 	{
-		fprintf(stderr,"Row Count is High\n");
+		fprintf(stderr,"row count is high\n");
 		return;
 	}
 	
-	int row_a = getIndex(mat_a,row, 1);
-	int row_b = getIndex(mat_b,row, 1);
+	int row_a = getindex(mat_a,row, 1);
+	int row_b = getindex(mat_b,row, 1);
 
 	for (int i = 0; i < mat_a->colc; i++)
 	{
@@ -315,7 +315,7 @@ void aug_subScalarFromRow(augmatrix* a, int row, int s)
 // 	int r2 -> row #2
 // 	int r3 -> row #3
 // 	r3 = r1 + r2;
-void aug_addRow(augmatrix* a, int r1, int r2, int r3)
+void aug_addrow(augmatrix* a, int r1, int r2, int r3)
 {
 	matrix* mat_a = a->arr_a;
 	matrix* mat_b = a->arr_b;
@@ -329,13 +329,13 @@ void aug_addRow(augmatrix* a, int r1, int r2, int r3)
 	}
 
 	// get the starting indexes of all the rows
-	int row_a_r1 = getIndex(mat_a, r1, 1); 
-	int row_a_r2 = getIndex(mat_a, r2, 1); 
-	int row_a_r3 = getIndex(mat_a, r3, 1); 
+	int row_a_r1 = getindex(mat_a, r1, 1); 
+	int row_a_r2 = getindex(mat_a, r2, 1); 
+	int row_a_r3 = getindex(mat_a, r3, 1); 
 	
-	int row_b_r1 = getIndex(mat_b, r1, 1); 
-	int row_b_r2 = getIndex(mat_b, r2, 1); 
-	int row_b_r3 = getIndex(mat_b, r3, 1); 
+	int row_b_r1 = getindex(mat_b, r1, 1); 
+	int row_b_r2 = getindex(mat_b, r2, 1); 
+	int row_b_r3 = getindex(mat_b, r3, 1); 
 
 
 	for (int i = 0; i < mat_a->colc; i++)
@@ -367,7 +367,7 @@ void aug_addRow(augmatrix* a, int r1, int r2, int r3)
 // 	int r2 -> row #2
 // 	int r3 -> row #3
 // 	r3 = r1 - r2;
-void aug_subRow(augmatrix* a, int r1, int r2, int r3) 
+void aug_subrow(augmatrix* a, int r1, int r2, int r3) 
 {
 	matrix* mat_a = a->arr_a;
 	matrix* mat_b = a->arr_b;
@@ -376,18 +376,18 @@ void aug_subRow(augmatrix* a, int r1, int r2, int r3)
 		(r2 > mat_a->rowc) ||
 		(r3 > mat_a->rowc))
 	{
-		fprintf(stderr, "Row Count is High\n");
+		fprintf(stderr, "row count is high\n");
 		return;
 	}
 
 	// get the starting indexes of all the rows
-	int row_a_r1 = getIndex(mat_a, r1, 1); 
-	int row_a_r2 = getIndex(mat_a, r2, 1); 
-	int row_a_r3 = getIndex(mat_a, r3, 1); 
+	int row_a_r1 = getindex(mat_a, r1, 1); 
+	int row_a_r2 = getindex(mat_a, r2, 1); 
+	int row_a_r3 = getindex(mat_a, r3, 1); 
 	
-	int row_b_r1 = getIndex(mat_b, r1, 1); 
-	int row_b_r2 = getIndex(mat_b, r2, 1); 
-	int row_b_r3 = getIndex(mat_b, r3, 1); 
+	int row_b_r1 = getindex(mat_b, r1, 1); 
+	int row_b_r2 = getindex(mat_b, r2, 1); 
+	int row_b_r3 = getindex(mat_b, r3, 1); 
 
 	for (int i = 0; i < mat_a->colc; i++)
 	{
@@ -419,7 +419,7 @@ void aug_subRow(augmatrix* a, int r1, int r2, int r3)
 //   int idx -> index of the 
 //   matrix 
 // ret: col number
-int getCol(matrix* a, int idx)
+int getcol(matrix* a, int idx)
 {
 	int col = (idx + 1) % a->colc;
 	return (col == 0) ? a->colc : col;
@@ -433,9 +433,9 @@ int getCol(matrix* a, int idx)
 //   int idx -> index of the 
 //   matrix 
 // ret: row number
-int getRow(matrix* a, int idx)
+int getrow(matrix* a, int idx)
 {
-	int col = getCol(a, idx);
+	int col = getcol(a, idx);
 	int cnst = a->colc - (col - 1);
 	int ans = (idx + cnst) / a->colc;
 	return (idx + cnst) / a->colc;
@@ -446,7 +446,7 @@ int getRow(matrix* a, int idx)
 // args: matrix* a -> matrix #1
 //      matrix* b -> matrix #2
 // ret: (new matrix) ptr to a matrix	
-matrix* addMatrix(matrix* a,matrix* b)
+matrix* addmatrix(matrix* a,matrix* b)
 {
 	//is it compatible
 	if ((a->rowc != b->rowc) &&
@@ -457,7 +457,7 @@ matrix* addMatrix(matrix* a,matrix* b)
 		return NULL;
 	}
 
-	matrix* m = createEmptyMatrix(a->rowc, b->colc);
+	matrix* m = createemptymatrix(a->rowc, b->colc);
 	int* A = a->arr;
 	int* B = b->arr;
 	int* arr = m->arr;
@@ -489,7 +489,7 @@ matrix* addMatrix(matrix* a,matrix* b)
 // args: matrix* a -> matrix #1
 // 		matrix* b -> matrix #2
 // ret: (new matrix) ptr to a matrix*/	
-matrix* subMatrix(matrix* a,matrix* b)
+matrix* submatrix(matrix* a,matrix* b)
 {
 	//is it compatible
 	if ((a->rowc != b->rowc) &&
@@ -499,7 +499,7 @@ matrix* subMatrix(matrix* a,matrix* b)
 		return NULL;
 	}
 
-	matrix* m = createEmptyMatrix(a->rowc, b->colc);
+	matrix* m = createemptymatrix(a->rowc, b->colc);
 	int* A = a->arr;
 	int* B = b->arr;
 	int* arr = m->arr;
@@ -531,7 +531,7 @@ matrix* subMatrix(matrix* a,matrix* b)
 // args: matrix* a -> matrix #1
 //   	matrix* b -> matrix #2
 // ret: (new matrix) ptr to a matrix*/
-matrix* multiplyMatrix(matrix* a, matrix* b)
+matrix* multiplymatrix(matrix* a, matrix* b)
 {
 	// is it compatible
 	if (a->colc != b->rowc){
@@ -580,7 +580,7 @@ matrix* multiplyMatrix(matrix* a, matrix* b)
 }
 
 
-matrix* getPermutationMatrix(int dim, int r1, int r2){
+matrix* getpermutationmatrix(int dim, int r1, int r2){
 	/*summary: return permutation Matrix
 	 * identity matrix with swapped rows
 	 * with dimension size;
@@ -589,9 +589,9 @@ matrix* getPermutationMatrix(int dim, int r1, int r2){
 		int r2 -> row number #2
 		swap r1 -> r2;
 	 * ret: (new matrix)ptr to a identity matrix*/
-	matrix* i = createIdentityMatrix(dim); 
-	int si_r1 = getIndex(i,r1,1);
-	int si_r2 = getIndex(i,r2,1);
+	matrix* i = createidentitymatrix(dim); 
+	int si_r1 = getindex(i,r1,1);
+	int si_r2 = getindex(i,r2,1);
 	for (int a = 0; a < i->rowc; a++){
 		int j = i->arr[si_r1];
 		i->arr[si_r1] = i->arr[si_r2];
@@ -603,7 +603,7 @@ matrix* getPermutationMatrix(int dim, int r1, int r2){
 }
 
 
-void multiplyRow(matrix* a, int row, int s){
+void multiplyrow(matrix* a, int row, int s){
 	/*summary: simple row multiplication
 	 *args: matrix* a -> pointer to matrix 
 	 	int row -> row of matrix 
@@ -618,13 +618,13 @@ void multiplyRow(matrix* a, int row, int s){
 	// grabbing the start index
 	int sidx;
 	for (int i = 1; i <= a->colc; i++){
-		sidx = getIndex(a, row, i);
+		sidx = getindex(a, row, i);
 		a->arr[sidx] *= s; 
 	}
 };
 
 
-void divideRow(matrix* a, int row, int s){
+void dividerow(matrix* a, int row, int s){
 	/*summary: divide row in a matrix
 	 *args: matrix* a -> pointer to matrix 
 	 	int row -> row of matrix 
@@ -637,14 +637,14 @@ void divideRow(matrix* a, int row, int s){
 		return;
 	}
 	// grabbing the start index
-	int sidx = getIndex(a, row, 1);
+	int sidx = getindex(a, row, 1);
 	for (int i = 1; i <= a->rowc; i++, sidx++){
 		a->arr[sidx] /= s; 
 	}
 }
 
 
-void multiplyColumn(matrix* a, int col, int s){
+void multiplycolumn(matrix* a, int col, int s){
 	/*summary: simple col multiplication
 	 *args: matrix* a -> pointer to matrix 
 	 	int col -> col of matrix 
@@ -653,7 +653,7 @@ void multiplyColumn(matrix* a, int col, int s){
 };
 
 
-void addScalarToMatrix(matrix* a, int s){
+void addscalartomatrix(matrix* a, int s){
 	/*summary: [inplace-addition] add 
 	 * a scalar value to the whole matrix
 	 *args: matrix* a -> pointer to matrix 
@@ -665,7 +665,7 @@ void addScalarToMatrix(matrix* a, int s){
 	return;
 }
 
-void subScalarFromMatrix(matrix* a, int s){
+void subscalarfrommatrix(matrix* a, int s){
 	/*summary: [inplace-addition] substract 
 	 * a scalar value to the whole matrix
 	 *args: matrix* a -> pointer to matrix 
@@ -677,15 +677,15 @@ void subScalarFromMatrix(matrix* a, int s){
 	return;
 }
 
-void swapRows(matrix* a, int r1, int r2){
+void swaprows(matrix* a, int r1, int r2){
 	/*summary: swap rows in the matrix 
 	 *args: matrix* a-> ptr to a matrix
 		int r1 -> row number #1
 		int r2 -> row number #2
 		swap r1 -> r2;
 	 * ret: matrix * a*/ 
-	int si_r1 = getIndex(a, r1, 1);
-	int si_r2 = getIndex(a, r2, 1);
+	int si_r1 = getindex(a, r1, 1);
+	int si_r2 = getindex(a, r2, 1);
 	for (int i = 0; i < a->colc; i++){
 		 int temp = a->arr[si_r1]; 
 		 a->arr[si_r1] = a->arr[si_r2];
@@ -697,14 +697,14 @@ void swapRows(matrix* a, int r1, int r2){
 }
 
 
-matrix* getInverse(matrix* a){
+matrix* getinverse(matrix* a) {
 	// checking if the matrix is invertible
 	// obtaining the determinant is not 
 	// supported yet; lesson is in future!	
 
 }
 
-matrix* getLowerTriangularMatrix(matrix* a){
+matrix* getlowertriangularmatrix(matrix* a) {
 	/*summary: return a lower 
 	 * triangular matrix 
 	 *args: matrix * a -> pointer to a 
@@ -721,14 +721,14 @@ matrix* getLowerTriangularMatrix(matrix* a){
 		return NULL;
 	}
 	matrix* ltm = 
-		createEmptyMatrix(a->rowc, a->colc);
+		createemptymatrix(a->rowc, a->colc);
 
 	/*row count and column count starts with zero*/
 	int colcount = 1;
 	int index = 0;
 	for (int i = 0; i < a->rowc; i++){
 		for (int j = 0; j < colcount; j++){
-			index = getIndex(a, i + 1, j + 1);
+			index = getindex(a, i + 1, j + 1);
 			ltm->arr[index] = a->arr[index];
 		}
 		colcount++;
@@ -741,8 +741,7 @@ matrix* getLowerTriangularMatrix(matrix* a){
 //   matrix
 // ret: (new matrix)ptr to a 
 //	lower triangular matrix
-matrix* getUpperTriangularMatrix(matrix* a)
-{
+matrix* getuppertriangularmatrix(matrix* a) {
 	/*checking if matrix is a square*/
 	if (a->colc != a->rowc){
 		fprintf(stderr, 
@@ -752,12 +751,12 @@ matrix* getUpperTriangularMatrix(matrix* a)
 		return NULL;
 	}
 	matrix* utm = 
-		createEmptyMatrix(a->rowc, a->colc);
+		createemptymatrix(a->rowc, a->colc);
 	/*row count and column count starts with zero*/
 	int index = 0;
 	for (int i = 1; i <= a->rowc; i++){
 		for (int j = i; j <= a->colc; j++){
-			index = getIndex(a, i, j);
+			index = getindex(a, i, j);
 			utm->arr[index] = a->arr[index];
 		}
 	}

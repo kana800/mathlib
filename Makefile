@@ -13,7 +13,6 @@ mattest:
 	# copying the header-only library
 	cp -r lib/matrix/*.h $(TESTDIR)/matrices/
 	$(CC) -mavx2 $(TESTDIR)/matrices/$@.c -o $(BUILDDIR)$^/$@
-	# cleaning the directories
 	rm -r $(TESTDIR)/matrices/*.h
 
 gausstest: matrix modules/linalg/gaussjordan.h
@@ -21,7 +20,6 @@ gausstest: matrix modules/linalg/gaussjordan.h
 	cp -r modules/linalg/gaussjordan.h $(MODULETEST)linalg/
 	mkdir -p $(BUILDDIR)linalg/
 	$(CC) $(MODULETEST)linalg/$@.c -o $(BUILDDIR)linalg/$@
-	# cleaning the directories
 	rm -r $(MODULETEST)linalg/*.h
 
 cleanbuild:
