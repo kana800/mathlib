@@ -8,6 +8,10 @@ domains:
 - Fourier Analysis and Differential Equations
 - Interpolation
 
+---
+
+> added reusable functions that can be used for project euler ( check playgroundv2 )
+
 ### Map Of Content
 
 - [Documentation](docs) 
