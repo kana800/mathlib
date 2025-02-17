@@ -7,3 +7,4 @@ animations/*/media
 
 
 test/libtest/*.h
+*.out
